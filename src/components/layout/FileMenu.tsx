@@ -11,11 +11,7 @@ import {
   XCircle,
 } from "lucide-react";
 import { downloadProjectExport, parseProjectJsonFile, type ProjectExportFormat } from "../../lib/exportImport";
-import {
-  getSavedGitHubPublishToken,
-  publishProjectToGitHub,
-  saveGitHubPublishToken,
-} from "../../lib/publish";
+import { publishProjectSnapshot } from "../../lib/publish";
 import { useProjectStore } from "../../state/projectStore";
 import { Button } from "../ui/Button";
 import { useDialog } from "../ui/DialogProvider";
@@ -26,66 +22,6 @@ export function FileMenu() {
   const fileInputRef = useRef<HTMLInputElement>(null);
   const dialog = useDialog();
   const { project, createNewProject, closeProject, createSnapshot, importProject } = useProjectStore();
-
-  async function getPublishToken() {
-    const savedToken = getSavedGitHubPublishToken();
-
-    if (savedToken) {
-      const tokenChoice = await dialog.choose<"saved" | "replace">({
-        title: "GitHub token",
-        message: "Use the saved GitHub token for this browser, or replace it before publishing.",
-        confirmLabel: "Continue",
-        choices: [
-          {
-            value: "saved",
-            label: "Use saved token",
-            description: "publish with the token already stored in this browser",
-          },
-          {
-            value: "replace",
-            label: "Replace token",
-            description: "paste a new fine-grained token before publishing",
-          },
-        ],
-      });
-
-      if (tokenChoice === "saved") {
-        return savedToken;
-      }
-
-      if (tokenChoice === null) {
-        return null;
-      }
-    }
-
-    const confirmed = await dialog.confirm({
-      title: "Save GitHub token",
-      message:
-        "Publishing commits a frozen snapshot to GitHub. Paste a fine-grained token for jebagu/Stickies with Contents read and write access. The token will be saved in this browser's localStorage.",
-      confirmLabel: "Enter Token",
-    });
-
-    if (!confirmed) {
-      return null;
-    }
-
-    const token = await dialog.prompt({
-      title: "GitHub token",
-      message: "Paste the fine-grained GitHub token for publishing snapshots.",
-      confirmLabel: "Save Token",
-    });
-
-    if (!token?.trim()) {
-      await dialog.alert({
-        title: "Publish canceled",
-        message: "A GitHub token is required to save the published snapshot to GitHub.",
-      });
-      return null;
-    }
-
-    saveGitHubPublishToken(token.trim());
-    return token.trim();
-  }
 
   useEffect(() => {
     if (!open) {
@@ -223,14 +159,8 @@ export function FileMenu() {
       return;
     }
 
-    const token = await getPublishToken();
-
-    if (!token) {
-      return;
-    }
-
     try {
-      const result = await publishProjectToGitHub(project, token);
+      const result = await publishProjectSnapshot(project);
 
       await dialog.alert({
         title: "Published snapshot saved",

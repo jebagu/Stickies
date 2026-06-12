@@ -26,15 +26,11 @@ function PlanningNodeComponent({ data, selected, isConnectable }: NodeProps<Plan
       {note ? <p className="planning-node__note">{note}</p> : null}
       <div className="planning-node__footer">
         <div className="planning-node__associated-list" aria-label="Associated">
-          {associated.length > 0 ? (
-            associated.slice(0, 4).map((person) => (
-              <span key={person?.id} className="planning-node__associated">
-                {person?.initials}
-              </span>
-            ))
-          ) : (
-            <span className="planning-node__unassigned">No association</span>
-          )}
+          {associated.slice(0, 4).map((person) => (
+            <span key={person?.id} className="planning-node__associated">
+              {person?.initials}
+            </span>
+          ))}
         </div>
       </div>
       <Handle

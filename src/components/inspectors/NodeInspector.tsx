@@ -123,22 +123,6 @@ export function NodeInspector({ node, readOnly = false }: NodeInspectorProps) {
         ))}
       </Select>
 
-      <label className="field-label" htmlFor="node-workstream">
-        Workstream
-      </label>
-      <Select
-        id="node-workstream"
-        value={data.workstreamId ?? ""}
-        onChange={(event) => update({ workstreamId: event.target.value || undefined })}
-      >
-        <option value="">No workstream</option>
-        {project.workstreams.map((workstream) => (
-          <option key={workstream.id} value={workstream.id}>
-            {workstream.name}
-          </option>
-        ))}
-      </Select>
-
       <label className="field-label" htmlFor="node-associated">
         Associated
       </label>

@@ -222,7 +222,7 @@ Inspector files:
 - [src/components/inspectors/EdgeInspector.tsx](/Users/jeremyguillory/Documents/vibecode-projects/SS%20React%20Flow%20Charts/src/components/inspectors/EdgeInspector.tsx)
 - [src/components/inspectors/TabInspector.tsx](/Users/jeremyguillory/Documents/vibecode-projects/SS%20React%20Flow%20Charts/src/components/inspectors/TabInspector.tsx)
 
-In editor mode, users can add planning items, create/rename/delete tabs, edit the active tab's stages from the left sidebar, edit a selected item's title, note, status, workstream, and associations, duplicate/delete items, edit/delete selected edges, set edge line types, hide/show the inspector, create/restore snapshots, import/export JSON, and toggle MiniMap, Settings, and Presentation modes.
+In editor mode, users can add planning items, create/rename/delete tabs, edit the active tab's stages from the left sidebar, edit a selected item's title, note, status, and associations, duplicate/delete items, edit/delete selected edges, set edge line types, hide/show the inspector, create/restore snapshots, import/export JSON, and toggle MiniMap, Settings, and Presentation modes.
 
 In public mode, the right inspector renders selected tab, node, and edge details as read-only field/value rows. Selected edge details show the source and target item titles plus the edge line type.
 

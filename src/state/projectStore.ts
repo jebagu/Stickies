@@ -97,6 +97,7 @@ type ProjectState = {
   clearFilters: () => void;
   createSnapshot: (label?: string, note?: string) => void;
   restoreSnapshot: (snapshotId: string) => void;
+  copyPublicSnapshotToEditorSession: () => boolean;
   exportProject: () => void;
   importProject: (project: ProjectFile) => void;
   setTheme: (themeId: ThemeId) => void;
@@ -1042,6 +1043,36 @@ export const useProjectStore = create<ProjectState>((set, get) => ({
     commitProject(restoredProject, set, {
       selectedElement: null,
     });
+  },
+
+  copyPublicSnapshotToEditorSession: () => {
+    const { project } = get();
+    const editableProject = normalizeProjectStageColumns({
+      ...structuredClone(project),
+      updatedAt: nowIso(),
+    });
+
+    try {
+      saveProjectToStorage(editableProject);
+      set({
+        viewMode: "editor",
+        project: editableProject,
+        activeTabId: editableProject.activeTabId,
+        filters: getActiveTab(editableProject, editableProject.activeTabId).filters ?? {},
+        selectedElement: null,
+        saveStatus: "saved",
+        lastSavedAt: nowIso(),
+        storageWarning: undefined,
+        importError: undefined,
+        inspectorHidden: false,
+      });
+      return true;
+    } catch (error) {
+      set({
+        storageWarning: error instanceof Error ? error.message : "Project copy could not be saved.",
+      });
+      return false;
+    }
   },
 
   exportProject: () => {

@@ -393,12 +393,17 @@ select {
 
 
 .tab-bar__actions,
+.tab-bar__public-actions,
 .inspector-actions,
 .inspector-section-header,
 .stage-editor-row {
   display: flex;
   align-items: center;
   gap: 8px;
+}
+
+.tab-bar__public-actions {
+  flex: 0 0 auto;
 }
 
 .left-sidebar,

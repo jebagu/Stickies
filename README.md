@@ -137,7 +137,7 @@ The editor left rail starts with a single `File` menu for browser-local project 
 - `Open`: imports a native `.json` project file after validation and confirmation.
 - `Close`: clears the current browser project and switches to a blank project after confirmation.
 - `Save`: creates a named snapshot inside the current project. Autosave to localStorage still happens in the background.
-- `Publish`: prepares a frozen read-only snapshot with a random slug link. Later edits do not update that published snapshot.
+- `Publish`: saves a frozen read-only snapshot to GitHub with a random slug link. Later edits do not update that published snapshot.
 - `Export`: downloads a native JSON, Markdown, or DOCX file.
 - `Version History`: shows the most recent saved snapshots.
 
@@ -145,10 +145,11 @@ The editor left rail starts with a single `File` menu for browser-local project 
 
 The public viewer lives at `/Stickies/public/`. It loads the committed static snapshot at [public/public/project.json](/Users/jeremyguillory/Documents/vibecode-projects/SS%20React%20Flow%20Charts/public/public/project.json) instead of browser localStorage.
 
-Published read-only links live at `/Stickies/public/<slug>/`. The `File` menu's `Publish` action downloads a frozen JSON snapshot and shows the matching link. Save the downloaded JSON as `public/published/<slug>.json`, then deploy the static app. After that, anyone with `/Stickies/public/<slug>/` can view that exact frozen version. Publishing does not create live collaboration and does not update the link when the editor project changes later.
+Published read-only links live at `/Stickies/public/<slug>/`. The `File` menu's `Publish` action commits a frozen JSON snapshot to GitHub at `public/published/<slug>.json` and shows the matching GitHub Pages link. Publishing requires a fine-grained GitHub token for `jebagu/Stickies` with Contents read and write access. The token is saved in this browser's localStorage after confirmation. Publishing does not create live collaboration and does not update the link when the editor project changes later.
 
 Public mode allows:
 
+- Starting a new editable browser-local copy from the published snapshot.
 - Switching tabs.
 - Selecting nodes and edges.
 - Reading the right inspector.
@@ -161,7 +162,7 @@ Public mode does not allow durable editing. Add, rename, delete, import, snapsho
 
 To update the public data, export an approved project JSON from the private editor, review it for public-safe content, then replace `public/public/project.json` before deploying. Anything in that file can be public on GitHub Pages.
 
-To update a published slug, publish again and deploy the new generated JSON under its new `public/published/<slug>.json` path. Treat every published JSON file as public.
+To update a published slug, publish again to create a new `public/published/<slug>.json` file. Treat every published JSON file as public.
 
 ## Import and Export
 

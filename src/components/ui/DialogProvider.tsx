@@ -27,6 +27,8 @@ type BaseDialogRequest = {
 type DialogRequest =
   | (BaseDialogRequest & {
       kind: "alert";
+      copyLabel?: string;
+      copyText?: string;
       resolve: () => void;
     })
   | (BaseDialogRequest & {
@@ -49,7 +51,7 @@ type DialogRequest =
     });
 
 type DialogContextValue = {
-  alert: (request: BaseDialogRequest) => Promise<void>;
+  alert: (request: BaseDialogRequest & { copyLabel?: string; copyText?: string }) => Promise<void>;
   confirm: (request: BaseDialogRequest & { confirmLabel?: string; danger?: boolean }) => Promise<boolean>;
   prompt: (request: BaseDialogRequest & { defaultValue?: string; confirmLabel?: string }) => Promise<string | null>;
   choose: <T extends string>(
@@ -151,6 +153,7 @@ function CenteredDialog({ request, onClose }: { request: DialogRequest; onClose:
   const initialChoiceValue = request.kind === "choice" ? request.choices[0]?.value ?? "" : "";
   const [promptValue, setPromptValue] = useState(initialPromptValue);
   const [choiceValue, setChoiceValue] = useState(initialChoiceValue);
+  const [copyLabel, setCopyLabel] = useState(request.kind === "alert" ? request.copyLabel ?? "Copy" : "Copy");
   const dialogRef = useRef<HTMLDivElement>(null);
   const titleId = useId();
 
@@ -184,6 +187,19 @@ function CenteredDialog({ request, onClose }: { request: DialogRequest; onClose:
     }
 
     onClose();
+  }
+
+  async function copyAlertText() {
+    if (request.kind !== "alert" || !request.copyText) {
+      return;
+    }
+
+    try {
+      await navigator.clipboard.writeText(request.copyText);
+      setCopyLabel("Copied");
+    } catch {
+      setCopyLabel("Copy Failed");
+    }
   }
 
   return (
@@ -228,6 +244,11 @@ function CenteredDialog({ request, onClose }: { request: DialogRequest; onClose:
                 Cancel
               </Button>
             )}
+            {request.kind === "alert" && request.copyText ? (
+              <Button variant="secondary" onClick={copyAlertText}>
+                {copyLabel}
+              </Button>
+            ) : null}
             <Button
               variant={request.kind === "confirm" && request.danger ? "danger" : "primary"}
               type="submit"

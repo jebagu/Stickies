@@ -12,10 +12,9 @@ import {
 } from "lucide-react";
 import { downloadProjectExport, parseProjectJsonFile, type ProjectExportFormat } from "../../lib/exportImport";
 import {
-  createPublishSlug,
-  downloadPublishedProject,
-  getPublishedProjectTargetPath,
-  getPublishedProjectUrl,
+  getSavedGitHubPublishToken,
+  publishProjectToGitHub,
+  saveGitHubPublishToken,
 } from "../../lib/publish";
 import { useProjectStore } from "../../state/projectStore";
 import { Button } from "../ui/Button";
@@ -27,6 +26,66 @@ export function FileMenu() {
   const fileInputRef = useRef<HTMLInputElement>(null);
   const dialog = useDialog();
   const { project, createNewProject, closeProject, createSnapshot, importProject } = useProjectStore();
+
+  async function getPublishToken() {
+    const savedToken = getSavedGitHubPublishToken();
+
+    if (savedToken) {
+      const tokenChoice = await dialog.choose<"saved" | "replace">({
+        title: "GitHub token",
+        message: "Use the saved GitHub token for this browser, or replace it before publishing.",
+        confirmLabel: "Continue",
+        choices: [
+          {
+            value: "saved",
+            label: "Use saved token",
+            description: "publish with the token already stored in this browser",
+          },
+          {
+            value: "replace",
+            label: "Replace token",
+            description: "paste a new fine-grained token before publishing",
+          },
+        ],
+      });
+
+      if (tokenChoice === "saved") {
+        return savedToken;
+      }
+
+      if (tokenChoice === null) {
+        return null;
+      }
+    }
+
+    const confirmed = await dialog.confirm({
+      title: "Save GitHub token",
+      message:
+        "Publishing commits a frozen snapshot to GitHub. Paste a fine-grained token for jebagu/Stickies with Contents read and write access. The token will be saved in this browser's localStorage.",
+      confirmLabel: "Enter Token",
+    });
+
+    if (!confirmed) {
+      return null;
+    }
+
+    const token = await dialog.prompt({
+      title: "GitHub token",
+      message: "Paste the fine-grained GitHub token for publishing snapshots.",
+      confirmLabel: "Save Token",
+    });
+
+    if (!token?.trim()) {
+      await dialog.alert({
+        title: "Publish canceled",
+        message: "A GitHub token is required to save the published snapshot to GitHub.",
+      });
+      return null;
+    }
+
+    saveGitHubPublishToken(token.trim());
+    return token.trim();
+  }
 
   useEffect(() => {
     if (!open) {
@@ -156,7 +215,7 @@ export function FileMenu() {
     const confirmed = await dialog.confirm({
       title: "Publish read-only link",
       message:
-        "Publish creates a frozen read-only snapshot. People with the link can view this version, but later edits will not update it.",
+        "Publish creates a frozen read-only snapshot, saves it to GitHub, and gives you a public link. Later edits will not update this published version.",
       confirmLabel: "Publish",
     });
 
@@ -164,22 +223,25 @@ export function FileMenu() {
       return;
     }
 
-    const slug = createPublishSlug();
-    const publicUrl = getPublishedProjectUrl(slug);
-    const targetPath = getPublishedProjectTargetPath(slug);
+    const token = await getPublishToken();
 
-    downloadPublishedProject(project, slug);
+    if (!token) {
+      return;
+    }
 
     try {
-      await navigator.clipboard?.writeText(publicUrl);
+      const result = await publishProjectToGitHub(project, token);
+
       await dialog.alert({
-        title: "Published snapshot prepared",
-        message: `The read-only link was copied to your clipboard:\n${publicUrl}\n\nSave the downloaded JSON as ${targetPath}, then deploy the static app so other people can open it.`,
+        title: "Published snapshot saved",
+        message: `Link address:\n${result.publicUrl}\n\nGitHub Pages may take a minute to deploy this snapshot after the GitHub commit finishes.`,
+        copyLabel: "Copy Link",
+        copyText: result.publicUrl,
       });
-    } catch {
+    } catch (error) {
       await dialog.alert({
-        title: "Published snapshot prepared",
-        message: `Read-only link:\n${publicUrl}\n\nSave the downloaded JSON as ${targetPath}, then deploy the static app so other people can open it.`,
+        title: "Publish failed",
+        message: error instanceof Error ? error.message : "The snapshot could not be saved to GitHub.",
       });
     }
   }

@@ -8,6 +8,10 @@ export function isPublicViewMode(viewMode: AppViewMode) {
   return viewMode === "public";
 }
 
+export function getEditorUrl() {
+  return new URL(import.meta.env.BASE_URL, window.location.origin).toString();
+}
+
 export function getPublicProjectUrl() {
   return `${import.meta.env.BASE_URL}public/project.json`;
 }

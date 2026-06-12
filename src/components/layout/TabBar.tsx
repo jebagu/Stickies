@@ -1,12 +1,21 @@
 import { Plus, Pencil, Trash2 } from "lucide-react";
-import { isPublicViewMode } from "../../lib/appMode";
+import { getEditorUrl, isPublicViewMode } from "../../lib/appMode";
 import { useProjectStore } from "../../state/projectStore";
 import { Button } from "../ui/Button";
 import { useDialog } from "../ui/DialogProvider";
 
 export function TabBar() {
   const dialog = useDialog();
-  const { project, viewMode, activeTabId, setActiveTab, createTab, renameTab, deleteTab } = useProjectStore();
+  const {
+    project,
+    viewMode,
+    activeTabId,
+    setActiveTab,
+    createTab,
+    renameTab,
+    deleteTab,
+    copyPublicSnapshotToEditorSession,
+  } = useProjectStore();
   const presentationMode = project.settings.presentationMode;
   const readOnly = isPublicViewMode(viewMode);
 
@@ -67,8 +76,31 @@ export function TabBar() {
     }
   }
 
+  async function handleEditCopy() {
+    if (
+      await dialog.confirm({
+        title: "Edit a copy",
+        message:
+          "Start a new editable browser session from this snapshot? Your edits will not change the published read-only snapshot.",
+        confirmLabel: "Edit a Copy",
+      })
+    ) {
+      if (copyPublicSnapshotToEditorSession()) {
+        window.location.assign(getEditorUrl());
+      }
+    }
+  }
+
   return (
     <nav className="tab-bar" aria-label="Planning tabs">
+      {readOnly ? (
+        <div className="tab-bar__public-actions">
+          <Button onClick={handleEditCopy}>
+            <Pencil size={16} aria-hidden="true" />
+            Edit a Copy
+          </Button>
+        </div>
+      ) : null}
       <div className="tab-bar__tabs">
         {project.tabs.map((tab) => (
           <button

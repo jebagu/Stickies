@@ -1,0 +1,5201 @@
+{
+  "schemaVersion": 1,
+  "projectName": "Stickies",
+  "activeTabId": "tab_overall_project",
+  "people": [
+    {
+      "id": "person_jeremy_guillory",
+      "initials": "JG",
+      "name": "Jeremy Guillory",
+      "kind": "person"
+    },
+    {
+      "id": "person_merijn_royaards",
+      "initials": "MR",
+      "name": "Merijn Royaards",
+      "kind": "person"
+    },
+    {
+      "id": "person_ed_cooke",
+      "initials": "EC",
+      "name": "Ed Cooke",
+      "kind": "person"
+    },
+    {
+      "id": "person_ed_goh",
+      "initials": "EG",
+      "name": "Ed Goh",
+      "kind": "person"
+    },
+    {
+      "id": "person_alexander_morley",
+      "initials": "AM",
+      "name": "Alexander Morley",
+      "kind": "person"
+    },
+    {
+      "id": "person_nicholas_christie",
+      "initials": "NC",
+      "name": "Nicholas Christie",
+      "kind": "person"
+    },
+    {
+      "id": "person_sabine",
+      "initials": "S",
+      "name": "Sabine",
+      "kind": "person"
+    },
+    {
+      "id": "person_dnk",
+      "initials": "DNK",
+      "name": "DNK",
+      "kind": "organization"
+    },
+    {
+      "id": "person_sonic_sphere_bv",
+      "initials": "SSB",
+      "name": "Sonic Sphere, BV",
+      "kind": "organization"
+    },
+    {
+      "id": "person_sonic_spheres_inc",
+      "initials": "SSI",
+      "name": "Sonic Spheres, Inc.",
+      "kind": "organization"
+    },
+    {
+      "id": "person_rare",
+      "initials": "R",
+      "name": "Rare",
+      "kind": "organization"
+    },
+    {
+      "id": "person_richie_britton",
+      "initials": "RB",
+      "name": "Richie Britton",
+      "kind": "person"
+    },
+    {
+      "id": "person_dom_joseph",
+      "initials": "DJ",
+      "name": "Dom Joseph",
+      "kind": "person"
+    },
+    {
+      "id": "person_meelf_van_oosten",
+      "initials": "MO",
+      "name": "Meelf van Oosten",
+      "kind": "person"
+    },
+    {
+      "id": "person_rob_montgomery",
+      "initials": "RM",
+      "name": "Rob Montgomery",
+      "kind": "person"
+    }
+  ],
+  "workstreams": [
+    {
+      "id": "workstream_venue",
+      "name": "Venue",
+      "defaultAssociatedIds": [
+        "person_dnk",
+        "person_sonic_sphere_bv",
+        "person_sonic_spheres_inc"
+      ],
+      "colorToken": "venue"
+    },
+    {
+      "id": "workstream_delivery_of_physical_sphere",
+      "name": "Delivery of Physical Sphere",
+      "defaultAssociatedIds": [
+        "person_nicholas_christie",
+        "person_alexander_morley"
+      ],
+      "colorToken": "sphere"
+    },
+    {
+      "id": "workstream_delivery_of_sound_system",
+      "name": "Delivery of Sound System",
+      "defaultAssociatedIds": [
+        "person_merijn_royaards",
+        "person_jeremy_guillory"
+      ],
+      "colorToken": "sound"
+    },
+    {
+      "id": "workstream_acoustics_consultant",
+      "name": "Acoustics Consultant",
+      "defaultAssociatedIds": [
+        "person_sabine"
+      ],
+      "colorToken": "acoustics"
+    },
+    {
+      "id": "workstream_operations",
+      "name": "Operations",
+      "defaultAssociatedIds": [
+        "person_ed_cooke",
+        "person_ed_goh"
+      ],
+      "colorToken": "operations"
+    },
+    {
+      "id": "workstream_ticketing",
+      "name": "Ticketing",
+      "colorToken": "ticketing"
+    },
+    {
+      "id": "workstream_show_music_production",
+      "name": "Show Music Production",
+      "defaultAssociatedIds": [
+        "person_jeremy_guillory"
+      ],
+      "colorToken": "music"
+    },
+    {
+      "id": "workstream_labs",
+      "name": "Labs",
+      "colorToken": "labs"
+    },
+    {
+      "id": "workstream_legal",
+      "name": "Legal",
+      "colorToken": "legal"
+    },
+    {
+      "id": "workstream_experience_design",
+      "name": "Experience Design",
+      "colorToken": "experience"
+    }
+  ],
+  "tags": [
+    {
+      "id": "tag_critical_path",
+      "label": "Critical path",
+      "colorToken": "critical"
+    },
+    {
+      "id": "tag_needs_decision",
+      "label": "Needs decision",
+      "colorToken": "decision"
+    },
+    {
+      "id": "tag_external_partner",
+      "label": "External partner",
+      "colorToken": "partner"
+    }
+  ],
+  "tabs": [
+    {
+      "id": "tab_overall_project",
+      "name": "Overall Project",
+      "stages": [
+        {
+          "id": "stage_discovery",
+          "name": "Discovery",
+          "order": 0,
+          "colorToken": "stage-1",
+          "rect": {
+            "x": 0,
+            "y": 0,
+            "width": 300,
+            "height": 2200
+          }
+        },
+        {
+          "id": "stage_strategy_decisions",
+          "name": "Strategy / Decisions",
+          "order": 1,
+          "colorToken": "stage-2",
+          "rect": {
+            "x": 320,
+            "y": 0,
+            "width": 300,
+            "height": 2200
+          }
+        },
+        {
+          "id": "stage_partner_confirmation",
+          "name": "Partner Confirmation",
+          "order": 2,
+          "colorToken": "stage-3",
+          "rect": {
+            "x": 640,
+            "y": 0,
+            "width": 300,
+            "height": 2200
+          }
+        },
+        {
+          "id": "stage_design",
+          "name": "Design",
+          "order": 3,
+          "colorToken": "stage-4",
+          "rect": {
+            "x": 960,
+            "y": 0,
+            "width": 300,
+            "height": 2200
+          }
+        },
+        {
+          "id": "stage_production",
+          "name": "Production",
+          "order": 4,
+          "colorToken": "stage-5",
+          "rect": {
+            "x": 1280,
+            "y": 0,
+            "width": 300,
+            "height": 2200
+          }
+        },
+        {
+          "id": "stage_delivery_install",
+          "name": "Delivery / Install",
+          "order": 5,
+          "colorToken": "stage-6",
+          "rect": {
+            "x": 1600,
+            "y": 0,
+            "width": 300,
+            "height": 2200
+          }
+        },
+        {
+          "id": "stage_live_operations",
+          "name": "Live Operations",
+          "order": 6,
+          "colorToken": "stage-7",
+          "rect": {
+            "x": 1920,
+            "y": 0,
+            "width": 300,
+            "height": 2200
+          }
+        },
+        {
+          "id": "stage_post_experience",
+          "name": "Post-Experience",
+          "order": 7,
+          "colorToken": "stage-8",
+          "rect": {
+            "x": 2240,
+            "y": 0,
+            "width": 300,
+            "height": 2200
+          }
+        }
+      ],
+      "nodes": [
+        {
+          "id": "tab_overall_project_band_stage_discovery",
+          "type": "stageBand",
+          "position": {
+            "x": 0,
+            "y": 0
+          },
+          "width": 300,
+          "height": 2200,
+          "data": {
+            "title": "Discovery",
+            "stageId": "stage_discovery",
+            "locked": true,
+            "colorToken": "stage-1"
+          },
+          "draggable": false,
+          "selectable": false,
+          "deletable": false,
+          "zIndex": 0
+        },
+        {
+          "id": "tab_overall_project_band_stage_strategy_decisions",
+          "type": "stageBand",
+          "position": {
+            "x": 320,
+            "y": 0
+          },
+          "width": 300,
+          "height": 2200,
+          "data": {
+            "title": "Strategy / Decisions",
+            "stageId": "stage_strategy_decisions",
+            "locked": true,
+            "colorToken": "stage-2"
+          },
+          "draggable": false,
+          "selectable": false,
+          "deletable": false,
+          "zIndex": 0
+        },
+        {
+          "id": "tab_overall_project_band_stage_partner_confirmation",
+          "type": "stageBand",
+          "position": {
+            "x": 640,
+            "y": 0
+          },
+          "width": 300,
+          "height": 2200,
+          "data": {
+            "title": "Partner Confirmation",
+            "stageId": "stage_partner_confirmation",
+            "locked": true,
+            "colorToken": "stage-3"
+          },
+          "draggable": false,
+          "selectable": false,
+          "deletable": false,
+          "zIndex": 0
+        },
+        {
+          "id": "tab_overall_project_band_stage_design",
+          "type": "stageBand",
+          "position": {
+            "x": 960,
+            "y": 0
+          },
+          "width": 300,
+          "height": 2200,
+          "data": {
+            "title": "Design",
+            "stageId": "stage_design",
+            "locked": true,
+            "colorToken": "stage-4"
+          },
+          "draggable": false,
+          "selectable": false,
+          "deletable": false,
+          "zIndex": 0
+        },
+        {
+          "id": "tab_overall_project_band_stage_production",
+          "type": "stageBand",
+          "position": {
+            "x": 1280,
+            "y": 0
+          },
+          "width": 300,
+          "height": 2200,
+          "data": {
+            "title": "Production",
+            "stageId": "stage_production",
+            "locked": true,
+            "colorToken": "stage-5"
+          },
+          "draggable": false,
+          "selectable": false,
+          "deletable": false,
+          "zIndex": 0
+        },
+        {
+          "id": "tab_overall_project_band_stage_delivery_install",
+          "type": "stageBand",
+          "position": {
+            "x": 1600,
+            "y": 0
+          },
+          "width": 300,
+          "height": 2200,
+          "data": {
+            "title": "Delivery / Install",
+            "stageId": "stage_delivery_install",
+            "locked": true,
+            "colorToken": "stage-6"
+          },
+          "draggable": false,
+          "selectable": false,
+          "deletable": false,
+          "zIndex": 0
+        },
+        {
+          "id": "tab_overall_project_band_stage_live_operations",
+          "type": "stageBand",
+          "position": {
+            "x": 1920,
+            "y": 0
+          },
+          "width": 300,
+          "height": 2200,
+          "data": {
+            "title": "Live Operations",
+            "stageId": "stage_live_operations",
+            "locked": true,
+            "colorToken": "stage-7"
+          },
+          "draggable": false,
+          "selectable": false,
+          "deletable": false,
+          "zIndex": 0
+        },
+        {
+          "id": "tab_overall_project_band_stage_post_experience",
+          "type": "stageBand",
+          "position": {
+            "x": 2240,
+            "y": 0
+          },
+          "width": 300,
+          "height": 2200,
+          "data": {
+            "title": "Post-Experience",
+            "stageId": "stage_post_experience",
+            "locked": true,
+            "colorToken": "stage-8"
+          },
+          "draggable": false,
+          "selectable": false,
+          "deletable": false,
+          "zIndex": 0
+        },
+        {
+          "id": "tab_overall_project_node_confirm_venue_decision_maker",
+          "type": "planningNode",
+          "position": {
+            "x": 60,
+            "y": 80
+          },
+          "width": 260,
+          "data": {
+            "title": "Confirm venue decision maker.",
+            "status": "defined",
+            "associatedIds": [
+              "person_dnk",
+              "person_sonic_sphere_bv",
+              "person_sonic_spheres_inc"
+            ],
+            "workstreamId": "workstream_venue",
+            "stageId": "stage_discovery",
+            "priority": "P0",
+            "confidence": "medium",
+            "createdAt": "2026-06-12T00:00:00.000Z",
+            "updatedAt": "2026-06-12T00:00:00.000Z"
+          },
+          "draggable": true,
+          "selectable": true,
+          "deletable": true,
+          "zIndex": 10
+        },
+        {
+          "id": "tab_overall_project_node_confirm_commercial_structure",
+          "type": "planningNode",
+          "position": {
+            "x": 380,
+            "y": 80
+          },
+          "width": 260,
+          "data": {
+            "title": "Confirm commercial structure.",
+            "status": "idea",
+            "associatedIds": [
+              "person_sonic_spheres_inc"
+            ],
+            "workstreamId": "workstream_venue",
+            "stageId": "stage_strategy_decisions",
+            "priority": "P0",
+            "confidence": "medium",
+            "createdAt": "2026-06-12T00:00:00.000Z",
+            "updatedAt": "2026-06-12T00:00:00.000Z"
+          },
+          "draggable": true,
+          "selectable": true,
+          "deletable": true,
+          "zIndex": 10
+        },
+        {
+          "id": "tab_overall_project_node_define_physical_sphere_scope",
+          "type": "planningNode",
+          "position": {
+            "x": 60,
+            "y": 230
+          },
+          "width": 260,
+          "data": {
+            "title": "Define physical sphere scope.",
+            "status": "defined",
+            "associatedIds": [
+              "person_nicholas_christie",
+              "person_alexander_morley"
+            ],
+            "workstreamId": "workstream_delivery_of_physical_sphere",
+            "stageId": "stage_discovery",
+            "priority": "P0",
+            "confidence": "medium",
+            "createdAt": "2026-06-12T00:00:00.000Z",
+            "updatedAt": "2026-06-12T00:00:00.000Z"
+          },
+          "draggable": true,
+          "selectable": true,
+          "deletable": true,
+          "zIndex": 10
+        },
+        {
+          "id": "tab_overall_project_node_confirm_fabrication_requirements",
+          "type": "planningNode",
+          "position": {
+            "x": 1020,
+            "y": 230
+          },
+          "width": 260,
+          "data": {
+            "title": "Confirm fabrication requirements.",
+            "status": "idea",
+            "associatedIds": [
+              "person_nicholas_christie"
+            ],
+            "workstreamId": "workstream_delivery_of_physical_sphere",
+            "stageId": "stage_design",
+            "priority": "P1",
+            "confidence": "medium",
+            "createdAt": "2026-06-12T00:00:00.000Z",
+            "updatedAt": "2026-06-12T00:00:00.000Z"
+          },
+          "draggable": true,
+          "selectable": true,
+          "deletable": true,
+          "zIndex": 10
+        },
+        {
+          "id": "tab_overall_project_node_define_sound_system_specification",
+          "type": "planningNode",
+          "position": {
+            "x": 380,
+            "y": 380
+          },
+          "width": 260,
+          "data": {
+            "title": "Define sound system specification.",
+            "status": "defined",
+            "associatedIds": [
+              "person_merijn_royaards",
+              "person_jeremy_guillory"
+            ],
+            "workstreamId": "workstream_delivery_of_sound_system",
+            "stageId": "stage_strategy_decisions",
+            "priority": "P0",
+            "confidence": "medium",
+            "createdAt": "2026-06-12T00:00:00.000Z",
+            "updatedAt": "2026-06-12T00:00:00.000Z"
+          },
+          "draggable": true,
+          "selectable": true,
+          "deletable": true,
+          "zIndex": 10
+        },
+        {
+          "id": "tab_overall_project_node_confirm_speaker_layout",
+          "type": "planningNode",
+          "position": {
+            "x": 1020,
+            "y": 380
+          },
+          "width": 260,
+          "data": {
+            "title": "Confirm speaker layout.",
+            "status": "idea",
+            "associatedIds": [
+              "person_merijn_royaards"
+            ],
+            "workstreamId": "workstream_delivery_of_sound_system",
+            "stageId": "stage_design",
+            "priority": "P0",
+            "confidence": "medium",
+            "createdAt": "2026-06-12T00:00:00.000Z",
+            "updatedAt": "2026-06-12T00:00:00.000Z"
+          },
+          "draggable": true,
+          "selectable": true,
+          "deletable": true,
+          "zIndex": 10
+        },
+        {
+          "id": "tab_overall_project_node_confirm_acoustics_consultant_scope",
+          "type": "planningNode",
+          "position": {
+            "x": 60,
+            "y": 530
+          },
+          "width": 260,
+          "data": {
+            "title": "Confirm acoustics consultant scope.",
+            "status": "defined",
+            "associatedIds": [
+              "person_sabine"
+            ],
+            "workstreamId": "workstream_acoustics_consultant",
+            "stageId": "stage_discovery",
+            "priority": "P1",
+            "confidence": "medium",
+            "createdAt": "2026-06-12T00:00:00.000Z",
+            "updatedAt": "2026-06-12T00:00:00.000Z"
+          },
+          "draggable": true,
+          "selectable": true,
+          "deletable": true,
+          "zIndex": 10
+        },
+        {
+          "id": "tab_overall_project_node_define_operating_model",
+          "type": "planningNode",
+          "position": {
+            "x": 380,
+            "y": 680
+          },
+          "width": 260,
+          "data": {
+            "title": "Define operating model.",
+            "status": "idea",
+            "associatedIds": [
+              "person_ed_cooke",
+              "person_ed_goh"
+            ],
+            "workstreamId": "workstream_operations",
+            "stageId": "stage_strategy_decisions",
+            "priority": "P0",
+            "confidence": "medium",
+            "createdAt": "2026-06-12T00:00:00.000Z",
+            "updatedAt": "2026-06-12T00:00:00.000Z"
+          },
+          "draggable": true,
+          "selectable": true,
+          "deletable": true,
+          "zIndex": 10
+        },
+        {
+          "id": "tab_overall_project_node_define_partner_interface_model",
+          "type": "planningNode",
+          "position": {
+            "x": 700,
+            "y": 680
+          },
+          "width": 260,
+          "data": {
+            "title": "Define partner interface model.",
+            "status": "idea",
+            "associatedIds": [
+              "person_ed_cooke"
+            ],
+            "workstreamId": "workstream_operations",
+            "stageId": "stage_partner_confirmation",
+            "priority": "P1",
+            "confidence": "medium",
+            "createdAt": "2026-06-12T00:00:00.000Z",
+            "updatedAt": "2026-06-12T00:00:00.000Z"
+          },
+          "draggable": true,
+          "selectable": true,
+          "deletable": true,
+          "zIndex": 10
+        },
+        {
+          "id": "tab_overall_project_node_choose_ticketing_platform",
+          "type": "planningNode",
+          "position": {
+            "x": 380,
+            "y": 830
+          },
+          "width": 260,
+          "data": {
+            "title": "Choose ticketing platform.",
+            "status": "idea",
+            "associatedIds": [],
+            "workstreamId": "workstream_ticketing",
+            "stageId": "stage_strategy_decisions",
+            "priority": "P1",
+            "confidence": "medium",
+            "createdAt": "2026-06-12T00:00:00.000Z",
+            "updatedAt": "2026-06-12T00:00:00.000Z"
+          },
+          "draggable": true,
+          "selectable": true,
+          "deletable": true,
+          "zIndex": 10
+        },
+        {
+          "id": "tab_overall_project_node_define_ticket_tiers",
+          "type": "planningNode",
+          "position": {
+            "x": 1020,
+            "y": 830
+          },
+          "width": 260,
+          "data": {
+            "title": "Define ticket tiers.",
+            "status": "idea",
+            "associatedIds": [],
+            "workstreamId": "workstream_ticketing",
+            "stageId": "stage_design",
+            "priority": "P2",
+            "confidence": "medium",
+            "createdAt": "2026-06-12T00:00:00.000Z",
+            "updatedAt": "2026-06-12T00:00:00.000Z"
+          },
+          "draggable": true,
+          "selectable": true,
+          "deletable": true,
+          "zIndex": 10
+        },
+        {
+          "id": "tab_overall_project_node_identify_artists",
+          "type": "planningNode",
+          "position": {
+            "x": 60,
+            "y": 980
+          },
+          "width": 260,
+          "data": {
+            "title": "Identify artists.",
+            "status": "idea",
+            "associatedIds": [
+              "person_jeremy_guillory"
+            ],
+            "workstreamId": "workstream_show_music_production",
+            "stageId": "stage_discovery",
+            "priority": "P0",
+            "confidence": "medium",
+            "createdAt": "2026-06-12T00:00:00.000Z",
+            "updatedAt": "2026-06-12T00:00:00.000Z"
+          },
+          "draggable": true,
+          "selectable": true,
+          "deletable": true,
+          "zIndex": 10
+        },
+        {
+          "id": "tab_overall_project_node_develop_artist_workflow",
+          "type": "planningNode",
+          "position": {
+            "x": 380,
+            "y": 980
+          },
+          "width": 260,
+          "data": {
+            "title": "Develop artist workflow.",
+            "status": "idea",
+            "associatedIds": [
+              "person_jeremy_guillory"
+            ],
+            "workstreamId": "workstream_show_music_production",
+            "stageId": "stage_strategy_decisions",
+            "priority": "P0",
+            "confidence": "medium",
+            "createdAt": "2026-06-12T00:00:00.000Z",
+            "updatedAt": "2026-06-12T00:00:00.000Z"
+          },
+          "draggable": true,
+          "selectable": true,
+          "deletable": true,
+          "zIndex": 10
+        },
+        {
+          "id": "tab_overall_project_node_define_atmos_engineer_workflow",
+          "type": "planningNode",
+          "position": {
+            "x": 380,
+            "y": 1130
+          },
+          "width": 260,
+          "data": {
+            "title": "Define Atmos engineer workflow.",
+            "status": "defined",
+            "associatedIds": [
+              "person_jeremy_guillory"
+            ],
+            "workstreamId": "workstream_show_music_production",
+            "stageId": "stage_strategy_decisions",
+            "priority": "P0",
+            "confidence": "medium",
+            "createdAt": "2026-06-12T00:00:00.000Z",
+            "updatedAt": "2026-06-12T00:00:00.000Z"
+          },
+          "draggable": true,
+          "selectable": true,
+          "deletable": true,
+          "zIndex": 10
+        },
+        {
+          "id": "tab_overall_project_node_evaluate_ollie_morgan_as_possible_atmos_engineer",
+          "type": "planningNode",
+          "position": {
+            "x": 700,
+            "y": 1130
+          },
+          "width": 260,
+          "data": {
+            "title": "Evaluate Ollie Morgan as possible Atmos engineer.",
+            "status": "idea",
+            "associatedIds": [
+              "person_richie_britton"
+            ],
+            "workstreamId": "workstream_show_music_production",
+            "stageId": "stage_partner_confirmation",
+            "priority": "P1",
+            "confidence": "medium",
+            "createdAt": "2026-06-12T00:00:00.000Z",
+            "updatedAt": "2026-06-12T00:00:00.000Z"
+          },
+          "draggable": true,
+          "selectable": true,
+          "deletable": true,
+          "zIndex": 10
+        },
+        {
+          "id": "tab_overall_project_node_create_technical_content_development_process",
+          "type": "planningNode",
+          "position": {
+            "x": 1020,
+            "y": 1130
+          },
+          "width": 260,
+          "data": {
+            "title": "Create technical content development process.",
+            "status": "idea",
+            "associatedIds": [
+              "person_jeremy_guillory"
+            ],
+            "workstreamId": "workstream_show_music_production",
+            "stageId": "stage_design",
+            "priority": "P0",
+            "confidence": "medium",
+            "createdAt": "2026-06-12T00:00:00.000Z",
+            "updatedAt": "2026-06-12T00:00:00.000Z"
+          },
+          "draggable": true,
+          "selectable": true,
+          "deletable": true,
+          "zIndex": 10
+        },
+        {
+          "id": "tab_overall_project_node_prepare_tier_one_artist_content_production_answer",
+          "type": "planningNode",
+          "position": {
+            "x": 1340,
+            "y": 1130
+          },
+          "width": 260,
+          "data": {
+            "title": "Prepare tier-one artist content-production answer.",
+            "status": "idea",
+            "associatedIds": [
+              "person_jeremy_guillory"
+            ],
+            "workstreamId": "workstream_show_music_production",
+            "stageId": "stage_production",
+            "priority": "P0",
+            "confidence": "medium",
+            "createdAt": "2026-06-12T00:00:00.000Z",
+            "updatedAt": "2026-06-12T00:00:00.000Z"
+          },
+          "draggable": true,
+          "selectable": true,
+          "deletable": true,
+          "zIndex": 10
+        },
+        {
+          "id": "tab_overall_project_node_define_lab_intake_workflow",
+          "type": "planningNode",
+          "position": {
+            "x": 380,
+            "y": 1280
+          },
+          "width": 260,
+          "data": {
+            "title": "Define lab intake workflow.",
+            "status": "idea",
+            "associatedIds": [],
+            "workstreamId": "workstream_labs",
+            "stageId": "stage_strategy_decisions",
+            "priority": "P2",
+            "confidence": "medium",
+            "createdAt": "2026-06-12T00:00:00.000Z",
+            "updatedAt": "2026-06-12T00:00:00.000Z"
+          },
+          "draggable": true,
+          "selectable": true,
+          "deletable": true,
+          "zIndex": 10
+        },
+        {
+          "id": "tab_overall_project_node_define_lab_to_main_show_escalation_path",
+          "type": "planningNode",
+          "position": {
+            "x": 1340,
+            "y": 1280
+          },
+          "width": 260,
+          "data": {
+            "title": "Define lab-to-main-show escalation path.",
+            "status": "idea",
+            "associatedIds": [],
+            "workstreamId": "workstream_labs",
+            "stageId": "stage_production",
+            "priority": "P2",
+            "confidence": "medium",
+            "createdAt": "2026-06-12T00:00:00.000Z",
+            "updatedAt": "2026-06-12T00:00:00.000Z"
+          },
+          "draggable": true,
+          "selectable": true,
+          "deletable": true,
+          "zIndex": 10
+        },
+        {
+          "id": "tab_overall_project_node_define_artist_agreement_template",
+          "type": "planningNode",
+          "position": {
+            "x": 380,
+            "y": 1430
+          },
+          "width": 260,
+          "data": {
+            "title": "Define artist agreement template.",
+            "status": "idea",
+            "associatedIds": [],
+            "workstreamId": "workstream_legal",
+            "stageId": "stage_strategy_decisions",
+            "priority": "P0",
+            "confidence": "medium",
+            "createdAt": "2026-06-12T00:00:00.000Z",
+            "updatedAt": "2026-06-12T00:00:00.000Z"
+          },
+          "draggable": true,
+          "selectable": true,
+          "deletable": true,
+          "zIndex": 10
+        },
+        {
+          "id": "tab_overall_project_node_confirm_ip_and_music_rights_approach",
+          "type": "planningNode",
+          "position": {
+            "x": 700,
+            "y": 1430
+          },
+          "width": 260,
+          "data": {
+            "title": "Confirm IP and music-rights approach.",
+            "status": "idea",
+            "associatedIds": [],
+            "workstreamId": "workstream_legal",
+            "stageId": "stage_strategy_decisions",
+            "priority": "P0",
+            "confidence": "medium",
+            "createdAt": "2026-06-12T00:00:00.000Z",
+            "updatedAt": "2026-06-12T00:00:00.000Z"
+          },
+          "draggable": true,
+          "selectable": true,
+          "deletable": true,
+          "zIndex": 10
+        },
+        {
+          "id": "tab_overall_project_node_map_pre_arrival_experience",
+          "type": "planningNode",
+          "position": {
+            "x": 60,
+            "y": 1580
+          },
+          "width": 260,
+          "data": {
+            "title": "Map pre-arrival experience.",
+            "status": "idea",
+            "associatedIds": [],
+            "workstreamId": "workstream_experience_design",
+            "stageId": "stage_discovery",
+            "priority": "P1",
+            "confidence": "medium",
+            "createdAt": "2026-06-12T00:00:00.000Z",
+            "updatedAt": "2026-06-12T00:00:00.000Z"
+          },
+          "draggable": true,
+          "selectable": true,
+          "deletable": true,
+          "zIndex": 10
+        },
+        {
+          "id": "tab_overall_project_node_design_queue_and_line_experience",
+          "type": "planningNode",
+          "position": {
+            "x": 1020,
+            "y": 1580
+          },
+          "width": 260,
+          "data": {
+            "title": "Design queue and line experience.",
+            "status": "idea",
+            "associatedIds": [],
+            "workstreamId": "workstream_experience_design",
+            "stageId": "stage_design",
+            "priority": "P1",
+            "confidence": "medium",
+            "createdAt": "2026-06-12T00:00:00.000Z",
+            "updatedAt": "2026-06-12T00:00:00.000Z"
+          },
+          "draggable": true,
+          "selectable": true,
+          "deletable": true,
+          "zIndex": 10
+        },
+        {
+          "id": "tab_overall_project_node_define_seating_model",
+          "type": "planningNode",
+          "position": {
+            "x": 1020,
+            "y": 1730
+          },
+          "width": 260,
+          "data": {
+            "title": "Define seating model.",
+            "status": "idea",
+            "associatedIds": [],
+            "workstreamId": "workstream_experience_design",
+            "stageId": "stage_design",
+            "priority": "P1",
+            "confidence": "medium",
+            "createdAt": "2026-06-12T00:00:00.000Z",
+            "updatedAt": "2026-06-12T00:00:00.000Z"
+          },
+          "draggable": true,
+          "selectable": true,
+          "deletable": true,
+          "zIndex": 10
+        },
+        {
+          "id": "tab_overall_project_node_define_lighting_design_requirements",
+          "type": "planningNode",
+          "position": {
+            "x": 1340,
+            "y": 1730
+          },
+          "width": 260,
+          "data": {
+            "title": "Define lighting design requirements.",
+            "status": "idea",
+            "associatedIds": [],
+            "workstreamId": "workstream_experience_design",
+            "stageId": "stage_design",
+            "priority": "P2",
+            "confidence": "medium",
+            "createdAt": "2026-06-12T00:00:00.000Z",
+            "updatedAt": "2026-06-12T00:00:00.000Z"
+          },
+          "draggable": true,
+          "selectable": true,
+          "deletable": true,
+          "zIndex": 10
+        },
+        {
+          "id": "tab_overall_project_node_define_food_and_beverage_concept",
+          "type": "planningNode",
+          "position": {
+            "x": 60,
+            "y": 1880
+          },
+          "width": 260,
+          "data": {
+            "title": "Define food and beverage concept.",
+            "status": "parked",
+            "associatedIds": [],
+            "workstreamId": "workstream_experience_design",
+            "stageId": "stage_discovery",
+            "priority": "P2",
+            "confidence": "medium",
+            "createdAt": "2026-06-12T00:00:00.000Z",
+            "updatedAt": "2026-06-12T00:00:00.000Z"
+          },
+          "draggable": true,
+          "selectable": true,
+          "deletable": true,
+          "zIndex": 10
+        },
+        {
+          "id": "tab_overall_project_node_define_post_experience_flow",
+          "type": "planningNode",
+          "position": {
+            "x": 1980,
+            "y": 1880
+          },
+          "width": 260,
+          "data": {
+            "title": "Define post-experience flow.",
+            "status": "idea",
+            "associatedIds": [],
+            "workstreamId": "workstream_experience_design",
+            "stageId": "stage_live_operations",
+            "priority": "P2",
+            "confidence": "medium",
+            "createdAt": "2026-06-12T00:00:00.000Z",
+            "updatedAt": "2026-06-12T00:00:00.000Z"
+          },
+          "draggable": true,
+          "selectable": true,
+          "deletable": true,
+          "zIndex": 10
+        }
+      ],
+      "edges": [
+        {
+          "id": "tab_overall_project_edge_confirm_venue_decision_maker_to_confirm_commercial_structure",
+          "source": "tab_overall_project_node_confirm_venue_decision_maker",
+          "target": "tab_overall_project_node_confirm_commercial_structure",
+          "type": "planningEdge",
+          "data": {
+            "relation": "hard_dependency"
+          }
+        },
+        {
+          "id": "tab_overall_project_edge_confirm_commercial_structure_to_define_operating_model",
+          "source": "tab_overall_project_node_confirm_commercial_structure",
+          "target": "tab_overall_project_node_define_operating_model",
+          "type": "planningEdge",
+          "data": {
+            "relation": "hard_dependency"
+          }
+        },
+        {
+          "id": "tab_overall_project_edge_define_physical_sphere_scope_to_confirm_fabrication_requirements",
+          "source": "tab_overall_project_node_define_physical_sphere_scope",
+          "target": "tab_overall_project_node_confirm_fabrication_requirements",
+          "type": "planningEdge",
+          "data": {
+            "relation": "hard_dependency"
+          }
+        },
+        {
+          "id": "tab_overall_project_edge_define_sound_system_specification_to_confirm_speaker_layout",
+          "source": "tab_overall_project_node_define_sound_system_specification",
+          "target": "tab_overall_project_node_confirm_speaker_layout",
+          "type": "planningEdge",
+          "data": {
+            "relation": "hard_dependency"
+          }
+        },
+        {
+          "id": "tab_overall_project_edge_confirm_acoustics_consultant_scope_to_define_sound_system_specification",
+          "source": "tab_overall_project_node_confirm_acoustics_consultant_scope",
+          "target": "tab_overall_project_node_define_sound_system_specification",
+          "type": "planningEdge",
+          "data": {
+            "relation": "hard_dependency"
+          }
+        },
+        {
+          "id": "tab_overall_project_edge_identify_artists_to_develop_artist_workflow",
+          "source": "tab_overall_project_node_identify_artists",
+          "target": "tab_overall_project_node_develop_artist_workflow",
+          "type": "planningEdge",
+          "data": {
+            "relation": "hard_dependency"
+          }
+        },
+        {
+          "id": "tab_overall_project_edge_define_atmos_engineer_workflow_to_create_technical_content_development_process",
+          "source": "tab_overall_project_node_define_atmos_engineer_workflow",
+          "target": "tab_overall_project_node_create_technical_content_development_process",
+          "type": "planningEdge",
+          "data": {
+            "relation": "hard_dependency"
+          }
+        },
+        {
+          "id": "tab_overall_project_edge_create_technical_content_development_process_to_prepare_tier_one_artist_content_production_answer",
+          "source": "tab_overall_project_node_create_technical_content_development_process",
+          "target": "tab_overall_project_node_prepare_tier_one_artist_content_production_answer",
+          "type": "planningEdge",
+          "data": {
+            "relation": "hard_dependency"
+          }
+        },
+        {
+          "id": "tab_overall_project_edge_choose_ticketing_platform_to_define_ticket_tiers",
+          "source": "tab_overall_project_node_choose_ticketing_platform",
+          "target": "tab_overall_project_node_define_ticket_tiers",
+          "type": "planningEdge",
+          "data": {
+            "relation": "hard_dependency"
+          }
+        },
+        {
+          "id": "tab_overall_project_edge_define_operating_model_to_design_queue_and_line_experience",
+          "source": "tab_overall_project_node_define_operating_model",
+          "target": "tab_overall_project_node_design_queue_and_line_experience",
+          "type": "planningEdge",
+          "data": {
+            "relation": "hard_dependency"
+          }
+        },
+        {
+          "id": "tab_overall_project_edge_define_seating_model_to_define_lighting_design_requirements",
+          "source": "tab_overall_project_node_define_seating_model",
+          "target": "tab_overall_project_node_define_lighting_design_requirements",
+          "type": "planningEdge",
+          "data": {
+            "relation": "hard_dependency"
+          }
+        }
+      ],
+      "viewport": {
+        "x": 0,
+        "y": 0,
+        "zoom": 0.8
+      },
+      "filters": {}
+    },
+    {
+      "id": "tab_workstreams",
+      "name": "Workstreams",
+      "stages": [
+        {
+          "id": "stage_discovery",
+          "name": "Discovery",
+          "order": 0,
+          "colorToken": "stage-1",
+          "rect": {
+            "x": 0,
+            "y": 0,
+            "width": 300,
+            "height": 2200
+          }
+        },
+        {
+          "id": "stage_strategy_decisions",
+          "name": "Strategy / Decisions",
+          "order": 1,
+          "colorToken": "stage-2",
+          "rect": {
+            "x": 320,
+            "y": 0,
+            "width": 300,
+            "height": 2200
+          }
+        },
+        {
+          "id": "stage_partner_confirmation",
+          "name": "Partner Confirmation",
+          "order": 2,
+          "colorToken": "stage-3",
+          "rect": {
+            "x": 640,
+            "y": 0,
+            "width": 300,
+            "height": 2200
+          }
+        },
+        {
+          "id": "stage_design",
+          "name": "Design",
+          "order": 3,
+          "colorToken": "stage-4",
+          "rect": {
+            "x": 960,
+            "y": 0,
+            "width": 300,
+            "height": 2200
+          }
+        },
+        {
+          "id": "stage_production",
+          "name": "Production",
+          "order": 4,
+          "colorToken": "stage-5",
+          "rect": {
+            "x": 1280,
+            "y": 0,
+            "width": 300,
+            "height": 2200
+          }
+        },
+        {
+          "id": "stage_delivery_install",
+          "name": "Delivery / Install",
+          "order": 5,
+          "colorToken": "stage-6",
+          "rect": {
+            "x": 1600,
+            "y": 0,
+            "width": 300,
+            "height": 2200
+          }
+        },
+        {
+          "id": "stage_live_operations",
+          "name": "Live Operations",
+          "order": 6,
+          "colorToken": "stage-7",
+          "rect": {
+            "x": 1920,
+            "y": 0,
+            "width": 300,
+            "height": 2200
+          }
+        },
+        {
+          "id": "stage_post_experience",
+          "name": "Post-Experience",
+          "order": 7,
+          "colorToken": "stage-8",
+          "rect": {
+            "x": 2240,
+            "y": 0,
+            "width": 300,
+            "height": 2200
+          }
+        }
+      ],
+      "nodes": [
+        {
+          "id": "tab_workstreams_band_stage_discovery",
+          "type": "stageBand",
+          "position": {
+            "x": 0,
+            "y": 0
+          },
+          "width": 300,
+          "height": 2200,
+          "data": {
+            "title": "Discovery",
+            "stageId": "stage_discovery",
+            "locked": true,
+            "colorToken": "stage-1"
+          },
+          "draggable": false,
+          "selectable": false,
+          "deletable": false,
+          "zIndex": 0
+        },
+        {
+          "id": "tab_workstreams_band_stage_strategy_decisions",
+          "type": "stageBand",
+          "position": {
+            "x": 320,
+            "y": 0
+          },
+          "width": 300,
+          "height": 2200,
+          "data": {
+            "title": "Strategy / Decisions",
+            "stageId": "stage_strategy_decisions",
+            "locked": true,
+            "colorToken": "stage-2"
+          },
+          "draggable": false,
+          "selectable": false,
+          "deletable": false,
+          "zIndex": 0
+        },
+        {
+          "id": "tab_workstreams_band_stage_partner_confirmation",
+          "type": "stageBand",
+          "position": {
+            "x": 640,
+            "y": 0
+          },
+          "width": 300,
+          "height": 2200,
+          "data": {
+            "title": "Partner Confirmation",
+            "stageId": "stage_partner_confirmation",
+            "locked": true,
+            "colorToken": "stage-3"
+          },
+          "draggable": false,
+          "selectable": false,
+          "deletable": false,
+          "zIndex": 0
+        },
+        {
+          "id": "tab_workstreams_band_stage_design",
+          "type": "stageBand",
+          "position": {
+            "x": 960,
+            "y": 0
+          },
+          "width": 300,
+          "height": 2200,
+          "data": {
+            "title": "Design",
+            "stageId": "stage_design",
+            "locked": true,
+            "colorToken": "stage-4"
+          },
+          "draggable": false,
+          "selectable": false,
+          "deletable": false,
+          "zIndex": 0
+        },
+        {
+          "id": "tab_workstreams_band_stage_production",
+          "type": "stageBand",
+          "position": {
+            "x": 1280,
+            "y": 0
+          },
+          "width": 300,
+          "height": 2200,
+          "data": {
+            "title": "Production",
+            "stageId": "stage_production",
+            "locked": true,
+            "colorToken": "stage-5"
+          },
+          "draggable": false,
+          "selectable": false,
+          "deletable": false,
+          "zIndex": 0
+        },
+        {
+          "id": "tab_workstreams_band_stage_delivery_install",
+          "type": "stageBand",
+          "position": {
+            "x": 1600,
+            "y": 0
+          },
+          "width": 300,
+          "height": 2200,
+          "data": {
+            "title": "Delivery / Install",
+            "stageId": "stage_delivery_install",
+            "locked": true,
+            "colorToken": "stage-6"
+          },
+          "draggable": false,
+          "selectable": false,
+          "deletable": false,
+          "zIndex": 0
+        },
+        {
+          "id": "tab_workstreams_band_stage_live_operations",
+          "type": "stageBand",
+          "position": {
+            "x": 1920,
+            "y": 0
+          },
+          "width": 300,
+          "height": 2200,
+          "data": {
+            "title": "Live Operations",
+            "stageId": "stage_live_operations",
+            "locked": true,
+            "colorToken": "stage-7"
+          },
+          "draggable": false,
+          "selectable": false,
+          "deletable": false,
+          "zIndex": 0
+        },
+        {
+          "id": "tab_workstreams_band_stage_post_experience",
+          "type": "stageBand",
+          "position": {
+            "x": 2240,
+            "y": 0
+          },
+          "width": 300,
+          "height": 2200,
+          "data": {
+            "title": "Post-Experience",
+            "stageId": "stage_post_experience",
+            "locked": true,
+            "colorToken": "stage-8"
+          },
+          "draggable": false,
+          "selectable": false,
+          "deletable": false,
+          "zIndex": 0
+        },
+        {
+          "id": "tab_workstreams_node_confirm_venue_decision_maker",
+          "type": "planningNode",
+          "position": {
+            "x": 60,
+            "y": 80
+          },
+          "width": 260,
+          "data": {
+            "title": "Confirm venue decision maker.",
+            "status": "defined",
+            "associatedIds": [
+              "person_dnk",
+              "person_sonic_sphere_bv",
+              "person_sonic_spheres_inc"
+            ],
+            "workstreamId": "workstream_venue",
+            "stageId": "stage_discovery",
+            "priority": "P0",
+            "confidence": "medium",
+            "createdAt": "2026-06-12T00:00:00.000Z",
+            "updatedAt": "2026-06-12T00:00:00.000Z"
+          },
+          "draggable": true,
+          "selectable": true,
+          "deletable": true,
+          "zIndex": 10
+        },
+        {
+          "id": "tab_workstreams_node_confirm_commercial_structure",
+          "type": "planningNode",
+          "position": {
+            "x": 380,
+            "y": 80
+          },
+          "width": 260,
+          "data": {
+            "title": "Confirm commercial structure.",
+            "status": "idea",
+            "associatedIds": [
+              "person_sonic_spheres_inc"
+            ],
+            "workstreamId": "workstream_venue",
+            "stageId": "stage_strategy_decisions",
+            "priority": "P0",
+            "confidence": "medium",
+            "createdAt": "2026-06-12T00:00:00.000Z",
+            "updatedAt": "2026-06-12T00:00:00.000Z"
+          },
+          "draggable": true,
+          "selectable": true,
+          "deletable": true,
+          "zIndex": 10
+        }
+      ],
+      "edges": [
+        {
+          "id": "tab_workstreams_edge_confirm_venue_decision_maker_to_confirm_commercial_structure",
+          "source": "tab_workstreams_node_confirm_venue_decision_maker",
+          "target": "tab_workstreams_node_confirm_commercial_structure",
+          "type": "planningEdge",
+          "data": {
+            "relation": "hard_dependency"
+          }
+        }
+      ],
+      "viewport": {
+        "x": 0,
+        "y": 0,
+        "zoom": 0.8
+      },
+      "filters": {}
+    },
+    {
+      "id": "tab_audio",
+      "name": "Audio",
+      "stages": [
+        {
+          "id": "stage_discovery",
+          "name": "Discovery",
+          "order": 0,
+          "colorToken": "stage-1",
+          "rect": {
+            "x": 0,
+            "y": 0,
+            "width": 300,
+            "height": 2200
+          }
+        },
+        {
+          "id": "stage_strategy_decisions",
+          "name": "Strategy / Decisions",
+          "order": 1,
+          "colorToken": "stage-2",
+          "rect": {
+            "x": 320,
+            "y": 0,
+            "width": 300,
+            "height": 2200
+          }
+        },
+        {
+          "id": "stage_partner_confirmation",
+          "name": "Partner Confirmation",
+          "order": 2,
+          "colorToken": "stage-3",
+          "rect": {
+            "x": 640,
+            "y": 0,
+            "width": 300,
+            "height": 2200
+          }
+        },
+        {
+          "id": "stage_design",
+          "name": "Design",
+          "order": 3,
+          "colorToken": "stage-4",
+          "rect": {
+            "x": 960,
+            "y": 0,
+            "width": 300,
+            "height": 2200
+          }
+        },
+        {
+          "id": "stage_production",
+          "name": "Production",
+          "order": 4,
+          "colorToken": "stage-5",
+          "rect": {
+            "x": 1280,
+            "y": 0,
+            "width": 300,
+            "height": 2200
+          }
+        },
+        {
+          "id": "stage_delivery_install",
+          "name": "Delivery / Install",
+          "order": 5,
+          "colorToken": "stage-6",
+          "rect": {
+            "x": 1600,
+            "y": 0,
+            "width": 300,
+            "height": 2200
+          }
+        },
+        {
+          "id": "stage_live_operations",
+          "name": "Live Operations",
+          "order": 6,
+          "colorToken": "stage-7",
+          "rect": {
+            "x": 1920,
+            "y": 0,
+            "width": 300,
+            "height": 2200
+          }
+        },
+        {
+          "id": "stage_post_experience",
+          "name": "Post-Experience",
+          "order": 7,
+          "colorToken": "stage-8",
+          "rect": {
+            "x": 2240,
+            "y": 0,
+            "width": 300,
+            "height": 2200
+          }
+        }
+      ],
+      "nodes": [
+        {
+          "id": "tab_audio_band_stage_discovery",
+          "type": "stageBand",
+          "position": {
+            "x": 0,
+            "y": 0
+          },
+          "width": 300,
+          "height": 2200,
+          "data": {
+            "title": "Discovery",
+            "stageId": "stage_discovery",
+            "locked": true,
+            "colorToken": "stage-1"
+          },
+          "draggable": false,
+          "selectable": false,
+          "deletable": false,
+          "zIndex": 0
+        },
+        {
+          "id": "tab_audio_band_stage_strategy_decisions",
+          "type": "stageBand",
+          "position": {
+            "x": 320,
+            "y": 0
+          },
+          "width": 300,
+          "height": 2200,
+          "data": {
+            "title": "Strategy / Decisions",
+            "stageId": "stage_strategy_decisions",
+            "locked": true,
+            "colorToken": "stage-2"
+          },
+          "draggable": false,
+          "selectable": false,
+          "deletable": false,
+          "zIndex": 0
+        },
+        {
+          "id": "tab_audio_band_stage_partner_confirmation",
+          "type": "stageBand",
+          "position": {
+            "x": 640,
+            "y": 0
+          },
+          "width": 300,
+          "height": 2200,
+          "data": {
+            "title": "Partner Confirmation",
+            "stageId": "stage_partner_confirmation",
+            "locked": true,
+            "colorToken": "stage-3"
+          },
+          "draggable": false,
+          "selectable": false,
+          "deletable": false,
+          "zIndex": 0
+        },
+        {
+          "id": "tab_audio_band_stage_design",
+          "type": "stageBand",
+          "position": {
+            "x": 960,
+            "y": 0
+          },
+          "width": 300,
+          "height": 2200,
+          "data": {
+            "title": "Design",
+            "stageId": "stage_design",
+            "locked": true,
+            "colorToken": "stage-4"
+          },
+          "draggable": false,
+          "selectable": false,
+          "deletable": false,
+          "zIndex": 0
+        },
+        {
+          "id": "tab_audio_band_stage_production",
+          "type": "stageBand",
+          "position": {
+            "x": 1280,
+            "y": 0
+          },
+          "width": 300,
+          "height": 2200,
+          "data": {
+            "title": "Production",
+            "stageId": "stage_production",
+            "locked": true,
+            "colorToken": "stage-5"
+          },
+          "draggable": false,
+          "selectable": false,
+          "deletable": false,
+          "zIndex": 0
+        },
+        {
+          "id": "tab_audio_band_stage_delivery_install",
+          "type": "stageBand",
+          "position": {
+            "x": 1600,
+            "y": 0
+          },
+          "width": 300,
+          "height": 2200,
+          "data": {
+            "title": "Delivery / Install",
+            "stageId": "stage_delivery_install",
+            "locked": true,
+            "colorToken": "stage-6"
+          },
+          "draggable": false,
+          "selectable": false,
+          "deletable": false,
+          "zIndex": 0
+        },
+        {
+          "id": "tab_audio_band_stage_live_operations",
+          "type": "stageBand",
+          "position": {
+            "x": 1920,
+            "y": 0
+          },
+          "width": 300,
+          "height": 2200,
+          "data": {
+            "title": "Live Operations",
+            "stageId": "stage_live_operations",
+            "locked": true,
+            "colorToken": "stage-7"
+          },
+          "draggable": false,
+          "selectable": false,
+          "deletable": false,
+          "zIndex": 0
+        },
+        {
+          "id": "tab_audio_band_stage_post_experience",
+          "type": "stageBand",
+          "position": {
+            "x": 2240,
+            "y": 0
+          },
+          "width": 300,
+          "height": 2200,
+          "data": {
+            "title": "Post-Experience",
+            "stageId": "stage_post_experience",
+            "locked": true,
+            "colorToken": "stage-8"
+          },
+          "draggable": false,
+          "selectable": false,
+          "deletable": false,
+          "zIndex": 0
+        },
+        {
+          "id": "tab_audio_node_define_sound_system_specification",
+          "type": "planningNode",
+          "position": {
+            "x": 380,
+            "y": 380
+          },
+          "width": 260,
+          "data": {
+            "title": "Define sound system specification.",
+            "status": "defined",
+            "associatedIds": [
+              "person_merijn_royaards",
+              "person_jeremy_guillory"
+            ],
+            "workstreamId": "workstream_delivery_of_sound_system",
+            "stageId": "stage_strategy_decisions",
+            "priority": "P0",
+            "confidence": "medium",
+            "createdAt": "2026-06-12T00:00:00.000Z",
+            "updatedAt": "2026-06-12T00:00:00.000Z"
+          },
+          "draggable": true,
+          "selectable": true,
+          "deletable": true,
+          "zIndex": 10
+        },
+        {
+          "id": "tab_audio_node_confirm_speaker_layout",
+          "type": "planningNode",
+          "position": {
+            "x": 1020,
+            "y": 380
+          },
+          "width": 260,
+          "data": {
+            "title": "Confirm speaker layout.",
+            "status": "idea",
+            "associatedIds": [
+              "person_merijn_royaards"
+            ],
+            "workstreamId": "workstream_delivery_of_sound_system",
+            "stageId": "stage_design",
+            "priority": "P0",
+            "confidence": "medium",
+            "createdAt": "2026-06-12T00:00:00.000Z",
+            "updatedAt": "2026-06-12T00:00:00.000Z"
+          },
+          "draggable": true,
+          "selectable": true,
+          "deletable": true,
+          "zIndex": 10
+        },
+        {
+          "id": "tab_audio_node_confirm_acoustics_consultant_scope",
+          "type": "planningNode",
+          "position": {
+            "x": 60,
+            "y": 530
+          },
+          "width": 260,
+          "data": {
+            "title": "Confirm acoustics consultant scope.",
+            "status": "defined",
+            "associatedIds": [
+              "person_sabine"
+            ],
+            "workstreamId": "workstream_acoustics_consultant",
+            "stageId": "stage_discovery",
+            "priority": "P1",
+            "confidence": "medium",
+            "createdAt": "2026-06-12T00:00:00.000Z",
+            "updatedAt": "2026-06-12T00:00:00.000Z"
+          },
+          "draggable": true,
+          "selectable": true,
+          "deletable": true,
+          "zIndex": 10
+        },
+        {
+          "id": "tab_audio_node_define_atmos_engineer_workflow",
+          "type": "planningNode",
+          "position": {
+            "x": 380,
+            "y": 1130
+          },
+          "width": 260,
+          "data": {
+            "title": "Define Atmos engineer workflow.",
+            "status": "defined",
+            "associatedIds": [
+              "person_jeremy_guillory"
+            ],
+            "workstreamId": "workstream_show_music_production",
+            "stageId": "stage_strategy_decisions",
+            "priority": "P0",
+            "confidence": "medium",
+            "createdAt": "2026-06-12T00:00:00.000Z",
+            "updatedAt": "2026-06-12T00:00:00.000Z"
+          },
+          "draggable": true,
+          "selectable": true,
+          "deletable": true,
+          "zIndex": 10
+        },
+        {
+          "id": "tab_audio_node_evaluate_ollie_morgan_as_possible_atmos_engineer",
+          "type": "planningNode",
+          "position": {
+            "x": 700,
+            "y": 1130
+          },
+          "width": 260,
+          "data": {
+            "title": "Evaluate Ollie Morgan as possible Atmos engineer.",
+            "status": "idea",
+            "associatedIds": [
+              "person_richie_britton"
+            ],
+            "workstreamId": "workstream_show_music_production",
+            "stageId": "stage_partner_confirmation",
+            "priority": "P1",
+            "confidence": "medium",
+            "createdAt": "2026-06-12T00:00:00.000Z",
+            "updatedAt": "2026-06-12T00:00:00.000Z"
+          },
+          "draggable": true,
+          "selectable": true,
+          "deletable": true,
+          "zIndex": 10
+        },
+        {
+          "id": "tab_audio_node_create_technical_content_development_process",
+          "type": "planningNode",
+          "position": {
+            "x": 1020,
+            "y": 1130
+          },
+          "width": 260,
+          "data": {
+            "title": "Create technical content development process.",
+            "status": "idea",
+            "associatedIds": [
+              "person_jeremy_guillory"
+            ],
+            "workstreamId": "workstream_show_music_production",
+            "stageId": "stage_design",
+            "priority": "P0",
+            "confidence": "medium",
+            "createdAt": "2026-06-12T00:00:00.000Z",
+            "updatedAt": "2026-06-12T00:00:00.000Z"
+          },
+          "draggable": true,
+          "selectable": true,
+          "deletable": true,
+          "zIndex": 10
+        }
+      ],
+      "edges": [
+        {
+          "id": "tab_audio_edge_define_sound_system_specification_to_confirm_speaker_layout",
+          "source": "tab_audio_node_define_sound_system_specification",
+          "target": "tab_audio_node_confirm_speaker_layout",
+          "type": "planningEdge",
+          "data": {
+            "relation": "hard_dependency"
+          }
+        },
+        {
+          "id": "tab_audio_edge_confirm_acoustics_consultant_scope_to_define_sound_system_specification",
+          "source": "tab_audio_node_confirm_acoustics_consultant_scope",
+          "target": "tab_audio_node_define_sound_system_specification",
+          "type": "planningEdge",
+          "data": {
+            "relation": "hard_dependency"
+          }
+        },
+        {
+          "id": "tab_audio_edge_define_atmos_engineer_workflow_to_create_technical_content_development_process",
+          "source": "tab_audio_node_define_atmos_engineer_workflow",
+          "target": "tab_audio_node_create_technical_content_development_process",
+          "type": "planningEdge",
+          "data": {
+            "relation": "hard_dependency"
+          }
+        }
+      ],
+      "viewport": {
+        "x": 0,
+        "y": 0,
+        "zoom": 0.8
+      },
+      "filters": {}
+    },
+    {
+      "id": "tab_structure",
+      "name": "Structure",
+      "stages": [
+        {
+          "id": "stage_discovery",
+          "name": "Discovery",
+          "order": 0,
+          "colorToken": "stage-1",
+          "rect": {
+            "x": 0,
+            "y": 0,
+            "width": 300,
+            "height": 2200
+          }
+        },
+        {
+          "id": "stage_strategy_decisions",
+          "name": "Strategy / Decisions",
+          "order": 1,
+          "colorToken": "stage-2",
+          "rect": {
+            "x": 320,
+            "y": 0,
+            "width": 300,
+            "height": 2200
+          }
+        },
+        {
+          "id": "stage_partner_confirmation",
+          "name": "Partner Confirmation",
+          "order": 2,
+          "colorToken": "stage-3",
+          "rect": {
+            "x": 640,
+            "y": 0,
+            "width": 300,
+            "height": 2200
+          }
+        },
+        {
+          "id": "stage_design",
+          "name": "Design",
+          "order": 3,
+          "colorToken": "stage-4",
+          "rect": {
+            "x": 960,
+            "y": 0,
+            "width": 300,
+            "height": 2200
+          }
+        },
+        {
+          "id": "stage_production",
+          "name": "Production",
+          "order": 4,
+          "colorToken": "stage-5",
+          "rect": {
+            "x": 1280,
+            "y": 0,
+            "width": 300,
+            "height": 2200
+          }
+        },
+        {
+          "id": "stage_delivery_install",
+          "name": "Delivery / Install",
+          "order": 5,
+          "colorToken": "stage-6",
+          "rect": {
+            "x": 1600,
+            "y": 0,
+            "width": 300,
+            "height": 2200
+          }
+        },
+        {
+          "id": "stage_live_operations",
+          "name": "Live Operations",
+          "order": 6,
+          "colorToken": "stage-7",
+          "rect": {
+            "x": 1920,
+            "y": 0,
+            "width": 300,
+            "height": 2200
+          }
+        },
+        {
+          "id": "stage_post_experience",
+          "name": "Post-Experience",
+          "order": 7,
+          "colorToken": "stage-8",
+          "rect": {
+            "x": 2240,
+            "y": 0,
+            "width": 300,
+            "height": 2200
+          }
+        }
+      ],
+      "nodes": [
+        {
+          "id": "tab_structure_band_stage_discovery",
+          "type": "stageBand",
+          "position": {
+            "x": 0,
+            "y": 0
+          },
+          "width": 300,
+          "height": 2200,
+          "data": {
+            "title": "Discovery",
+            "stageId": "stage_discovery",
+            "locked": true,
+            "colorToken": "stage-1"
+          },
+          "draggable": false,
+          "selectable": false,
+          "deletable": false,
+          "zIndex": 0
+        },
+        {
+          "id": "tab_structure_band_stage_strategy_decisions",
+          "type": "stageBand",
+          "position": {
+            "x": 320,
+            "y": 0
+          },
+          "width": 300,
+          "height": 2200,
+          "data": {
+            "title": "Strategy / Decisions",
+            "stageId": "stage_strategy_decisions",
+            "locked": true,
+            "colorToken": "stage-2"
+          },
+          "draggable": false,
+          "selectable": false,
+          "deletable": false,
+          "zIndex": 0
+        },
+        {
+          "id": "tab_structure_band_stage_partner_confirmation",
+          "type": "stageBand",
+          "position": {
+            "x": 640,
+            "y": 0
+          },
+          "width": 300,
+          "height": 2200,
+          "data": {
+            "title": "Partner Confirmation",
+            "stageId": "stage_partner_confirmation",
+            "locked": true,
+            "colorToken": "stage-3"
+          },
+          "draggable": false,
+          "selectable": false,
+          "deletable": false,
+          "zIndex": 0
+        },
+        {
+          "id": "tab_structure_band_stage_design",
+          "type": "stageBand",
+          "position": {
+            "x": 960,
+            "y": 0
+          },
+          "width": 300,
+          "height": 2200,
+          "data": {
+            "title": "Design",
+            "stageId": "stage_design",
+            "locked": true,
+            "colorToken": "stage-4"
+          },
+          "draggable": false,
+          "selectable": false,
+          "deletable": false,
+          "zIndex": 0
+        },
+        {
+          "id": "tab_structure_band_stage_production",
+          "type": "stageBand",
+          "position": {
+            "x": 1280,
+            "y": 0
+          },
+          "width": 300,
+          "height": 2200,
+          "data": {
+            "title": "Production",
+            "stageId": "stage_production",
+            "locked": true,
+            "colorToken": "stage-5"
+          },
+          "draggable": false,
+          "selectable": false,
+          "deletable": false,
+          "zIndex": 0
+        },
+        {
+          "id": "tab_structure_band_stage_delivery_install",
+          "type": "stageBand",
+          "position": {
+            "x": 1600,
+            "y": 0
+          },
+          "width": 300,
+          "height": 2200,
+          "data": {
+            "title": "Delivery / Install",
+            "stageId": "stage_delivery_install",
+            "locked": true,
+            "colorToken": "stage-6"
+          },
+          "draggable": false,
+          "selectable": false,
+          "deletable": false,
+          "zIndex": 0
+        },
+        {
+          "id": "tab_structure_band_stage_live_operations",
+          "type": "stageBand",
+          "position": {
+            "x": 1920,
+            "y": 0
+          },
+          "width": 300,
+          "height": 2200,
+          "data": {
+            "title": "Live Operations",
+            "stageId": "stage_live_operations",
+            "locked": true,
+            "colorToken": "stage-7"
+          },
+          "draggable": false,
+          "selectable": false,
+          "deletable": false,
+          "zIndex": 0
+        },
+        {
+          "id": "tab_structure_band_stage_post_experience",
+          "type": "stageBand",
+          "position": {
+            "x": 2240,
+            "y": 0
+          },
+          "width": 300,
+          "height": 2200,
+          "data": {
+            "title": "Post-Experience",
+            "stageId": "stage_post_experience",
+            "locked": true,
+            "colorToken": "stage-8"
+          },
+          "draggable": false,
+          "selectable": false,
+          "deletable": false,
+          "zIndex": 0
+        },
+        {
+          "id": "tab_structure_node_define_physical_sphere_scope",
+          "type": "planningNode",
+          "position": {
+            "x": 60,
+            "y": 230
+          },
+          "width": 260,
+          "data": {
+            "title": "Define physical sphere scope.",
+            "status": "defined",
+            "associatedIds": [
+              "person_nicholas_christie",
+              "person_alexander_morley"
+            ],
+            "workstreamId": "workstream_delivery_of_physical_sphere",
+            "stageId": "stage_discovery",
+            "priority": "P0",
+            "confidence": "medium",
+            "createdAt": "2026-06-12T00:00:00.000Z",
+            "updatedAt": "2026-06-12T00:00:00.000Z"
+          },
+          "draggable": true,
+          "selectable": true,
+          "deletable": true,
+          "zIndex": 10
+        },
+        {
+          "id": "tab_structure_node_confirm_fabrication_requirements",
+          "type": "planningNode",
+          "position": {
+            "x": 1020,
+            "y": 230
+          },
+          "width": 260,
+          "data": {
+            "title": "Confirm fabrication requirements.",
+            "status": "idea",
+            "associatedIds": [
+              "person_nicholas_christie"
+            ],
+            "workstreamId": "workstream_delivery_of_physical_sphere",
+            "stageId": "stage_design",
+            "priority": "P1",
+            "confidence": "medium",
+            "createdAt": "2026-06-12T00:00:00.000Z",
+            "updatedAt": "2026-06-12T00:00:00.000Z"
+          },
+          "draggable": true,
+          "selectable": true,
+          "deletable": true,
+          "zIndex": 10
+        }
+      ],
+      "edges": [
+        {
+          "id": "tab_structure_edge_define_physical_sphere_scope_to_confirm_fabrication_requirements",
+          "source": "tab_structure_node_define_physical_sphere_scope",
+          "target": "tab_structure_node_confirm_fabrication_requirements",
+          "type": "planningEdge",
+          "data": {
+            "relation": "hard_dependency"
+          }
+        }
+      ],
+      "viewport": {
+        "x": 0,
+        "y": 0,
+        "zoom": 0.8
+      },
+      "filters": {}
+    },
+    {
+      "id": "tab_operations_topco",
+      "name": "Operations: TopCo",
+      "stages": [
+        {
+          "id": "stage_discovery",
+          "name": "Discovery",
+          "order": 0,
+          "colorToken": "stage-1",
+          "rect": {
+            "x": 0,
+            "y": 0,
+            "width": 300,
+            "height": 2200
+          }
+        },
+        {
+          "id": "stage_strategy_decisions",
+          "name": "Strategy / Decisions",
+          "order": 1,
+          "colorToken": "stage-2",
+          "rect": {
+            "x": 320,
+            "y": 0,
+            "width": 300,
+            "height": 2200
+          }
+        },
+        {
+          "id": "stage_partner_confirmation",
+          "name": "Partner Confirmation",
+          "order": 2,
+          "colorToken": "stage-3",
+          "rect": {
+            "x": 640,
+            "y": 0,
+            "width": 300,
+            "height": 2200
+          }
+        },
+        {
+          "id": "stage_design",
+          "name": "Design",
+          "order": 3,
+          "colorToken": "stage-4",
+          "rect": {
+            "x": 960,
+            "y": 0,
+            "width": 300,
+            "height": 2200
+          }
+        },
+        {
+          "id": "stage_production",
+          "name": "Production",
+          "order": 4,
+          "colorToken": "stage-5",
+          "rect": {
+            "x": 1280,
+            "y": 0,
+            "width": 300,
+            "height": 2200
+          }
+        },
+        {
+          "id": "stage_delivery_install",
+          "name": "Delivery / Install",
+          "order": 5,
+          "colorToken": "stage-6",
+          "rect": {
+            "x": 1600,
+            "y": 0,
+            "width": 300,
+            "height": 2200
+          }
+        },
+        {
+          "id": "stage_live_operations",
+          "name": "Live Operations",
+          "order": 6,
+          "colorToken": "stage-7",
+          "rect": {
+            "x": 1920,
+            "y": 0,
+            "width": 300,
+            "height": 2200
+          }
+        },
+        {
+          "id": "stage_post_experience",
+          "name": "Post-Experience",
+          "order": 7,
+          "colorToken": "stage-8",
+          "rect": {
+            "x": 2240,
+            "y": 0,
+            "width": 300,
+            "height": 2200
+          }
+        }
+      ],
+      "nodes": [
+        {
+          "id": "tab_operations_topco_band_stage_discovery",
+          "type": "stageBand",
+          "position": {
+            "x": 0,
+            "y": 0
+          },
+          "width": 300,
+          "height": 2200,
+          "data": {
+            "title": "Discovery",
+            "stageId": "stage_discovery",
+            "locked": true,
+            "colorToken": "stage-1"
+          },
+          "draggable": false,
+          "selectable": false,
+          "deletable": false,
+          "zIndex": 0
+        },
+        {
+          "id": "tab_operations_topco_band_stage_strategy_decisions",
+          "type": "stageBand",
+          "position": {
+            "x": 320,
+            "y": 0
+          },
+          "width": 300,
+          "height": 2200,
+          "data": {
+            "title": "Strategy / Decisions",
+            "stageId": "stage_strategy_decisions",
+            "locked": true,
+            "colorToken": "stage-2"
+          },
+          "draggable": false,
+          "selectable": false,
+          "deletable": false,
+          "zIndex": 0
+        },
+        {
+          "id": "tab_operations_topco_band_stage_partner_confirmation",
+          "type": "stageBand",
+          "position": {
+            "x": 640,
+            "y": 0
+          },
+          "width": 300,
+          "height": 2200,
+          "data": {
+            "title": "Partner Confirmation",
+            "stageId": "stage_partner_confirmation",
+            "locked": true,
+            "colorToken": "stage-3"
+          },
+          "draggable": false,
+          "selectable": false,
+          "deletable": false,
+          "zIndex": 0
+        },
+        {
+          "id": "tab_operations_topco_band_stage_design",
+          "type": "stageBand",
+          "position": {
+            "x": 960,
+            "y": 0
+          },
+          "width": 300,
+          "height": 2200,
+          "data": {
+            "title": "Design",
+            "stageId": "stage_design",
+            "locked": true,
+            "colorToken": "stage-4"
+          },
+          "draggable": false,
+          "selectable": false,
+          "deletable": false,
+          "zIndex": 0
+        },
+        {
+          "id": "tab_operations_topco_band_stage_production",
+          "type": "stageBand",
+          "position": {
+            "x": 1280,
+            "y": 0
+          },
+          "width": 300,
+          "height": 2200,
+          "data": {
+            "title": "Production",
+            "stageId": "stage_production",
+            "locked": true,
+            "colorToken": "stage-5"
+          },
+          "draggable": false,
+          "selectable": false,
+          "deletable": false,
+          "zIndex": 0
+        },
+        {
+          "id": "tab_operations_topco_band_stage_delivery_install",
+          "type": "stageBand",
+          "position": {
+            "x": 1600,
+            "y": 0
+          },
+          "width": 300,
+          "height": 2200,
+          "data": {
+            "title": "Delivery / Install",
+            "stageId": "stage_delivery_install",
+            "locked": true,
+            "colorToken": "stage-6"
+          },
+          "draggable": false,
+          "selectable": false,
+          "deletable": false,
+          "zIndex": 0
+        },
+        {
+          "id": "tab_operations_topco_band_stage_live_operations",
+          "type": "stageBand",
+          "position": {
+            "x": 1920,
+            "y": 0
+          },
+          "width": 300,
+          "height": 2200,
+          "data": {
+            "title": "Live Operations",
+            "stageId": "stage_live_operations",
+            "locked": true,
+            "colorToken": "stage-7"
+          },
+          "draggable": false,
+          "selectable": false,
+          "deletable": false,
+          "zIndex": 0
+        },
+        {
+          "id": "tab_operations_topco_band_stage_post_experience",
+          "type": "stageBand",
+          "position": {
+            "x": 2240,
+            "y": 0
+          },
+          "width": 300,
+          "height": 2200,
+          "data": {
+            "title": "Post-Experience",
+            "stageId": "stage_post_experience",
+            "locked": true,
+            "colorToken": "stage-8"
+          },
+          "draggable": false,
+          "selectable": false,
+          "deletable": false,
+          "zIndex": 0
+        },
+        {
+          "id": "tab_operations_topco_node_define_operating_model",
+          "type": "planningNode",
+          "position": {
+            "x": 380,
+            "y": 680
+          },
+          "width": 260,
+          "data": {
+            "title": "Define operating model.",
+            "status": "idea",
+            "associatedIds": [
+              "person_ed_cooke",
+              "person_ed_goh"
+            ],
+            "workstreamId": "workstream_operations",
+            "stageId": "stage_strategy_decisions",
+            "priority": "P0",
+            "confidence": "medium",
+            "createdAt": "2026-06-12T00:00:00.000Z",
+            "updatedAt": "2026-06-12T00:00:00.000Z"
+          },
+          "draggable": true,
+          "selectable": true,
+          "deletable": true,
+          "zIndex": 10
+        },
+        {
+          "id": "tab_operations_topco_node_design_queue_and_line_experience",
+          "type": "planningNode",
+          "position": {
+            "x": 1020,
+            "y": 1580
+          },
+          "width": 260,
+          "data": {
+            "title": "Design queue and line experience.",
+            "status": "idea",
+            "associatedIds": [],
+            "workstreamId": "workstream_experience_design",
+            "stageId": "stage_design",
+            "priority": "P1",
+            "confidence": "medium",
+            "createdAt": "2026-06-12T00:00:00.000Z",
+            "updatedAt": "2026-06-12T00:00:00.000Z"
+          },
+          "draggable": true,
+          "selectable": true,
+          "deletable": true,
+          "zIndex": 10
+        }
+      ],
+      "edges": [
+        {
+          "id": "tab_operations_topco_edge_define_operating_model_to_design_queue_and_line_experience",
+          "source": "tab_operations_topco_node_define_operating_model",
+          "target": "tab_operations_topco_node_design_queue_and_line_experience",
+          "type": "planningEdge",
+          "data": {
+            "relation": "hard_dependency"
+          }
+        }
+      ],
+      "viewport": {
+        "x": 0,
+        "y": 0,
+        "zoom": 0.8
+      },
+      "filters": {}
+    },
+    {
+      "id": "tab_operations_co_ops",
+      "name": "Operations: Co-Ops",
+      "stages": [
+        {
+          "id": "stage_discovery",
+          "name": "Discovery",
+          "order": 0,
+          "colorToken": "stage-1",
+          "rect": {
+            "x": 0,
+            "y": 0,
+            "width": 300,
+            "height": 2200
+          }
+        },
+        {
+          "id": "stage_strategy_decisions",
+          "name": "Strategy / Decisions",
+          "order": 1,
+          "colorToken": "stage-2",
+          "rect": {
+            "x": 320,
+            "y": 0,
+            "width": 300,
+            "height": 2200
+          }
+        },
+        {
+          "id": "stage_partner_confirmation",
+          "name": "Partner Confirmation",
+          "order": 2,
+          "colorToken": "stage-3",
+          "rect": {
+            "x": 640,
+            "y": 0,
+            "width": 300,
+            "height": 2200
+          }
+        },
+        {
+          "id": "stage_design",
+          "name": "Design",
+          "order": 3,
+          "colorToken": "stage-4",
+          "rect": {
+            "x": 960,
+            "y": 0,
+            "width": 300,
+            "height": 2200
+          }
+        },
+        {
+          "id": "stage_production",
+          "name": "Production",
+          "order": 4,
+          "colorToken": "stage-5",
+          "rect": {
+            "x": 1280,
+            "y": 0,
+            "width": 300,
+            "height": 2200
+          }
+        },
+        {
+          "id": "stage_delivery_install",
+          "name": "Delivery / Install",
+          "order": 5,
+          "colorToken": "stage-6",
+          "rect": {
+            "x": 1600,
+            "y": 0,
+            "width": 300,
+            "height": 2200
+          }
+        },
+        {
+          "id": "stage_live_operations",
+          "name": "Live Operations",
+          "order": 6,
+          "colorToken": "stage-7",
+          "rect": {
+            "x": 1920,
+            "y": 0,
+            "width": 300,
+            "height": 2200
+          }
+        },
+        {
+          "id": "stage_post_experience",
+          "name": "Post-Experience",
+          "order": 7,
+          "colorToken": "stage-8",
+          "rect": {
+            "x": 2240,
+            "y": 0,
+            "width": 300,
+            "height": 2200
+          }
+        }
+      ],
+      "nodes": [
+        {
+          "id": "tab_operations_co_ops_band_stage_discovery",
+          "type": "stageBand",
+          "position": {
+            "x": 0,
+            "y": 0
+          },
+          "width": 300,
+          "height": 2200,
+          "data": {
+            "title": "Discovery",
+            "stageId": "stage_discovery",
+            "locked": true,
+            "colorToken": "stage-1"
+          },
+          "draggable": false,
+          "selectable": false,
+          "deletable": false,
+          "zIndex": 0
+        },
+        {
+          "id": "tab_operations_co_ops_band_stage_strategy_decisions",
+          "type": "stageBand",
+          "position": {
+            "x": 320,
+            "y": 0
+          },
+          "width": 300,
+          "height": 2200,
+          "data": {
+            "title": "Strategy / Decisions",
+            "stageId": "stage_strategy_decisions",
+            "locked": true,
+            "colorToken": "stage-2"
+          },
+          "draggable": false,
+          "selectable": false,
+          "deletable": false,
+          "zIndex": 0
+        },
+        {
+          "id": "tab_operations_co_ops_band_stage_partner_confirmation",
+          "type": "stageBand",
+          "position": {
+            "x": 640,
+            "y": 0
+          },
+          "width": 300,
+          "height": 2200,
+          "data": {
+            "title": "Partner Confirmation",
+            "stageId": "stage_partner_confirmation",
+            "locked": true,
+            "colorToken": "stage-3"
+          },
+          "draggable": false,
+          "selectable": false,
+          "deletable": false,
+          "zIndex": 0
+        },
+        {
+          "id": "tab_operations_co_ops_band_stage_design",
+          "type": "stageBand",
+          "position": {
+            "x": 960,
+            "y": 0
+          },
+          "width": 300,
+          "height": 2200,
+          "data": {
+            "title": "Design",
+            "stageId": "stage_design",
+            "locked": true,
+            "colorToken": "stage-4"
+          },
+          "draggable": false,
+          "selectable": false,
+          "deletable": false,
+          "zIndex": 0
+        },
+        {
+          "id": "tab_operations_co_ops_band_stage_production",
+          "type": "stageBand",
+          "position": {
+            "x": 1280,
+            "y": 0
+          },
+          "width": 300,
+          "height": 2200,
+          "data": {
+            "title": "Production",
+            "stageId": "stage_production",
+            "locked": true,
+            "colorToken": "stage-5"
+          },
+          "draggable": false,
+          "selectable": false,
+          "deletable": false,
+          "zIndex": 0
+        },
+        {
+          "id": "tab_operations_co_ops_band_stage_delivery_install",
+          "type": "stageBand",
+          "position": {
+            "x": 1600,
+            "y": 0
+          },
+          "width": 300,
+          "height": 2200,
+          "data": {
+            "title": "Delivery / Install",
+            "stageId": "stage_delivery_install",
+            "locked": true,
+            "colorToken": "stage-6"
+          },
+          "draggable": false,
+          "selectable": false,
+          "deletable": false,
+          "zIndex": 0
+        },
+        {
+          "id": "tab_operations_co_ops_band_stage_live_operations",
+          "type": "stageBand",
+          "position": {
+            "x": 1920,
+            "y": 0
+          },
+          "width": 300,
+          "height": 2200,
+          "data": {
+            "title": "Live Operations",
+            "stageId": "stage_live_operations",
+            "locked": true,
+            "colorToken": "stage-7"
+          },
+          "draggable": false,
+          "selectable": false,
+          "deletable": false,
+          "zIndex": 0
+        },
+        {
+          "id": "tab_operations_co_ops_band_stage_post_experience",
+          "type": "stageBand",
+          "position": {
+            "x": 2240,
+            "y": 0
+          },
+          "width": 300,
+          "height": 2200,
+          "data": {
+            "title": "Post-Experience",
+            "stageId": "stage_post_experience",
+            "locked": true,
+            "colorToken": "stage-8"
+          },
+          "draggable": false,
+          "selectable": false,
+          "deletable": false,
+          "zIndex": 0
+        },
+        {
+          "id": "tab_operations_co_ops_node_define_operating_model",
+          "type": "planningNode",
+          "position": {
+            "x": 380,
+            "y": 680
+          },
+          "width": 260,
+          "data": {
+            "title": "Define operating model.",
+            "status": "idea",
+            "associatedIds": [
+              "person_ed_cooke",
+              "person_ed_goh"
+            ],
+            "workstreamId": "workstream_operations",
+            "stageId": "stage_strategy_decisions",
+            "priority": "P0",
+            "confidence": "medium",
+            "createdAt": "2026-06-12T00:00:00.000Z",
+            "updatedAt": "2026-06-12T00:00:00.000Z"
+          },
+          "draggable": true,
+          "selectable": true,
+          "deletable": true,
+          "zIndex": 10
+        },
+        {
+          "id": "tab_operations_co_ops_node_define_partner_interface_model",
+          "type": "planningNode",
+          "position": {
+            "x": 700,
+            "y": 680
+          },
+          "width": 260,
+          "data": {
+            "title": "Define partner interface model.",
+            "status": "idea",
+            "associatedIds": [
+              "person_ed_cooke"
+            ],
+            "workstreamId": "workstream_operations",
+            "stageId": "stage_partner_confirmation",
+            "priority": "P1",
+            "confidence": "medium",
+            "createdAt": "2026-06-12T00:00:00.000Z",
+            "updatedAt": "2026-06-12T00:00:00.000Z"
+          },
+          "draggable": true,
+          "selectable": true,
+          "deletable": true,
+          "zIndex": 10
+        }
+      ],
+      "edges": [],
+      "viewport": {
+        "x": 0,
+        "y": 0,
+        "zoom": 0.8
+      },
+      "filters": {}
+    },
+    {
+      "id": "tab_experience_design",
+      "name": "Experience Design",
+      "stages": [
+        {
+          "id": "stage_discovery",
+          "name": "Discovery",
+          "order": 0,
+          "colorToken": "stage-1",
+          "rect": {
+            "x": 0,
+            "y": 0,
+            "width": 300,
+            "height": 2200
+          }
+        },
+        {
+          "id": "stage_strategy_decisions",
+          "name": "Strategy / Decisions",
+          "order": 1,
+          "colorToken": "stage-2",
+          "rect": {
+            "x": 320,
+            "y": 0,
+            "width": 300,
+            "height": 2200
+          }
+        },
+        {
+          "id": "stage_partner_confirmation",
+          "name": "Partner Confirmation",
+          "order": 2,
+          "colorToken": "stage-3",
+          "rect": {
+            "x": 640,
+            "y": 0,
+            "width": 300,
+            "height": 2200
+          }
+        },
+        {
+          "id": "stage_design",
+          "name": "Design",
+          "order": 3,
+          "colorToken": "stage-4",
+          "rect": {
+            "x": 960,
+            "y": 0,
+            "width": 300,
+            "height": 2200
+          }
+        },
+        {
+          "id": "stage_production",
+          "name": "Production",
+          "order": 4,
+          "colorToken": "stage-5",
+          "rect": {
+            "x": 1280,
+            "y": 0,
+            "width": 300,
+            "height": 2200
+          }
+        },
+        {
+          "id": "stage_delivery_install",
+          "name": "Delivery / Install",
+          "order": 5,
+          "colorToken": "stage-6",
+          "rect": {
+            "x": 1600,
+            "y": 0,
+            "width": 300,
+            "height": 2200
+          }
+        },
+        {
+          "id": "stage_live_operations",
+          "name": "Live Operations",
+          "order": 6,
+          "colorToken": "stage-7",
+          "rect": {
+            "x": 1920,
+            "y": 0,
+            "width": 300,
+            "height": 2200
+          }
+        },
+        {
+          "id": "stage_post_experience",
+          "name": "Post-Experience",
+          "order": 7,
+          "colorToken": "stage-8",
+          "rect": {
+            "x": 2240,
+            "y": 0,
+            "width": 300,
+            "height": 2200
+          }
+        }
+      ],
+      "nodes": [
+        {
+          "id": "tab_experience_design_band_stage_discovery",
+          "type": "stageBand",
+          "position": {
+            "x": 0,
+            "y": 0
+          },
+          "width": 300,
+          "height": 2200,
+          "data": {
+            "title": "Discovery",
+            "stageId": "stage_discovery",
+            "locked": true,
+            "colorToken": "stage-1"
+          },
+          "draggable": false,
+          "selectable": false,
+          "deletable": false,
+          "zIndex": 0
+        },
+        {
+          "id": "tab_experience_design_band_stage_strategy_decisions",
+          "type": "stageBand",
+          "position": {
+            "x": 320,
+            "y": 0
+          },
+          "width": 300,
+          "height": 2200,
+          "data": {
+            "title": "Strategy / Decisions",
+            "stageId": "stage_strategy_decisions",
+            "locked": true,
+            "colorToken": "stage-2"
+          },
+          "draggable": false,
+          "selectable": false,
+          "deletable": false,
+          "zIndex": 0
+        },
+        {
+          "id": "tab_experience_design_band_stage_partner_confirmation",
+          "type": "stageBand",
+          "position": {
+            "x": 640,
+            "y": 0
+          },
+          "width": 300,
+          "height": 2200,
+          "data": {
+            "title": "Partner Confirmation",
+            "stageId": "stage_partner_confirmation",
+            "locked": true,
+            "colorToken": "stage-3"
+          },
+          "draggable": false,
+          "selectable": false,
+          "deletable": false,
+          "zIndex": 0
+        },
+        {
+          "id": "tab_experience_design_band_stage_design",
+          "type": "stageBand",
+          "position": {
+            "x": 960,
+            "y": 0
+          },
+          "width": 300,
+          "height": 2200,
+          "data": {
+            "title": "Design",
+            "stageId": "stage_design",
+            "locked": true,
+            "colorToken": "stage-4"
+          },
+          "draggable": false,
+          "selectable": false,
+          "deletable": false,
+          "zIndex": 0
+        },
+        {
+          "id": "tab_experience_design_band_stage_production",
+          "type": "stageBand",
+          "position": {
+            "x": 1280,
+            "y": 0
+          },
+          "width": 300,
+          "height": 2200,
+          "data": {
+            "title": "Production",
+            "stageId": "stage_production",
+            "locked": true,
+            "colorToken": "stage-5"
+          },
+          "draggable": false,
+          "selectable": false,
+          "deletable": false,
+          "zIndex": 0
+        },
+        {
+          "id": "tab_experience_design_band_stage_delivery_install",
+          "type": "stageBand",
+          "position": {
+            "x": 1600,
+            "y": 0
+          },
+          "width": 300,
+          "height": 2200,
+          "data": {
+            "title": "Delivery / Install",
+            "stageId": "stage_delivery_install",
+            "locked": true,
+            "colorToken": "stage-6"
+          },
+          "draggable": false,
+          "selectable": false,
+          "deletable": false,
+          "zIndex": 0
+        },
+        {
+          "id": "tab_experience_design_band_stage_live_operations",
+          "type": "stageBand",
+          "position": {
+            "x": 1920,
+            "y": 0
+          },
+          "width": 300,
+          "height": 2200,
+          "data": {
+            "title": "Live Operations",
+            "stageId": "stage_live_operations",
+            "locked": true,
+            "colorToken": "stage-7"
+          },
+          "draggable": false,
+          "selectable": false,
+          "deletable": false,
+          "zIndex": 0
+        },
+        {
+          "id": "tab_experience_design_band_stage_post_experience",
+          "type": "stageBand",
+          "position": {
+            "x": 2240,
+            "y": 0
+          },
+          "width": 300,
+          "height": 2200,
+          "data": {
+            "title": "Post-Experience",
+            "stageId": "stage_post_experience",
+            "locked": true,
+            "colorToken": "stage-8"
+          },
+          "draggable": false,
+          "selectable": false,
+          "deletable": false,
+          "zIndex": 0
+        },
+        {
+          "id": "tab_experience_design_node_map_pre_arrival_experience",
+          "type": "planningNode",
+          "position": {
+            "x": 60,
+            "y": 1580
+          },
+          "width": 260,
+          "data": {
+            "title": "Map pre-arrival experience.",
+            "status": "idea",
+            "associatedIds": [],
+            "workstreamId": "workstream_experience_design",
+            "stageId": "stage_discovery",
+            "priority": "P1",
+            "confidence": "medium",
+            "createdAt": "2026-06-12T00:00:00.000Z",
+            "updatedAt": "2026-06-12T00:00:00.000Z"
+          },
+          "draggable": true,
+          "selectable": true,
+          "deletable": true,
+          "zIndex": 10
+        },
+        {
+          "id": "tab_experience_design_node_design_queue_and_line_experience",
+          "type": "planningNode",
+          "position": {
+            "x": 1020,
+            "y": 1580
+          },
+          "width": 260,
+          "data": {
+            "title": "Design queue and line experience.",
+            "status": "idea",
+            "associatedIds": [],
+            "workstreamId": "workstream_experience_design",
+            "stageId": "stage_design",
+            "priority": "P1",
+            "confidence": "medium",
+            "createdAt": "2026-06-12T00:00:00.000Z",
+            "updatedAt": "2026-06-12T00:00:00.000Z"
+          },
+          "draggable": true,
+          "selectable": true,
+          "deletable": true,
+          "zIndex": 10
+        },
+        {
+          "id": "tab_experience_design_node_define_seating_model",
+          "type": "planningNode",
+          "position": {
+            "x": 1020,
+            "y": 1730
+          },
+          "width": 260,
+          "data": {
+            "title": "Define seating model.",
+            "status": "idea",
+            "associatedIds": [],
+            "workstreamId": "workstream_experience_design",
+            "stageId": "stage_design",
+            "priority": "P1",
+            "confidence": "medium",
+            "createdAt": "2026-06-12T00:00:00.000Z",
+            "updatedAt": "2026-06-12T00:00:00.000Z"
+          },
+          "draggable": true,
+          "selectable": true,
+          "deletable": true,
+          "zIndex": 10
+        },
+        {
+          "id": "tab_experience_design_node_define_lighting_design_requirements",
+          "type": "planningNode",
+          "position": {
+            "x": 1340,
+            "y": 1730
+          },
+          "width": 260,
+          "data": {
+            "title": "Define lighting design requirements.",
+            "status": "idea",
+            "associatedIds": [],
+            "workstreamId": "workstream_experience_design",
+            "stageId": "stage_design",
+            "priority": "P2",
+            "confidence": "medium",
+            "createdAt": "2026-06-12T00:00:00.000Z",
+            "updatedAt": "2026-06-12T00:00:00.000Z"
+          },
+          "draggable": true,
+          "selectable": true,
+          "deletable": true,
+          "zIndex": 10
+        },
+        {
+          "id": "tab_experience_design_node_define_food_and_beverage_concept",
+          "type": "planningNode",
+          "position": {
+            "x": 60,
+            "y": 1880
+          },
+          "width": 260,
+          "data": {
+            "title": "Define food and beverage concept.",
+            "status": "parked",
+            "associatedIds": [],
+            "workstreamId": "workstream_experience_design",
+            "stageId": "stage_discovery",
+            "priority": "P2",
+            "confidence": "medium",
+            "createdAt": "2026-06-12T00:00:00.000Z",
+            "updatedAt": "2026-06-12T00:00:00.000Z"
+          },
+          "draggable": true,
+          "selectable": true,
+          "deletable": true,
+          "zIndex": 10
+        },
+        {
+          "id": "tab_experience_design_node_define_post_experience_flow",
+          "type": "planningNode",
+          "position": {
+            "x": 1980,
+            "y": 1880
+          },
+          "width": 260,
+          "data": {
+            "title": "Define post-experience flow.",
+            "status": "idea",
+            "associatedIds": [],
+            "workstreamId": "workstream_experience_design",
+            "stageId": "stage_live_operations",
+            "priority": "P2",
+            "confidence": "medium",
+            "createdAt": "2026-06-12T00:00:00.000Z",
+            "updatedAt": "2026-06-12T00:00:00.000Z"
+          },
+          "draggable": true,
+          "selectable": true,
+          "deletable": true,
+          "zIndex": 10
+        }
+      ],
+      "edges": [
+        {
+          "id": "tab_experience_design_edge_define_seating_model_to_define_lighting_design_requirements",
+          "source": "tab_experience_design_node_define_seating_model",
+          "target": "tab_experience_design_node_define_lighting_design_requirements",
+          "type": "planningEdge",
+          "data": {
+            "relation": "hard_dependency"
+          }
+        }
+      ],
+      "viewport": {
+        "x": 0,
+        "y": 0,
+        "zoom": 0.8
+      },
+      "filters": {}
+    },
+    {
+      "id": "tab_show_music_production",
+      "name": "Show Music Production",
+      "stages": [
+        {
+          "id": "stage_discovery",
+          "name": "Discovery",
+          "order": 0,
+          "colorToken": "stage-1",
+          "rect": {
+            "x": 0,
+            "y": 0,
+            "width": 300,
+            "height": 2200
+          }
+        },
+        {
+          "id": "stage_strategy_decisions",
+          "name": "Strategy / Decisions",
+          "order": 1,
+          "colorToken": "stage-2",
+          "rect": {
+            "x": 320,
+            "y": 0,
+            "width": 300,
+            "height": 2200
+          }
+        },
+        {
+          "id": "stage_partner_confirmation",
+          "name": "Partner Confirmation",
+          "order": 2,
+          "colorToken": "stage-3",
+          "rect": {
+            "x": 640,
+            "y": 0,
+            "width": 300,
+            "height": 2200
+          }
+        },
+        {
+          "id": "stage_design",
+          "name": "Design",
+          "order": 3,
+          "colorToken": "stage-4",
+          "rect": {
+            "x": 960,
+            "y": 0,
+            "width": 300,
+            "height": 2200
+          }
+        },
+        {
+          "id": "stage_production",
+          "name": "Production",
+          "order": 4,
+          "colorToken": "stage-5",
+          "rect": {
+            "x": 1280,
+            "y": 0,
+            "width": 300,
+            "height": 2200
+          }
+        },
+        {
+          "id": "stage_delivery_install",
+          "name": "Delivery / Install",
+          "order": 5,
+          "colorToken": "stage-6",
+          "rect": {
+            "x": 1600,
+            "y": 0,
+            "width": 300,
+            "height": 2200
+          }
+        },
+        {
+          "id": "stage_live_operations",
+          "name": "Live Operations",
+          "order": 6,
+          "colorToken": "stage-7",
+          "rect": {
+            "x": 1920,
+            "y": 0,
+            "width": 300,
+            "height": 2200
+          }
+        },
+        {
+          "id": "stage_post_experience",
+          "name": "Post-Experience",
+          "order": 7,
+          "colorToken": "stage-8",
+          "rect": {
+            "x": 2240,
+            "y": 0,
+            "width": 300,
+            "height": 2200
+          }
+        }
+      ],
+      "nodes": [
+        {
+          "id": "tab_show_music_production_band_stage_discovery",
+          "type": "stageBand",
+          "position": {
+            "x": 0,
+            "y": 0
+          },
+          "width": 300,
+          "height": 2200,
+          "data": {
+            "title": "Discovery",
+            "stageId": "stage_discovery",
+            "locked": true,
+            "colorToken": "stage-1"
+          },
+          "draggable": false,
+          "selectable": false,
+          "deletable": false,
+          "zIndex": 0
+        },
+        {
+          "id": "tab_show_music_production_band_stage_strategy_decisions",
+          "type": "stageBand",
+          "position": {
+            "x": 320,
+            "y": 0
+          },
+          "width": 300,
+          "height": 2200,
+          "data": {
+            "title": "Strategy / Decisions",
+            "stageId": "stage_strategy_decisions",
+            "locked": true,
+            "colorToken": "stage-2"
+          },
+          "draggable": false,
+          "selectable": false,
+          "deletable": false,
+          "zIndex": 0
+        },
+        {
+          "id": "tab_show_music_production_band_stage_partner_confirmation",
+          "type": "stageBand",
+          "position": {
+            "x": 640,
+            "y": 0
+          },
+          "width": 300,
+          "height": 2200,
+          "data": {
+            "title": "Partner Confirmation",
+            "stageId": "stage_partner_confirmation",
+            "locked": true,
+            "colorToken": "stage-3"
+          },
+          "draggable": false,
+          "selectable": false,
+          "deletable": false,
+          "zIndex": 0
+        },
+        {
+          "id": "tab_show_music_production_band_stage_design",
+          "type": "stageBand",
+          "position": {
+            "x": 960,
+            "y": 0
+          },
+          "width": 300,
+          "height": 2200,
+          "data": {
+            "title": "Design",
+            "stageId": "stage_design",
+            "locked": true,
+            "colorToken": "stage-4"
+          },
+          "draggable": false,
+          "selectable": false,
+          "deletable": false,
+          "zIndex": 0
+        },
+        {
+          "id": "tab_show_music_production_band_stage_production",
+          "type": "stageBand",
+          "position": {
+            "x": 1280,
+            "y": 0
+          },
+          "width": 300,
+          "height": 2200,
+          "data": {
+            "title": "Production",
+            "stageId": "stage_production",
+            "locked": true,
+            "colorToken": "stage-5"
+          },
+          "draggable": false,
+          "selectable": false,
+          "deletable": false,
+          "zIndex": 0
+        },
+        {
+          "id": "tab_show_music_production_band_stage_delivery_install",
+          "type": "stageBand",
+          "position": {
+            "x": 1600,
+            "y": 0
+          },
+          "width": 300,
+          "height": 2200,
+          "data": {
+            "title": "Delivery / Install",
+            "stageId": "stage_delivery_install",
+            "locked": true,
+            "colorToken": "stage-6"
+          },
+          "draggable": false,
+          "selectable": false,
+          "deletable": false,
+          "zIndex": 0
+        },
+        {
+          "id": "tab_show_music_production_band_stage_live_operations",
+          "type": "stageBand",
+          "position": {
+            "x": 1920,
+            "y": 0
+          },
+          "width": 300,
+          "height": 2200,
+          "data": {
+            "title": "Live Operations",
+            "stageId": "stage_live_operations",
+            "locked": true,
+            "colorToken": "stage-7"
+          },
+          "draggable": false,
+          "selectable": false,
+          "deletable": false,
+          "zIndex": 0
+        },
+        {
+          "id": "tab_show_music_production_band_stage_post_experience",
+          "type": "stageBand",
+          "position": {
+            "x": 2240,
+            "y": 0
+          },
+          "width": 300,
+          "height": 2200,
+          "data": {
+            "title": "Post-Experience",
+            "stageId": "stage_post_experience",
+            "locked": true,
+            "colorToken": "stage-8"
+          },
+          "draggable": false,
+          "selectable": false,
+          "deletable": false,
+          "zIndex": 0
+        },
+        {
+          "id": "tab_show_music_production_node_identify_artists",
+          "type": "planningNode",
+          "position": {
+            "x": 60,
+            "y": 980
+          },
+          "width": 260,
+          "data": {
+            "title": "Identify artists.",
+            "status": "idea",
+            "associatedIds": [
+              "person_jeremy_guillory"
+            ],
+            "workstreamId": "workstream_show_music_production",
+            "stageId": "stage_discovery",
+            "priority": "P0",
+            "confidence": "medium",
+            "createdAt": "2026-06-12T00:00:00.000Z",
+            "updatedAt": "2026-06-12T00:00:00.000Z"
+          },
+          "draggable": true,
+          "selectable": true,
+          "deletable": true,
+          "zIndex": 10
+        },
+        {
+          "id": "tab_show_music_production_node_develop_artist_workflow",
+          "type": "planningNode",
+          "position": {
+            "x": 380,
+            "y": 980
+          },
+          "width": 260,
+          "data": {
+            "title": "Develop artist workflow.",
+            "status": "idea",
+            "associatedIds": [
+              "person_jeremy_guillory"
+            ],
+            "workstreamId": "workstream_show_music_production",
+            "stageId": "stage_strategy_decisions",
+            "priority": "P0",
+            "confidence": "medium",
+            "createdAt": "2026-06-12T00:00:00.000Z",
+            "updatedAt": "2026-06-12T00:00:00.000Z"
+          },
+          "draggable": true,
+          "selectable": true,
+          "deletable": true,
+          "zIndex": 10
+        },
+        {
+          "id": "tab_show_music_production_node_define_atmos_engineer_workflow",
+          "type": "planningNode",
+          "position": {
+            "x": 380,
+            "y": 1130
+          },
+          "width": 260,
+          "data": {
+            "title": "Define Atmos engineer workflow.",
+            "status": "defined",
+            "associatedIds": [
+              "person_jeremy_guillory"
+            ],
+            "workstreamId": "workstream_show_music_production",
+            "stageId": "stage_strategy_decisions",
+            "priority": "P0",
+            "confidence": "medium",
+            "createdAt": "2026-06-12T00:00:00.000Z",
+            "updatedAt": "2026-06-12T00:00:00.000Z"
+          },
+          "draggable": true,
+          "selectable": true,
+          "deletable": true,
+          "zIndex": 10
+        },
+        {
+          "id": "tab_show_music_production_node_evaluate_ollie_morgan_as_possible_atmos_engineer",
+          "type": "planningNode",
+          "position": {
+            "x": 700,
+            "y": 1130
+          },
+          "width": 260,
+          "data": {
+            "title": "Evaluate Ollie Morgan as possible Atmos engineer.",
+            "status": "idea",
+            "associatedIds": [
+              "person_richie_britton"
+            ],
+            "workstreamId": "workstream_show_music_production",
+            "stageId": "stage_partner_confirmation",
+            "priority": "P1",
+            "confidence": "medium",
+            "createdAt": "2026-06-12T00:00:00.000Z",
+            "updatedAt": "2026-06-12T00:00:00.000Z"
+          },
+          "draggable": true,
+          "selectable": true,
+          "deletable": true,
+          "zIndex": 10
+        },
+        {
+          "id": "tab_show_music_production_node_create_technical_content_development_process",
+          "type": "planningNode",
+          "position": {
+            "x": 1020,
+            "y": 1130
+          },
+          "width": 260,
+          "data": {
+            "title": "Create technical content development process.",
+            "status": "idea",
+            "associatedIds": [
+              "person_jeremy_guillory"
+            ],
+            "workstreamId": "workstream_show_music_production",
+            "stageId": "stage_design",
+            "priority": "P0",
+            "confidence": "medium",
+            "createdAt": "2026-06-12T00:00:00.000Z",
+            "updatedAt": "2026-06-12T00:00:00.000Z"
+          },
+          "draggable": true,
+          "selectable": true,
+          "deletable": true,
+          "zIndex": 10
+        },
+        {
+          "id": "tab_show_music_production_node_prepare_tier_one_artist_content_production_answer",
+          "type": "planningNode",
+          "position": {
+            "x": 1340,
+            "y": 1130
+          },
+          "width": 260,
+          "data": {
+            "title": "Prepare tier-one artist content-production answer.",
+            "status": "idea",
+            "associatedIds": [
+              "person_jeremy_guillory"
+            ],
+            "workstreamId": "workstream_show_music_production",
+            "stageId": "stage_production",
+            "priority": "P0",
+            "confidence": "medium",
+            "createdAt": "2026-06-12T00:00:00.000Z",
+            "updatedAt": "2026-06-12T00:00:00.000Z"
+          },
+          "draggable": true,
+          "selectable": true,
+          "deletable": true,
+          "zIndex": 10
+        },
+        {
+          "id": "tab_show_music_production_node_confirm_ip_and_music_rights_approach",
+          "type": "planningNode",
+          "position": {
+            "x": 700,
+            "y": 1430
+          },
+          "width": 260,
+          "data": {
+            "title": "Confirm IP and music-rights approach.",
+            "status": "idea",
+            "associatedIds": [],
+            "workstreamId": "workstream_legal",
+            "stageId": "stage_strategy_decisions",
+            "priority": "P0",
+            "confidence": "medium",
+            "createdAt": "2026-06-12T00:00:00.000Z",
+            "updatedAt": "2026-06-12T00:00:00.000Z"
+          },
+          "draggable": true,
+          "selectable": true,
+          "deletable": true,
+          "zIndex": 10
+        }
+      ],
+      "edges": [
+        {
+          "id": "tab_show_music_production_edge_identify_artists_to_develop_artist_workflow",
+          "source": "tab_show_music_production_node_identify_artists",
+          "target": "tab_show_music_production_node_develop_artist_workflow",
+          "type": "planningEdge",
+          "data": {
+            "relation": "hard_dependency"
+          }
+        },
+        {
+          "id": "tab_show_music_production_edge_define_atmos_engineer_workflow_to_create_technical_content_development_process",
+          "source": "tab_show_music_production_node_define_atmos_engineer_workflow",
+          "target": "tab_show_music_production_node_create_technical_content_development_process",
+          "type": "planningEdge",
+          "data": {
+            "relation": "hard_dependency"
+          }
+        },
+        {
+          "id": "tab_show_music_production_edge_create_technical_content_development_process_to_prepare_tier_one_artist_content_production_answer",
+          "source": "tab_show_music_production_node_create_technical_content_development_process",
+          "target": "tab_show_music_production_node_prepare_tier_one_artist_content_production_answer",
+          "type": "planningEdge",
+          "data": {
+            "relation": "hard_dependency"
+          }
+        }
+      ],
+      "viewport": {
+        "x": 0,
+        "y": 0,
+        "zoom": 0.8
+      },
+      "filters": {}
+    },
+    {
+      "id": "tab_labs",
+      "name": "Labs",
+      "stages": [
+        {
+          "id": "stage_discovery",
+          "name": "Discovery",
+          "order": 0,
+          "colorToken": "stage-1",
+          "rect": {
+            "x": 0,
+            "y": 0,
+            "width": 300,
+            "height": 2200
+          }
+        },
+        {
+          "id": "stage_strategy_decisions",
+          "name": "Strategy / Decisions",
+          "order": 1,
+          "colorToken": "stage-2",
+          "rect": {
+            "x": 320,
+            "y": 0,
+            "width": 300,
+            "height": 2200
+          }
+        },
+        {
+          "id": "stage_partner_confirmation",
+          "name": "Partner Confirmation",
+          "order": 2,
+          "colorToken": "stage-3",
+          "rect": {
+            "x": 640,
+            "y": 0,
+            "width": 300,
+            "height": 2200
+          }
+        },
+        {
+          "id": "stage_design",
+          "name": "Design",
+          "order": 3,
+          "colorToken": "stage-4",
+          "rect": {
+            "x": 960,
+            "y": 0,
+            "width": 300,
+            "height": 2200
+          }
+        },
+        {
+          "id": "stage_production",
+          "name": "Production",
+          "order": 4,
+          "colorToken": "stage-5",
+          "rect": {
+            "x": 1280,
+            "y": 0,
+            "width": 300,
+            "height": 2200
+          }
+        },
+        {
+          "id": "stage_delivery_install",
+          "name": "Delivery / Install",
+          "order": 5,
+          "colorToken": "stage-6",
+          "rect": {
+            "x": 1600,
+            "y": 0,
+            "width": 300,
+            "height": 2200
+          }
+        },
+        {
+          "id": "stage_live_operations",
+          "name": "Live Operations",
+          "order": 6,
+          "colorToken": "stage-7",
+          "rect": {
+            "x": 1920,
+            "y": 0,
+            "width": 300,
+            "height": 2200
+          }
+        },
+        {
+          "id": "stage_post_experience",
+          "name": "Post-Experience",
+          "order": 7,
+          "colorToken": "stage-8",
+          "rect": {
+            "x": 2240,
+            "y": 0,
+            "width": 300,
+            "height": 2200
+          }
+        }
+      ],
+      "nodes": [
+        {
+          "id": "tab_labs_band_stage_discovery",
+          "type": "stageBand",
+          "position": {
+            "x": 0,
+            "y": 0
+          },
+          "width": 300,
+          "height": 2200,
+          "data": {
+            "title": "Discovery",
+            "stageId": "stage_discovery",
+            "locked": true,
+            "colorToken": "stage-1"
+          },
+          "draggable": false,
+          "selectable": false,
+          "deletable": false,
+          "zIndex": 0
+        },
+        {
+          "id": "tab_labs_band_stage_strategy_decisions",
+          "type": "stageBand",
+          "position": {
+            "x": 320,
+            "y": 0
+          },
+          "width": 300,
+          "height": 2200,
+          "data": {
+            "title": "Strategy / Decisions",
+            "stageId": "stage_strategy_decisions",
+            "locked": true,
+            "colorToken": "stage-2"
+          },
+          "draggable": false,
+          "selectable": false,
+          "deletable": false,
+          "zIndex": 0
+        },
+        {
+          "id": "tab_labs_band_stage_partner_confirmation",
+          "type": "stageBand",
+          "position": {
+            "x": 640,
+            "y": 0
+          },
+          "width": 300,
+          "height": 2200,
+          "data": {
+            "title": "Partner Confirmation",
+            "stageId": "stage_partner_confirmation",
+            "locked": true,
+            "colorToken": "stage-3"
+          },
+          "draggable": false,
+          "selectable": false,
+          "deletable": false,
+          "zIndex": 0
+        },
+        {
+          "id": "tab_labs_band_stage_design",
+          "type": "stageBand",
+          "position": {
+            "x": 960,
+            "y": 0
+          },
+          "width": 300,
+          "height": 2200,
+          "data": {
+            "title": "Design",
+            "stageId": "stage_design",
+            "locked": true,
+            "colorToken": "stage-4"
+          },
+          "draggable": false,
+          "selectable": false,
+          "deletable": false,
+          "zIndex": 0
+        },
+        {
+          "id": "tab_labs_band_stage_production",
+          "type": "stageBand",
+          "position": {
+            "x": 1280,
+            "y": 0
+          },
+          "width": 300,
+          "height": 2200,
+          "data": {
+            "title": "Production",
+            "stageId": "stage_production",
+            "locked": true,
+            "colorToken": "stage-5"
+          },
+          "draggable": false,
+          "selectable": false,
+          "deletable": false,
+          "zIndex": 0
+        },
+        {
+          "id": "tab_labs_band_stage_delivery_install",
+          "type": "stageBand",
+          "position": {
+            "x": 1600,
+            "y": 0
+          },
+          "width": 300,
+          "height": 2200,
+          "data": {
+            "title": "Delivery / Install",
+            "stageId": "stage_delivery_install",
+            "locked": true,
+            "colorToken": "stage-6"
+          },
+          "draggable": false,
+          "selectable": false,
+          "deletable": false,
+          "zIndex": 0
+        },
+        {
+          "id": "tab_labs_band_stage_live_operations",
+          "type": "stageBand",
+          "position": {
+            "x": 1920,
+            "y": 0
+          },
+          "width": 300,
+          "height": 2200,
+          "data": {
+            "title": "Live Operations",
+            "stageId": "stage_live_operations",
+            "locked": true,
+            "colorToken": "stage-7"
+          },
+          "draggable": false,
+          "selectable": false,
+          "deletable": false,
+          "zIndex": 0
+        },
+        {
+          "id": "tab_labs_band_stage_post_experience",
+          "type": "stageBand",
+          "position": {
+            "x": 2240,
+            "y": 0
+          },
+          "width": 300,
+          "height": 2200,
+          "data": {
+            "title": "Post-Experience",
+            "stageId": "stage_post_experience",
+            "locked": true,
+            "colorToken": "stage-8"
+          },
+          "draggable": false,
+          "selectable": false,
+          "deletable": false,
+          "zIndex": 0
+        },
+        {
+          "id": "tab_labs_node_define_lab_intake_workflow",
+          "type": "planningNode",
+          "position": {
+            "x": 380,
+            "y": 1280
+          },
+          "width": 260,
+          "data": {
+            "title": "Define lab intake workflow.",
+            "status": "idea",
+            "associatedIds": [],
+            "workstreamId": "workstream_labs",
+            "stageId": "stage_strategy_decisions",
+            "priority": "P2",
+            "confidence": "medium",
+            "createdAt": "2026-06-12T00:00:00.000Z",
+            "updatedAt": "2026-06-12T00:00:00.000Z"
+          },
+          "draggable": true,
+          "selectable": true,
+          "deletable": true,
+          "zIndex": 10
+        },
+        {
+          "id": "tab_labs_node_define_lab_to_main_show_escalation_path",
+          "type": "planningNode",
+          "position": {
+            "x": 1340,
+            "y": 1280
+          },
+          "width": 260,
+          "data": {
+            "title": "Define lab-to-main-show escalation path.",
+            "status": "idea",
+            "associatedIds": [],
+            "workstreamId": "workstream_labs",
+            "stageId": "stage_production",
+            "priority": "P2",
+            "confidence": "medium",
+            "createdAt": "2026-06-12T00:00:00.000Z",
+            "updatedAt": "2026-06-12T00:00:00.000Z"
+          },
+          "draggable": true,
+          "selectable": true,
+          "deletable": true,
+          "zIndex": 10
+        }
+      ],
+      "edges": [],
+      "viewport": {
+        "x": 0,
+        "y": 0,
+        "zoom": 0.8
+      },
+      "filters": {}
+    },
+    {
+      "id": "tab_legal",
+      "name": "Legal",
+      "stages": [
+        {
+          "id": "stage_discovery",
+          "name": "Discovery",
+          "order": 0,
+          "colorToken": "stage-1",
+          "rect": {
+            "x": 0,
+            "y": 0,
+            "width": 300,
+            "height": 2200
+          }
+        },
+        {
+          "id": "stage_strategy_decisions",
+          "name": "Strategy / Decisions",
+          "order": 1,
+          "colorToken": "stage-2",
+          "rect": {
+            "x": 320,
+            "y": 0,
+            "width": 300,
+            "height": 2200
+          }
+        },
+        {
+          "id": "stage_partner_confirmation",
+          "name": "Partner Confirmation",
+          "order": 2,
+          "colorToken": "stage-3",
+          "rect": {
+            "x": 640,
+            "y": 0,
+            "width": 300,
+            "height": 2200
+          }
+        },
+        {
+          "id": "stage_design",
+          "name": "Design",
+          "order": 3,
+          "colorToken": "stage-4",
+          "rect": {
+            "x": 960,
+            "y": 0,
+            "width": 300,
+            "height": 2200
+          }
+        },
+        {
+          "id": "stage_production",
+          "name": "Production",
+          "order": 4,
+          "colorToken": "stage-5",
+          "rect": {
+            "x": 1280,
+            "y": 0,
+            "width": 300,
+            "height": 2200
+          }
+        },
+        {
+          "id": "stage_delivery_install",
+          "name": "Delivery / Install",
+          "order": 5,
+          "colorToken": "stage-6",
+          "rect": {
+            "x": 1600,
+            "y": 0,
+            "width": 300,
+            "height": 2200
+          }
+        },
+        {
+          "id": "stage_live_operations",
+          "name": "Live Operations",
+          "order": 6,
+          "colorToken": "stage-7",
+          "rect": {
+            "x": 1920,
+            "y": 0,
+            "width": 300,
+            "height": 2200
+          }
+        },
+        {
+          "id": "stage_post_experience",
+          "name": "Post-Experience",
+          "order": 7,
+          "colorToken": "stage-8",
+          "rect": {
+            "x": 2240,
+            "y": 0,
+            "width": 300,
+            "height": 2200
+          }
+        }
+      ],
+      "nodes": [
+        {
+          "id": "tab_legal_band_stage_discovery",
+          "type": "stageBand",
+          "position": {
+            "x": 0,
+            "y": 0
+          },
+          "width": 300,
+          "height": 2200,
+          "data": {
+            "title": "Discovery",
+            "stageId": "stage_discovery",
+            "locked": true,
+            "colorToken": "stage-1"
+          },
+          "draggable": false,
+          "selectable": false,
+          "deletable": false,
+          "zIndex": 0
+        },
+        {
+          "id": "tab_legal_band_stage_strategy_decisions",
+          "type": "stageBand",
+          "position": {
+            "x": 320,
+            "y": 0
+          },
+          "width": 300,
+          "height": 2200,
+          "data": {
+            "title": "Strategy / Decisions",
+            "stageId": "stage_strategy_decisions",
+            "locked": true,
+            "colorToken": "stage-2"
+          },
+          "draggable": false,
+          "selectable": false,
+          "deletable": false,
+          "zIndex": 0
+        },
+        {
+          "id": "tab_legal_band_stage_partner_confirmation",
+          "type": "stageBand",
+          "position": {
+            "x": 640,
+            "y": 0
+          },
+          "width": 300,
+          "height": 2200,
+          "data": {
+            "title": "Partner Confirmation",
+            "stageId": "stage_partner_confirmation",
+            "locked": true,
+            "colorToken": "stage-3"
+          },
+          "draggable": false,
+          "selectable": false,
+          "deletable": false,
+          "zIndex": 0
+        },
+        {
+          "id": "tab_legal_band_stage_design",
+          "type": "stageBand",
+          "position": {
+            "x": 960,
+            "y": 0
+          },
+          "width": 300,
+          "height": 2200,
+          "data": {
+            "title": "Design",
+            "stageId": "stage_design",
+            "locked": true,
+            "colorToken": "stage-4"
+          },
+          "draggable": false,
+          "selectable": false,
+          "deletable": false,
+          "zIndex": 0
+        },
+        {
+          "id": "tab_legal_band_stage_production",
+          "type": "stageBand",
+          "position": {
+            "x": 1280,
+            "y": 0
+          },
+          "width": 300,
+          "height": 2200,
+          "data": {
+            "title": "Production",
+            "stageId": "stage_production",
+            "locked": true,
+            "colorToken": "stage-5"
+          },
+          "draggable": false,
+          "selectable": false,
+          "deletable": false,
+          "zIndex": 0
+        },
+        {
+          "id": "tab_legal_band_stage_delivery_install",
+          "type": "stageBand",
+          "position": {
+            "x": 1600,
+            "y": 0
+          },
+          "width": 300,
+          "height": 2200,
+          "data": {
+            "title": "Delivery / Install",
+            "stageId": "stage_delivery_install",
+            "locked": true,
+            "colorToken": "stage-6"
+          },
+          "draggable": false,
+          "selectable": false,
+          "deletable": false,
+          "zIndex": 0
+        },
+        {
+          "id": "tab_legal_band_stage_live_operations",
+          "type": "stageBand",
+          "position": {
+            "x": 1920,
+            "y": 0
+          },
+          "width": 300,
+          "height": 2200,
+          "data": {
+            "title": "Live Operations",
+            "stageId": "stage_live_operations",
+            "locked": true,
+            "colorToken": "stage-7"
+          },
+          "draggable": false,
+          "selectable": false,
+          "deletable": false,
+          "zIndex": 0
+        },
+        {
+          "id": "tab_legal_band_stage_post_experience",
+          "type": "stageBand",
+          "position": {
+            "x": 2240,
+            "y": 0
+          },
+          "width": 300,
+          "height": 2200,
+          "data": {
+            "title": "Post-Experience",
+            "stageId": "stage_post_experience",
+            "locked": true,
+            "colorToken": "stage-8"
+          },
+          "draggable": false,
+          "selectable": false,
+          "deletable": false,
+          "zIndex": 0
+        },
+        {
+          "id": "tab_legal_node_define_artist_agreement_template",
+          "type": "planningNode",
+          "position": {
+            "x": 380,
+            "y": 1430
+          },
+          "width": 260,
+          "data": {
+            "title": "Define artist agreement template.",
+            "status": "idea",
+            "associatedIds": [],
+            "workstreamId": "workstream_legal",
+            "stageId": "stage_strategy_decisions",
+            "priority": "P0",
+            "confidence": "medium",
+            "createdAt": "2026-06-12T00:00:00.000Z",
+            "updatedAt": "2026-06-12T00:00:00.000Z"
+          },
+          "draggable": true,
+          "selectable": true,
+          "deletable": true,
+          "zIndex": 10
+        },
+        {
+          "id": "tab_legal_node_confirm_ip_and_music_rights_approach",
+          "type": "planningNode",
+          "position": {
+            "x": 700,
+            "y": 1430
+          },
+          "width": 260,
+          "data": {
+            "title": "Confirm IP and music-rights approach.",
+            "status": "idea",
+            "associatedIds": [],
+            "workstreamId": "workstream_legal",
+            "stageId": "stage_strategy_decisions",
+            "priority": "P0",
+            "confidence": "medium",
+            "createdAt": "2026-06-12T00:00:00.000Z",
+            "updatedAt": "2026-06-12T00:00:00.000Z"
+          },
+          "draggable": true,
+          "selectable": true,
+          "deletable": true,
+          "zIndex": 10
+        }
+      ],
+      "edges": [],
+      "viewport": {
+        "x": 0,
+        "y": 0,
+        "zoom": 0.8
+      },
+      "filters": {}
+    },
+    {
+      "id": "tab_ticketing",
+      "name": "Ticketing",
+      "stages": [
+        {
+          "id": "stage_discovery",
+          "name": "Discovery",
+          "order": 0,
+          "colorToken": "stage-1",
+          "rect": {
+            "x": 0,
+            "y": 0,
+            "width": 300,
+            "height": 2200
+          }
+        },
+        {
+          "id": "stage_strategy_decisions",
+          "name": "Strategy / Decisions",
+          "order": 1,
+          "colorToken": "stage-2",
+          "rect": {
+            "x": 320,
+            "y": 0,
+            "width": 300,
+            "height": 2200
+          }
+        },
+        {
+          "id": "stage_partner_confirmation",
+          "name": "Partner Confirmation",
+          "order": 2,
+          "colorToken": "stage-3",
+          "rect": {
+            "x": 640,
+            "y": 0,
+            "width": 300,
+            "height": 2200
+          }
+        },
+        {
+          "id": "stage_design",
+          "name": "Design",
+          "order": 3,
+          "colorToken": "stage-4",
+          "rect": {
+            "x": 960,
+            "y": 0,
+            "width": 300,
+            "height": 2200
+          }
+        },
+        {
+          "id": "stage_production",
+          "name": "Production",
+          "order": 4,
+          "colorToken": "stage-5",
+          "rect": {
+            "x": 1280,
+            "y": 0,
+            "width": 300,
+            "height": 2200
+          }
+        },
+        {
+          "id": "stage_delivery_install",
+          "name": "Delivery / Install",
+          "order": 5,
+          "colorToken": "stage-6",
+          "rect": {
+            "x": 1600,
+            "y": 0,
+            "width": 300,
+            "height": 2200
+          }
+        },
+        {
+          "id": "stage_live_operations",
+          "name": "Live Operations",
+          "order": 6,
+          "colorToken": "stage-7",
+          "rect": {
+            "x": 1920,
+            "y": 0,
+            "width": 300,
+            "height": 2200
+          }
+        },
+        {
+          "id": "stage_post_experience",
+          "name": "Post-Experience",
+          "order": 7,
+          "colorToken": "stage-8",
+          "rect": {
+            "x": 2240,
+            "y": 0,
+            "width": 300,
+            "height": 2200
+          }
+        }
+      ],
+      "nodes": [
+        {
+          "id": "tab_ticketing_band_stage_discovery",
+          "type": "stageBand",
+          "position": {
+            "x": 0,
+            "y": 0
+          },
+          "width": 300,
+          "height": 2200,
+          "data": {
+            "title": "Discovery",
+            "stageId": "stage_discovery",
+            "locked": true,
+            "colorToken": "stage-1"
+          },
+          "draggable": false,
+          "selectable": false,
+          "deletable": false,
+          "zIndex": 0
+        },
+        {
+          "id": "tab_ticketing_band_stage_strategy_decisions",
+          "type": "stageBand",
+          "position": {
+            "x": 320,
+            "y": 0
+          },
+          "width": 300,
+          "height": 2200,
+          "data": {
+            "title": "Strategy / Decisions",
+            "stageId": "stage_strategy_decisions",
+            "locked": true,
+            "colorToken": "stage-2"
+          },
+          "draggable": false,
+          "selectable": false,
+          "deletable": false,
+          "zIndex": 0
+        },
+        {
+          "id": "tab_ticketing_band_stage_partner_confirmation",
+          "type": "stageBand",
+          "position": {
+            "x": 640,
+            "y": 0
+          },
+          "width": 300,
+          "height": 2200,
+          "data": {
+            "title": "Partner Confirmation",
+            "stageId": "stage_partner_confirmation",
+            "locked": true,
+            "colorToken": "stage-3"
+          },
+          "draggable": false,
+          "selectable": false,
+          "deletable": false,
+          "zIndex": 0
+        },
+        {
+          "id": "tab_ticketing_band_stage_design",
+          "type": "stageBand",
+          "position": {
+            "x": 960,
+            "y": 0
+          },
+          "width": 300,
+          "height": 2200,
+          "data": {
+            "title": "Design",
+            "stageId": "stage_design",
+            "locked": true,
+            "colorToken": "stage-4"
+          },
+          "draggable": false,
+          "selectable": false,
+          "deletable": false,
+          "zIndex": 0
+        },
+        {
+          "id": "tab_ticketing_band_stage_production",
+          "type": "stageBand",
+          "position": {
+            "x": 1280,
+            "y": 0
+          },
+          "width": 300,
+          "height": 2200,
+          "data": {
+            "title": "Production",
+            "stageId": "stage_production",
+            "locked": true,
+            "colorToken": "stage-5"
+          },
+          "draggable": false,
+          "selectable": false,
+          "deletable": false,
+          "zIndex": 0
+        },
+        {
+          "id": "tab_ticketing_band_stage_delivery_install",
+          "type": "stageBand",
+          "position": {
+            "x": 1600,
+            "y": 0
+          },
+          "width": 300,
+          "height": 2200,
+          "data": {
+            "title": "Delivery / Install",
+            "stageId": "stage_delivery_install",
+            "locked": true,
+            "colorToken": "stage-6"
+          },
+          "draggable": false,
+          "selectable": false,
+          "deletable": false,
+          "zIndex": 0
+        },
+        {
+          "id": "tab_ticketing_band_stage_live_operations",
+          "type": "stageBand",
+          "position": {
+            "x": 1920,
+            "y": 0
+          },
+          "width": 300,
+          "height": 2200,
+          "data": {
+            "title": "Live Operations",
+            "stageId": "stage_live_operations",
+            "locked": true,
+            "colorToken": "stage-7"
+          },
+          "draggable": false,
+          "selectable": false,
+          "deletable": false,
+          "zIndex": 0
+        },
+        {
+          "id": "tab_ticketing_band_stage_post_experience",
+          "type": "stageBand",
+          "position": {
+            "x": 2240,
+            "y": 0
+          },
+          "width": 300,
+          "height": 2200,
+          "data": {
+            "title": "Post-Experience",
+            "stageId": "stage_post_experience",
+            "locked": true,
+            "colorToken": "stage-8"
+          },
+          "draggable": false,
+          "selectable": false,
+          "deletable": false,
+          "zIndex": 0
+        },
+        {
+          "id": "tab_ticketing_node_choose_ticketing_platform",
+          "type": "planningNode",
+          "position": {
+            "x": 380,
+            "y": 830
+          },
+          "width": 260,
+          "data": {
+            "title": "Choose ticketing platform.",
+            "status": "idea",
+            "associatedIds": [],
+            "workstreamId": "workstream_ticketing",
+            "stageId": "stage_strategy_decisions",
+            "priority": "P1",
+            "confidence": "medium",
+            "createdAt": "2026-06-12T00:00:00.000Z",
+            "updatedAt": "2026-06-12T00:00:00.000Z"
+          },
+          "draggable": true,
+          "selectable": true,
+          "deletable": true,
+          "zIndex": 10
+        },
+        {
+          "id": "tab_ticketing_node_define_ticket_tiers",
+          "type": "planningNode",
+          "position": {
+            "x": 1020,
+            "y": 830
+          },
+          "width": 260,
+          "data": {
+            "title": "Define ticket tiers.",
+            "status": "idea",
+            "associatedIds": [],
+            "workstreamId": "workstream_ticketing",
+            "stageId": "stage_design",
+            "priority": "P2",
+            "confidence": "medium",
+            "createdAt": "2026-06-12T00:00:00.000Z",
+            "updatedAt": "2026-06-12T00:00:00.000Z"
+          },
+          "draggable": true,
+          "selectable": true,
+          "deletable": true,
+          "zIndex": 10
+        }
+      ],
+      "edges": [
+        {
+          "id": "tab_ticketing_edge_choose_ticketing_platform_to_define_ticket_tiers",
+          "source": "tab_ticketing_node_choose_ticketing_platform",
+          "target": "tab_ticketing_node_define_ticket_tiers",
+          "type": "planningEdge",
+          "data": {
+            "relation": "hard_dependency"
+          }
+        }
+      ],
+      "viewport": {
+        "x": 0,
+        "y": 0,
+        "zoom": 0.8
+      },
+      "filters": {}
+    },
+    {
+      "id": "tab_parking_lot",
+      "name": "Parking Lot",
+      "stages": [
+        {
+          "id": "stage_discovery",
+          "name": "Discovery",
+          "order": 0,
+          "colorToken": "stage-1",
+          "rect": {
+            "x": 0,
+            "y": 0,
+            "width": 300,
+            "height": 2200
+          }
+        },
+        {
+          "id": "stage_strategy_decisions",
+          "name": "Strategy / Decisions",
+          "order": 1,
+          "colorToken": "stage-2",
+          "rect": {
+            "x": 320,
+            "y": 0,
+            "width": 300,
+            "height": 2200
+          }
+        },
+        {
+          "id": "stage_partner_confirmation",
+          "name": "Partner Confirmation",
+          "order": 2,
+          "colorToken": "stage-3",
+          "rect": {
+            "x": 640,
+            "y": 0,
+            "width": 300,
+            "height": 2200
+          }
+        },
+        {
+          "id": "stage_design",
+          "name": "Design",
+          "order": 3,
+          "colorToken": "stage-4",
+          "rect": {
+            "x": 960,
+            "y": 0,
+            "width": 300,
+            "height": 2200
+          }
+        },
+        {
+          "id": "stage_production",
+          "name": "Production",
+          "order": 4,
+          "colorToken": "stage-5",
+          "rect": {
+            "x": 1280,
+            "y": 0,
+            "width": 300,
+            "height": 2200
+          }
+        },
+        {
+          "id": "stage_delivery_install",
+          "name": "Delivery / Install",
+          "order": 5,
+          "colorToken": "stage-6",
+          "rect": {
+            "x": 1600,
+            "y": 0,
+            "width": 300,
+            "height": 2200
+          }
+        },
+        {
+          "id": "stage_live_operations",
+          "name": "Live Operations",
+          "order": 6,
+          "colorToken": "stage-7",
+          "rect": {
+            "x": 1920,
+            "y": 0,
+            "width": 300,
+            "height": 2200
+          }
+        },
+        {
+          "id": "stage_post_experience",
+          "name": "Post-Experience",
+          "order": 7,
+          "colorToken": "stage-8",
+          "rect": {
+            "x": 2240,
+            "y": 0,
+            "width": 300,
+            "height": 2200
+          }
+        }
+      ],
+      "nodes": [
+        {
+          "id": "tab_parking_lot_band_stage_discovery",
+          "type": "stageBand",
+          "position": {
+            "x": 0,
+            "y": 0
+          },
+          "width": 300,
+          "height": 2200,
+          "data": {
+            "title": "Discovery",
+            "stageId": "stage_discovery",
+            "locked": true,
+            "colorToken": "stage-1"
+          },
+          "draggable": false,
+          "selectable": false,
+          "deletable": false,
+          "zIndex": 0
+        },
+        {
+          "id": "tab_parking_lot_band_stage_strategy_decisions",
+          "type": "stageBand",
+          "position": {
+            "x": 320,
+            "y": 0
+          },
+          "width": 300,
+          "height": 2200,
+          "data": {
+            "title": "Strategy / Decisions",
+            "stageId": "stage_strategy_decisions",
+            "locked": true,
+            "colorToken": "stage-2"
+          },
+          "draggable": false,
+          "selectable": false,
+          "deletable": false,
+          "zIndex": 0
+        },
+        {
+          "id": "tab_parking_lot_band_stage_partner_confirmation",
+          "type": "stageBand",
+          "position": {
+            "x": 640,
+            "y": 0
+          },
+          "width": 300,
+          "height": 2200,
+          "data": {
+            "title": "Partner Confirmation",
+            "stageId": "stage_partner_confirmation",
+            "locked": true,
+            "colorToken": "stage-3"
+          },
+          "draggable": false,
+          "selectable": false,
+          "deletable": false,
+          "zIndex": 0
+        },
+        {
+          "id": "tab_parking_lot_band_stage_design",
+          "type": "stageBand",
+          "position": {
+            "x": 960,
+            "y": 0
+          },
+          "width": 300,
+          "height": 2200,
+          "data": {
+            "title": "Design",
+            "stageId": "stage_design",
+            "locked": true,
+            "colorToken": "stage-4"
+          },
+          "draggable": false,
+          "selectable": false,
+          "deletable": false,
+          "zIndex": 0
+        },
+        {
+          "id": "tab_parking_lot_band_stage_production",
+          "type": "stageBand",
+          "position": {
+            "x": 1280,
+            "y": 0
+          },
+          "width": 300,
+          "height": 2200,
+          "data": {
+            "title": "Production",
+            "stageId": "stage_production",
+            "locked": true,
+            "colorToken": "stage-5"
+          },
+          "draggable": false,
+          "selectable": false,
+          "deletable": false,
+          "zIndex": 0
+        },
+        {
+          "id": "tab_parking_lot_band_stage_delivery_install",
+          "type": "stageBand",
+          "position": {
+            "x": 1600,
+            "y": 0
+          },
+          "width": 300,
+          "height": 2200,
+          "data": {
+            "title": "Delivery / Install",
+            "stageId": "stage_delivery_install",
+            "locked": true,
+            "colorToken": "stage-6"
+          },
+          "draggable": false,
+          "selectable": false,
+          "deletable": false,
+          "zIndex": 0
+        },
+        {
+          "id": "tab_parking_lot_band_stage_live_operations",
+          "type": "stageBand",
+          "position": {
+            "x": 1920,
+            "y": 0
+          },
+          "width": 300,
+          "height": 2200,
+          "data": {
+            "title": "Live Operations",
+            "stageId": "stage_live_operations",
+            "locked": true,
+            "colorToken": "stage-7"
+          },
+          "draggable": false,
+          "selectable": false,
+          "deletable": false,
+          "zIndex": 0
+        },
+        {
+          "id": "tab_parking_lot_band_stage_post_experience",
+          "type": "stageBand",
+          "position": {
+            "x": 2240,
+            "y": 0
+          },
+          "width": 300,
+          "height": 2200,
+          "data": {
+            "title": "Post-Experience",
+            "stageId": "stage_post_experience",
+            "locked": true,
+            "colorToken": "stage-8"
+          },
+          "draggable": false,
+          "selectable": false,
+          "deletable": false,
+          "zIndex": 0
+        },
+        {
+          "id": "tab_parking_lot_node_define_food_and_beverage_concept",
+          "type": "planningNode",
+          "position": {
+            "x": 60,
+            "y": 1880
+          },
+          "width": 260,
+          "data": {
+            "title": "Define food and beverage concept.",
+            "status": "parked",
+            "associatedIds": [],
+            "workstreamId": "workstream_experience_design",
+            "stageId": "stage_discovery",
+            "priority": "P2",
+            "confidence": "medium",
+            "createdAt": "2026-06-12T00:00:00.000Z",
+            "updatedAt": "2026-06-12T00:00:00.000Z"
+          },
+          "draggable": true,
+          "selectable": true,
+          "deletable": true,
+          "zIndex": 10
+        }
+      ],
+      "edges": [],
+      "viewport": {
+        "x": 0,
+        "y": 0,
+        "zoom": 0.8
+      },
+      "filters": {}
+    }
+  ],
+  "snapshots": [],
+  "settings": {
+    "themeId": "clean-light",
+    "showMiniMap": true,
+    "adminMode": false,
+    "presentationMode": false
+  },
+  "createdAt": "2026-06-12T00:00:00.000Z",
+  "updatedAt": "2026-06-12T00:00:00.000Z"
+}

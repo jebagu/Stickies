@@ -1,3 +1,4 @@
+import type { CSSProperties } from "react";
 import { Monitor, Presentation, Settings } from "lucide-react";
 import { isPublicViewMode } from "../../lib/appMode";
 import { THEME_OPTIONS, formatThemeLabel } from "../../lib/options";
@@ -5,6 +6,10 @@ import { useProjectStore } from "../../state/projectStore";
 import { Button } from "../ui/Button";
 import { Select } from "../ui/Select";
 import { Toggle } from "../ui/Toggle";
+
+const logoMaskStyle = {
+  "--top-bar-logo-url": `url("${import.meta.env.BASE_URL}favicon.svg")`,
+} as CSSProperties;
 
 export function TopBar() {
   const {
@@ -22,7 +27,7 @@ export function TopBar() {
     <header className="top-bar">
       <div className="top-bar__title">
         <div className="top-bar__brand">
-          <img className="top-bar__logo" src={`${import.meta.env.BASE_URL}favicon.svg`} alt="" aria-hidden="true" />
+          <span className="top-bar__logo" style={logoMaskStyle} aria-hidden="true" />
           <h1>Stickies</h1>
         </div>
       </div>

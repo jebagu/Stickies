@@ -235,12 +235,23 @@ select {
   display: flex;
   align-items: center;
   gap: 8px;
+  color: var(--text-primary);
 }
 
 .top-bar__logo {
+  display: block;
   width: 24px;
   height: 24px;
   flex: 0 0 auto;
+  background: currentColor;
+  mask-image: var(--top-bar-logo-url);
+  mask-position: center;
+  mask-repeat: no-repeat;
+  mask-size: contain;
+  -webkit-mask-image: var(--top-bar-logo-url);
+  -webkit-mask-position: center;
+  -webkit-mask-repeat: no-repeat;
+  -webkit-mask-size: contain;
 }
 
 

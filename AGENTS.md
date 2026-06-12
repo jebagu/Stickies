@@ -4,9 +4,9 @@
 
 This is a Vite React TypeScript app for an internal React Flow project-planning canvas.
 
-Permanent local URL: `http://127.0.0.1:5178/SS-React-Flow-Charts/`
+Permanent local URL: `http://127.0.0.1:5178/Stickies/`
 
-Public read-only local URL: `http://127.0.0.1:5178/SS-React-Flow-Charts/public/`
+Public read-only local URL: `http://127.0.0.1:5178/Stickies/public/`
 
 ## Working rules
 

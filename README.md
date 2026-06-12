@@ -35,13 +35,13 @@ npm run dev
 Open:
 
 ```txt
-http://127.0.0.1:5178/SS-React-Flow-Charts/
+http://127.0.0.1:5178/Stickies/
 ```
 
 Public read-only view:
 
 ```txt
-http://127.0.0.1:5178/SS-React-Flow-Charts/public/
+http://127.0.0.1:5178/Stickies/public/
 ```
 
 The dev server is pinned in [vite.config.ts](/Users/jeremyguillory/Documents/vibecode-projects/SS%20React%20Flow%20Charts/vite.config.ts) with strict-port behavior. If port `5178` is already occupied, stop the stale server instead of silently changing the permanent URL.
@@ -75,13 +75,13 @@ npm run preview
 Preview URL:
 
 ```txt
-http://127.0.0.1:4178/SS-React-Flow-Charts/
+http://127.0.0.1:4178/Stickies/
 ```
 
 Public preview URL:
 
 ```txt
-http://127.0.0.1:4178/SS-React-Flow-Charts/public/
+http://127.0.0.1:4178/Stickies/public/
 ```
 
 ## GitHub Pages Deployment
@@ -142,7 +142,7 @@ The editor left rail starts with a single `File` menu for browser-local project 
 
 ## Public Read-Only View
 
-The public viewer lives at `/SS-React-Flow-Charts/public/`. It loads the committed static snapshot at [public/public/project.json](/Users/jeremyguillory/Documents/vibecode-projects/SS%20React%20Flow%20Charts/public/public/project.json) instead of browser localStorage.
+The public viewer lives at `/Stickies/public/`. It loads the committed static snapshot at [public/public/project.json](/Users/jeremyguillory/Documents/vibecode-projects/SS%20React%20Flow%20Charts/public/public/project.json) instead of browser localStorage.
 
 Public mode allows:
 

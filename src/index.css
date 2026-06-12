@@ -231,6 +231,18 @@ select {
   min-width: 260px;
 }
 
+.top-bar__brand {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.top-bar__logo {
+  width: 24px;
+  height: 24px;
+  flex: 0 0 auto;
+}
+
 
 .top-bar__title h1,
 .inspector-title h2 {

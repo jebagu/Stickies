@@ -21,7 +21,10 @@ export function TopBar() {
   return (
     <header className="top-bar">
       <div className="top-bar__title">
-        <h1>Stickies</h1>
+        <div className="top-bar__brand">
+          <img className="top-bar__logo" src={`${import.meta.env.BASE_URL}favicon.svg`} alt="" aria-hidden="true" />
+          <h1>Stickies</h1>
+        </div>
       </div>
 
       <div className="top-bar__actions">

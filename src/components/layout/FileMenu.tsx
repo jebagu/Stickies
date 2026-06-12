@@ -7,9 +7,16 @@ import {
   History,
   Menu,
   Save,
+  Share2,
   XCircle,
 } from "lucide-react";
 import { downloadProjectExport, parseProjectJsonFile, type ProjectExportFormat } from "../../lib/exportImport";
+import {
+  createPublishSlug,
+  downloadPublishedProject,
+  getPublishedProjectTargetPath,
+  getPublishedProjectUrl,
+} from "../../lib/publish";
 import { useProjectStore } from "../../state/projectStore";
 import { Button } from "../ui/Button";
 import { useDialog } from "../ui/DialogProvider";
@@ -145,6 +152,38 @@ export function FileMenu() {
     }
   }
 
+  async function handlePublish() {
+    const confirmed = await dialog.confirm({
+      title: "Publish read-only link",
+      message:
+        "Publish creates a frozen read-only snapshot. People with the link can view this version, but later edits will not update it.",
+      confirmLabel: "Publish",
+    });
+
+    if (!confirmed) {
+      return;
+    }
+
+    const slug = createPublishSlug();
+    const publicUrl = getPublishedProjectUrl(slug);
+    const targetPath = getPublishedProjectTargetPath(slug);
+
+    downloadPublishedProject(project, slug);
+
+    try {
+      await navigator.clipboard?.writeText(publicUrl);
+      await dialog.alert({
+        title: "Published snapshot prepared",
+        message: `The read-only link was copied to your clipboard:\n${publicUrl}\n\nSave the downloaded JSON as ${targetPath}, then deploy the static app so other people can open it.`,
+      });
+    } catch {
+      await dialog.alert({
+        title: "Published snapshot prepared",
+        message: `Read-only link:\n${publicUrl}\n\nSave the downloaded JSON as ${targetPath}, then deploy the static app so other people can open it.`,
+      });
+    }
+  }
+
   async function showVersionHistory() {
     if (project.snapshots.length === 0) {
       await dialog.alert({
@@ -199,6 +238,10 @@ export function FileMenu() {
           <button type="button" role="menuitem" onClick={() => runMenuAction(handleSaveSnapshot)}>
             <Save size={15} aria-hidden="true" />
             <span>Save</span>
+          </button>
+          <button type="button" role="menuitem" onClick={() => runMenuAction(handlePublish)}>
+            <Share2 size={15} aria-hidden="true" />
+            <span>Publish</span>
           </button>
           <button type="button" role="menuitem" onClick={() => runMenuAction(handleExport)}>
             <Download size={15} aria-hidden="true" />

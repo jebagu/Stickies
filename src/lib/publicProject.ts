@@ -1,6 +1,7 @@
 import { createSeedProject } from "../data/seedProject";
 import type { ProjectFile } from "../types/planning";
-import { getPublicProjectUrl } from "./appMode";
+import { getPublicProjectSlug, getPublicProjectUrl } from "./appMode";
+import { getPublishedProjectJsonUrl } from "./publish";
 import { validateProjectFile } from "./validation";
 
 export type LoadPublicProjectResult = {
@@ -9,8 +10,11 @@ export type LoadPublicProjectResult = {
 };
 
 export async function loadProjectFromPublicSnapshot(): Promise<LoadPublicProjectResult> {
+  const slug = getPublicProjectSlug();
+  const projectUrl = slug ? getPublishedProjectJsonUrl(slug) : getPublicProjectUrl();
+
   try {
-    const response = await fetch(getPublicProjectUrl(), {
+    const response = await fetch(projectUrl, {
       headers: {
         Accept: "application/json",
       },

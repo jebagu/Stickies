@@ -13,10 +13,19 @@ export type Confidence = "low" | "medium" | "high";
 export type LineType = "solid" | "dashed" | "magic";
 export type ThemeId = "clean-light" | "clean-dark" | "neon-dark";
 export type TabOrientation = "vertical" | "horizontal";
+export type ProjectSchemaVersion = 1 | 2;
+export type StageRect = {
+  x: number;
+  y: number;
+  width: number;
+  height: number;
+};
 
 export type ProjectFile = {
-  schemaVersion: 1;
+  schemaVersion: ProjectSchemaVersion;
   projectName: string;
+  projectOrigin?: ProjectOrigin;
+  graphSnapshots?: GraphSnapshot[];
   activeTabId: string;
   people: Person[];
   workstreams: Workstream[];
@@ -24,8 +33,31 @@ export type ProjectFile = {
   tabs: PlanningTab[];
   snapshots: Snapshot[];
   settings: ProjectSettings;
+  softwareGraphNavigation?: SoftwareGraphNavigation;
   createdAt: string;
   updatedAt: string;
+};
+
+export type ProjectOrigin = {
+  source?: string;
+  sourcePath?: string;
+  generatedAt?: string;
+  analyzer?: string;
+  [key: string]: unknown;
+};
+
+export type GraphSnapshot = {
+  id: string;
+  label?: string;
+  buildId?: string;
+  buildIdentity?: string;
+  observedAt?: string;
+  metadata?: Record<string, unknown>;
+  [key: string]: unknown;
+};
+
+export type SoftwareGraphNavigation = {
+  [key: string]: unknown;
 };
 
 export type Person = {
@@ -54,6 +86,10 @@ export type PlanningTab = {
   name: string;
   description?: string;
   orientation?: TabOrientation;
+  kind?: string;
+  generated?: boolean;
+  readOnly?: boolean;
+  layout?: Record<string, unknown>;
   stages: Stage[];
   nodes: AppNode[];
   edges: AppEdge[];
@@ -71,18 +107,15 @@ export type Stage = {
   order: number;
   description?: string;
   colorToken?: string;
-  rect?: {
-    x: number;
-    y: number;
-    width: number;
-    height: number;
-  };
+  rect?: StageRect;
+  orientationRects?: Partial<Record<TabOrientation, StageRect>>;
 };
 
 export type PlanningNodeData = {
   title: string;
   status: NodeStatus;
   associatedIds: string[];
+  softwareGraph?: SoftwareGraphNodeMetadata;
   workstreamId?: string;
   tagIds?: string[];
   stageId?: string;
@@ -128,6 +161,9 @@ export type AppEdge = {
   type: "planningEdge";
   data: {
     lineType: LineType;
+    label?: string;
+    softwareGraph?: SoftwareGraphEdgeMetadata;
+    [key: string]: unknown;
   };
 };
 
@@ -150,6 +186,50 @@ export type ProjectSettings = {
   showMiniMap: boolean;
   adminMode: boolean;
   presentationMode: boolean;
+  generatedSoftwareGraph?: boolean;
+  readOnlyGeneratedTabs?: boolean;
+  [key: string]: unknown;
+};
+
+export type SoftwareGraphProvenance = {
+  sourceType?: string;
+  extractor?: string;
+  observedAt?: string;
+  [key: string]: unknown;
+};
+
+export type SoftwareGraphNodeMetadata = {
+  id: string;
+  nodeKind?: string;
+  path?: string;
+  symbol?: string;
+  provenance?: SoftwareGraphProvenance;
+  sourcePath?: string;
+  lineStart?: number;
+  lineEnd?: number;
+  confidence?: number | string;
+  riskLabels?: string[];
+  testCoverage?: string | number | boolean | Record<string, unknown>;
+  snapshotId?: string;
+  buildId?: string;
+  buildIdentity?: string;
+  metadata?: Record<string, unknown>;
+  [key: string]: unknown;
+};
+
+export type SoftwareGraphEdgeMetadata = {
+  id: string;
+  edgeKind?: string;
+  provenance?: SoftwareGraphProvenance;
+  sourcePath?: string;
+  lineStart?: number;
+  lineEnd?: number;
+  confidence?: number | string;
+  snapshotId?: string;
+  buildId?: string;
+  buildIdentity?: string;
+  metadata?: Record<string, unknown>;
+  [key: string]: unknown;
 };
 
 export type TabFilters = {

@@ -4,7 +4,9 @@ import { useProjectStore } from "../../state/projectStore";
 import type { AppEdge } from "../../types/planning";
 import { Button } from "../ui/Button";
 import { useDialog } from "../ui/DialogProvider";
+import { Input } from "../ui/Input";
 import { Select } from "../ui/Select";
+import { SoftwareGraphDetails } from "./SoftwareGraphDetails";
 
 type EdgeInspectorProps = {
   edge: AppEdge;
@@ -31,7 +33,9 @@ export function EdgeInspector({ edge, sourceTitle, targetTitle, readOnly = false
       <div className="inspector-stack">
         <ReadOnlyField label="From" value={sourceTitle} />
         <ReadOnlyField label="To" value={targetTitle} />
+        <ReadOnlyField label="Label" value={edge.data.label ?? ""} />
         <ReadOnlyField label="Line type" value={formatLineTypeLabel(edge.data.lineType)} />
+        <SoftwareGraphDetails metadata={edge.data.softwareGraph} kindLabel="Edge kind" />
       </div>
     );
   }
@@ -60,6 +64,15 @@ export function EdgeInspector({ edge, sourceTitle, targetTitle, readOnly = false
       <ReadOnlyField label="From" value={sourceTitle} />
       <ReadOnlyField label="To" value={targetTitle} />
 
+      <label className="field-label" htmlFor="edge-label">
+        Label
+      </label>
+      <Input
+        id="edge-label"
+        value={edge.data.label ?? ""}
+        onChange={(event) => updateEdge(edge.id, { label: event.target.value || undefined })}
+      />
+
       <label className="field-label" htmlFor="edge-line-type">
         Line type
       </label>
@@ -74,6 +87,7 @@ export function EdgeInspector({ edge, sourceTitle, targetTitle, readOnly = false
           </option>
         ))}
       </Select>
+      <SoftwareGraphDetails metadata={edge.data.softwareGraph} kindLabel="Edge kind" />
     </div>
   );
 }

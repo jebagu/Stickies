@@ -7,6 +7,7 @@ import { Button } from "../ui/Button";
 import { useDialog } from "../ui/DialogProvider";
 import { Input } from "../ui/Input";
 import { Select } from "../ui/Select";
+import { SoftwareGraphDetails } from "./SoftwareGraphDetails";
 import { Textarea } from "../ui/Textarea";
 
 type NodeInspectorProps = {
@@ -63,6 +64,7 @@ export function NodeInspector({ node, readOnly = false }: NodeInspectorProps) {
         <ReadOnlyField label="Priority" value={data.priority ?? ""} />
         <ReadOnlyField label="Confidence" value={data.confidence ? formatOptionLabel(data.confidence) : ""} />
         <ReadOnlyField label="Target date" value={data.targetDate ?? ""} />
+        <SoftwareGraphDetails metadata={data.softwareGraph} kindLabel="Node kind" />
       </div>
     );
   }
@@ -164,6 +166,7 @@ export function NodeInspector({ node, readOnly = false }: NodeInspectorProps) {
           <span className="meta-copy">No associated items</span>
         )}
       </div>
+      <SoftwareGraphDetails metadata={data.softwareGraph} kindLabel="Node kind" />
     </div>
   );
 }

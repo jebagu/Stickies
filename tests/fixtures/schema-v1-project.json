@@ -1,0 +1,42 @@
+{
+  "schemaVersion": 1,
+  "projectName": "Schema v1 Planning Fixture",
+  "activeTabId": "tab-plan",
+  "people": [],
+  "workstreams": [],
+  "tags": [],
+  "tabs": [
+    {
+      "id": "tab-plan",
+      "name": "Planning",
+      "orientation": "vertical",
+      "stages": [],
+      "nodes": [
+        {
+          "id": "node-plan-a",
+          "type": "planningNode",
+          "position": { "x": 0, "y": 0 },
+          "data": {
+            "title": "Plan item",
+            "status": "idea",
+            "associatedIds": [],
+            "createdAt": "2026-06-15T00:00:00.000Z",
+            "updatedAt": "2026-06-15T00:00:00.000Z"
+          }
+        }
+      ],
+      "edges": [],
+      "viewport": { "x": 0, "y": 0, "zoom": 0.8 },
+      "filters": {}
+    }
+  ],
+  "snapshots": [],
+  "settings": {
+    "themeId": "clean-light",
+    "showMiniMap": true,
+    "adminMode": false,
+    "presentationMode": false
+  },
+  "createdAt": "2026-06-15T00:00:00.000Z",
+  "updatedAt": "2026-06-15T00:00:00.000Z"
+}

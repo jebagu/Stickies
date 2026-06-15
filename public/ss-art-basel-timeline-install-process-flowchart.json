@@ -1,0 +1,1829 @@
+{
+  "schemaVersion": 1,
+  "projectName": "SS Art Basel 2025 Timeline + Install Process",
+  "activeTabId": "tab_timeline_install_process",
+  "people": [
+    {
+      "id": "person_jeremy_guillory",
+      "initials": "JG",
+      "name": "Jeremy Guillory",
+      "kind": "person"
+    },
+    {
+      "id": "person_merijn_royaards",
+      "initials": "MR",
+      "name": "Merijn Royaards",
+      "kind": "person"
+    },
+    {
+      "id": "person_ed_cooke",
+      "initials": "EC",
+      "name": "Ed Cooke",
+      "kind": "person"
+    },
+    {
+      "id": "person_ed_goh",
+      "initials": "EG",
+      "name": "Ed Goh",
+      "kind": "person"
+    },
+    {
+      "id": "person_alexander_morley",
+      "initials": "AM",
+      "name": "Alexander Morley",
+      "kind": "person"
+    },
+    {
+      "id": "person_nicholas_christie",
+      "initials": "NC",
+      "name": "Nicholas Christie",
+      "kind": "person"
+    },
+    {
+      "id": "person_sabine",
+      "initials": "S",
+      "name": "Sabine",
+      "kind": "person"
+    },
+    {
+      "id": "person_dnk",
+      "initials": "DNK",
+      "name": "DNK",
+      "kind": "organization"
+    },
+    {
+      "id": "person_sonic_sphere_bv",
+      "initials": "SSB",
+      "name": "Sonic Sphere, BV",
+      "kind": "organization"
+    },
+    {
+      "id": "person_sonic_spheres_inc",
+      "initials": "SSI",
+      "name": "Sonic Spheres, Inc.",
+      "kind": "organization"
+    },
+    {
+      "id": "person_rare",
+      "initials": "R",
+      "name": "Rare",
+      "kind": "organization"
+    },
+    {
+      "id": "person_artwithme",
+      "initials": "A",
+      "name": "ArtWithMe",
+      "kind": "organization"
+    },
+    {
+      "id": "person_richie_britton",
+      "initials": "RB",
+      "name": "Richie Britton",
+      "kind": "person"
+    },
+    {
+      "id": "person_dom_joseph",
+      "initials": "DJ",
+      "name": "Dom Joseph",
+      "kind": "person"
+    },
+    {
+      "id": "person_meelf_van_oosten",
+      "initials": "MO",
+      "name": "Meelf van Oosten",
+      "kind": "person"
+    },
+    {
+      "id": "person_rob_montgomery",
+      "initials": "RM",
+      "name": "Rob Montgomery",
+      "kind": "person"
+    },
+    {
+      "id": "person_chris_linder",
+      "initials": "CL",
+      "name": "Chris Linder",
+      "kind": "person"
+    }
+  ],
+  "workstreams": [
+    {
+      "id": "workstream_venue",
+      "name": "Venue",
+      "defaultAssociatedIds": [
+        "person_dnk",
+        "person_sonic_sphere_bv",
+        "person_sonic_spheres_inc"
+      ],
+      "colorToken": "venue"
+    },
+    {
+      "id": "workstream_delivery_of_physical_sphere",
+      "name": "Delivery of Physical Sphere",
+      "defaultAssociatedIds": [
+        "person_nicholas_christie",
+        "person_alexander_morley"
+      ],
+      "colorToken": "sphere"
+    },
+    {
+      "id": "workstream_delivery_of_sound_system",
+      "name": "Delivery of Sound System",
+      "defaultAssociatedIds": [
+        "person_merijn_royaards",
+        "person_jeremy_guillory"
+      ],
+      "colorToken": "sound"
+    },
+    {
+      "id": "workstream_acoustics_consultant",
+      "name": "Acoustics Consultant",
+      "defaultAssociatedIds": [
+        "person_sabine"
+      ],
+      "colorToken": "acoustics"
+    },
+    {
+      "id": "workstream_operations",
+      "name": "Operations",
+      "defaultAssociatedIds": [
+        "person_ed_cooke",
+        "person_ed_goh"
+      ],
+      "colorToken": "operations"
+    },
+    {
+      "id": "workstream_ticketing",
+      "name": "Ticketing",
+      "colorToken": "ticketing"
+    },
+    {
+      "id": "workstream_show_music_production",
+      "name": "Show Music Production",
+      "defaultAssociatedIds": [
+        "person_jeremy_guillory"
+      ],
+      "colorToken": "music"
+    },
+    {
+      "id": "workstream_labs",
+      "name": "Labs",
+      "colorToken": "labs"
+    },
+    {
+      "id": "workstream_legal",
+      "name": "Legal",
+      "colorToken": "legal"
+    },
+    {
+      "id": "workstream_experience_design",
+      "name": "Experience Design",
+      "colorToken": "experience"
+    }
+  ],
+  "tags": [
+    {
+      "id": "tag_critical_path",
+      "label": "Critical path",
+      "colorToken": "critical"
+    },
+    {
+      "id": "tag_needs_decision",
+      "label": "Needs decision",
+      "colorToken": "decision"
+    },
+    {
+      "id": "tag_external_partner",
+      "label": "External partner",
+      "colorToken": "partner"
+    }
+  ],
+  "tabs": [
+    {
+      "id": "tab_timeline_install_process",
+      "name": "Timeline + Install Process",
+      "description": "PDF-derived Miami Art Basel 2025 timeline and install/strike process.",
+      "stages": [
+        {
+          "id": "stage_pre_production",
+          "name": "Pre-Production",
+          "order": 0,
+          "colorToken": "stage-1",
+          "rect": {
+            "x": 0,
+            "y": 0,
+            "width": 300,
+            "height": 2200
+          }
+        },
+        {
+          "id": "stage_site_readiness",
+          "name": "Site Readiness",
+          "order": 1,
+          "colorToken": "stage-2",
+          "rect": {
+            "x": 320,
+            "y": 0,
+            "width": 300,
+            "height": 2200
+          }
+        },
+        {
+          "id": "stage_deliveries_sort",
+          "name": "Deliveries + Sort",
+          "order": 2,
+          "colorToken": "stage-3",
+          "rect": {
+            "x": 640,
+            "y": 0,
+            "width": 300,
+            "height": 2200
+          }
+        },
+        {
+          "id": "stage_sphere_assembly",
+          "name": "Sphere Assembly",
+          "order": 3,
+          "colorToken": "stage-4",
+          "rect": {
+            "x": 960,
+            "y": 0,
+            "width": 300,
+            "height": 2200
+          }
+        },
+        {
+          "id": "stage_systems_interior",
+          "name": "Systems + Interior",
+          "order": 4,
+          "colorToken": "stage-5",
+          "rect": {
+            "x": 1280,
+            "y": 0,
+            "width": 300,
+            "height": 2200
+          }
+        },
+        {
+          "id": "stage_commissioning_event",
+          "name": "Commissioning + Event",
+          "order": 5,
+          "colorToken": "stage-6",
+          "rect": {
+            "x": 1600,
+            "y": 0,
+            "width": 300,
+            "height": 2200
+          }
+        },
+        {
+          "id": "stage_strike_pack_out",
+          "name": "Strike + Pack-Out",
+          "order": 6,
+          "colorToken": "stage-7",
+          "rect": {
+            "x": 1920,
+            "y": 0,
+            "width": 300,
+            "height": 2200
+          }
+        }
+      ],
+      "nodes": [
+        {
+          "id": "tab_timeline_install_process_band_stage_pre_production",
+          "type": "stageBand",
+          "position": {
+            "x": 0,
+            "y": 0
+          },
+          "width": 300,
+          "height": 2200,
+          "data": {
+            "title": "Pre-Production",
+            "stageId": "stage_pre_production",
+            "locked": true,
+            "colorToken": "stage-1"
+          },
+          "draggable": false,
+          "selectable": false,
+          "deletable": false,
+          "zIndex": 0
+        },
+        {
+          "id": "tab_timeline_install_process_band_stage_site_readiness",
+          "type": "stageBand",
+          "position": {
+            "x": 320,
+            "y": 0
+          },
+          "width": 300,
+          "height": 2200,
+          "data": {
+            "title": "Site Readiness",
+            "stageId": "stage_site_readiness",
+            "locked": true,
+            "colorToken": "stage-2"
+          },
+          "draggable": false,
+          "selectable": false,
+          "deletable": false,
+          "zIndex": 0
+        },
+        {
+          "id": "tab_timeline_install_process_band_stage_deliveries_sort",
+          "type": "stageBand",
+          "position": {
+            "x": 640,
+            "y": 0
+          },
+          "width": 300,
+          "height": 2200,
+          "data": {
+            "title": "Deliveries + Sort",
+            "stageId": "stage_deliveries_sort",
+            "locked": true,
+            "colorToken": "stage-3"
+          },
+          "draggable": false,
+          "selectable": false,
+          "deletable": false,
+          "zIndex": 0
+        },
+        {
+          "id": "tab_timeline_install_process_band_stage_sphere_assembly",
+          "type": "stageBand",
+          "position": {
+            "x": 960,
+            "y": 0
+          },
+          "width": 300,
+          "height": 2200,
+          "data": {
+            "title": "Sphere Assembly",
+            "stageId": "stage_sphere_assembly",
+            "locked": true,
+            "colorToken": "stage-4"
+          },
+          "draggable": false,
+          "selectable": false,
+          "deletable": false,
+          "zIndex": 0
+        },
+        {
+          "id": "tab_timeline_install_process_band_stage_systems_interior",
+          "type": "stageBand",
+          "position": {
+            "x": 1280,
+            "y": 0
+          },
+          "width": 300,
+          "height": 2200,
+          "data": {
+            "title": "Systems + Interior",
+            "stageId": "stage_systems_interior",
+            "locked": true,
+            "colorToken": "stage-5"
+          },
+          "draggable": false,
+          "selectable": false,
+          "deletable": false,
+          "zIndex": 0
+        },
+        {
+          "id": "tab_timeline_install_process_band_stage_commissioning_event",
+          "type": "stageBand",
+          "position": {
+            "x": 1600,
+            "y": 0
+          },
+          "width": 300,
+          "height": 2200,
+          "data": {
+            "title": "Commissioning + Event",
+            "stageId": "stage_commissioning_event",
+            "locked": true,
+            "colorToken": "stage-6"
+          },
+          "draggable": false,
+          "selectable": false,
+          "deletable": false,
+          "zIndex": 0
+        },
+        {
+          "id": "tab_timeline_install_process_band_stage_strike_pack_out",
+          "type": "stageBand",
+          "position": {
+            "x": 1920,
+            "y": 0
+          },
+          "width": 300,
+          "height": 2200,
+          "data": {
+            "title": "Strike + Pack-Out",
+            "stageId": "stage_strike_pack_out",
+            "locked": true,
+            "colorToken": "stage-7"
+          },
+          "draggable": false,
+          "selectable": false,
+          "deletable": false,
+          "zIndex": 0
+        },
+        {
+          "id": "tab_timeline_install_process_node_notice_to_proceed_initial_payment",
+          "type": "planningNode",
+          "position": {
+            "x": 60,
+            "y": 80
+          },
+          "width": 260,
+          "data": {
+            "title": "Notice to proceed + initial payment.",
+            "status": "defined",
+            "associatedIds": [
+              "person_ed_cooke",
+              "person_artwithme"
+            ],
+            "workstreamId": "workstream_operations",
+            "stageId": "stage_pre_production",
+            "priority": "P0",
+            "targetDate": "2025-11-12",
+            "confidence": "medium",
+            "notes": "Timeline source: SS Art Basel 2025 Delivery Plan, page 2. Scheduled Nov 12.",
+            "createdAt": "2026-06-12T00:00:00.000Z",
+            "updatedAt": "2026-06-12T00:00:00.000Z"
+          },
+          "draggable": true,
+          "selectable": true,
+          "deletable": true,
+          "zIndex": 10
+        },
+        {
+          "id": "tab_timeline_install_process_node_review_storage_items",
+          "type": "planningNode",
+          "position": {
+            "x": 60,
+            "y": 230
+          },
+          "width": 260,
+          "data": {
+            "title": "Review storage items.",
+            "status": "defined",
+            "associatedIds": [
+              "person_nicholas_christie",
+              "person_alexander_morley"
+            ],
+            "workstreamId": "workstream_delivery_of_physical_sphere",
+            "stageId": "stage_pre_production",
+            "priority": "P0",
+            "targetDate": "2025-11-15",
+            "confidence": "medium",
+            "notes": "Scheduled Nov 13-15.",
+            "createdAt": "2026-06-12T00:00:00.000Z",
+            "updatedAt": "2026-06-12T00:00:00.000Z"
+          },
+          "draggable": true,
+          "selectable": true,
+          "deletable": true,
+          "zIndex": 10
+        },
+        {
+          "id": "tab_timeline_install_process_node_purchase_fabricate_repair",
+          "type": "planningNode",
+          "position": {
+            "x": 60,
+            "y": 380
+          },
+          "width": 260,
+          "data": {
+            "title": "Purchase, fabricate, repair.",
+            "status": "defined",
+            "associatedIds": [
+              "person_nicholas_christie",
+              "person_alexander_morley"
+            ],
+            "workstreamId": "workstream_delivery_of_physical_sphere",
+            "stageId": "stage_pre_production",
+            "priority": "P0",
+            "targetDate": "2025-12-02",
+            "confidence": "medium",
+            "notes": "Scheduled Nov 17-Dec 2. Covers item purchase, fabrication, repair, and replacement prep before site commissioning.",
+            "createdAt": "2026-06-12T00:00:00.000Z",
+            "updatedAt": "2026-06-12T00:00:00.000Z"
+          },
+          "draggable": true,
+          "selectable": true,
+          "deletable": true,
+          "zIndex": 10
+        },
+        {
+          "id": "tab_timeline_install_process_node_receive_containers_vr_etc",
+          "type": "planningNode",
+          "position": {
+            "x": 380,
+            "y": 80
+          },
+          "width": 260,
+          "data": {
+            "title": "Receive containers, VR, etc.",
+            "status": "defined",
+            "associatedIds": [
+              "person_artwithme",
+              "person_nicholas_christie"
+            ],
+            "workstreamId": "workstream_operations",
+            "stageId": "stage_site_readiness",
+            "priority": "P0",
+            "targetDate": "2025-11-27",
+            "confidence": "medium",
+            "notes": "Overview row shows Nov 27. Detailed rows split this into 12k VR and shipping-container deliveries.",
+            "createdAt": "2026-06-12T00:00:00.000Z",
+            "updatedAt": "2026-06-12T00:00:00.000Z"
+          },
+          "draggable": true,
+          "selectable": true,
+          "deletable": true,
+          "zIndex": 10
+        },
+        {
+          "id": "tab_timeline_install_process_node_power_available_on_site",
+          "type": "planningNode",
+          "position": {
+            "x": 380,
+            "y": 230
+          },
+          "width": 260,
+          "data": {
+            "title": "Power available on site.",
+            "status": "defined",
+            "associatedIds": [
+              "person_artwithme"
+            ],
+            "workstreamId": "workstream_operations",
+            "stageId": "stage_site_readiness",
+            "priority": "P0",
+            "targetDate": "2025-11-27",
+            "confidence": "medium",
+            "notes": "Rental need: Nov 27-Dec 10. PDF calls for one 50A @ 240V supply and a spider box with two 30A @ 240V outlets.",
+            "createdAt": "2026-06-12T00:00:00.000Z",
+            "updatedAt": "2026-06-12T00:00:00.000Z"
+          },
+          "draggable": true,
+          "selectable": true,
+          "deletable": true,
+          "zIndex": 10
+        },
+        {
+          "id": "tab_timeline_install_process_node_telehandler_available_on_site",
+          "type": "planningNode",
+          "position": {
+            "x": 380,
+            "y": 380
+          },
+          "width": 260,
+          "data": {
+            "title": "Telehandler available on site.",
+            "status": "defined",
+            "associatedIds": [
+              "person_artwithme",
+              "person_nicholas_christie"
+            ],
+            "workstreamId": "workstream_operations",
+            "stageId": "stage_site_readiness",
+            "priority": "P0",
+            "targetDate": "2025-11-27",
+            "confidence": "medium",
+            "notes": "Rental need: Nov 27-Dec 10. 12k capacity, 54ft reach.",
+            "createdAt": "2026-06-12T00:00:00.000Z",
+            "updatedAt": "2026-06-12T00:00:00.000Z"
+          },
+          "draggable": true,
+          "selectable": true,
+          "deletable": true,
+          "zIndex": 10
+        },
+        {
+          "id": "tab_timeline_install_process_node_ground_anchors_ready",
+          "type": "planningNode",
+          "position": {
+            "x": 380,
+            "y": 530
+          },
+          "width": 260,
+          "data": {
+            "title": "Ground anchors ready.",
+            "status": "defined",
+            "associatedIds": [
+              "person_artwithme",
+              "person_nicholas_christie"
+            ],
+            "workstreamId": "workstream_delivery_of_physical_sphere",
+            "stageId": "stage_site_readiness",
+            "priority": "P0",
+            "targetDate": "2025-11-28",
+            "confidence": "medium",
+            "notes": "Rental need: Nov 28-Dec 10. Includes PE46-Hex penetrators and PE46-TC tie-off cables.",
+            "createdAt": "2026-06-12T00:00:00.000Z",
+            "updatedAt": "2026-06-12T00:00:00.000Z"
+          },
+          "draggable": true,
+          "selectable": true,
+          "deletable": true,
+          "zIndex": 10
+        },
+        {
+          "id": "tab_timeline_install_process_node_crane_window_for_install",
+          "type": "planningNode",
+          "position": {
+            "x": 380,
+            "y": 680
+          },
+          "width": 260,
+          "data": {
+            "title": "Crane window for install.",
+            "status": "defined",
+            "associatedIds": [
+              "person_artwithme",
+              "person_nicholas_christie"
+            ],
+            "workstreamId": "workstream_delivery_of_physical_sphere",
+            "stageId": "stage_site_readiness",
+            "priority": "P0",
+            "targetDate": "2025-12-01",
+            "confidence": "medium",
+            "notes": "Install crane window: Dec 1, 8am-12pm. PDF calls for 10k capacity at 32ft minimum reach and 50ft pickpoint height.",
+            "createdAt": "2026-06-12T00:00:00.000Z",
+            "updatedAt": "2026-06-12T00:00:00.000Z"
+          },
+          "draggable": true,
+          "selectable": true,
+          "deletable": true,
+          "zIndex": 10
+        },
+        {
+          "id": "tab_timeline_install_process_node_stairs_scaffold_ballast_ready",
+          "type": "planningNode",
+          "position": {
+            "x": 380,
+            "y": 830
+          },
+          "width": 260,
+          "data": {
+            "title": "Stairs scaffold + ballast ready.",
+            "status": "defined",
+            "associatedIds": [
+              "person_artwithme",
+              "person_alexander_morley"
+            ],
+            "workstreamId": "workstream_operations",
+            "stageId": "stage_site_readiness",
+            "priority": "P1",
+            "targetDate": "2025-12-01",
+            "confidence": "medium",
+            "notes": "Rental need: Dec 1-Dec 10.",
+            "createdAt": "2026-06-12T00:00:00.000Z",
+            "updatedAt": "2026-06-12T00:00:00.000Z"
+          },
+          "draggable": true,
+          "selectable": true,
+          "deletable": true,
+          "zIndex": 10
+        },
+        {
+          "id": "tab_timeline_install_process_node_arrive_on_site_and_set_up_hq",
+          "type": "planningNode",
+          "position": {
+            "x": 700,
+            "y": 80
+          },
+          "width": 260,
+          "data": {
+            "title": "Arrive on site and set up HQ.",
+            "status": "defined",
+            "associatedIds": [
+              "person_ed_cooke",
+              "person_nicholas_christie"
+            ],
+            "workstreamId": "workstream_operations",
+            "stageId": "stage_deliveries_sort",
+            "priority": "P0",
+            "targetDate": "2025-11-27",
+            "confidence": "medium",
+            "notes": "Install process scheduled Nov 27.",
+            "createdAt": "2026-06-12T00:00:00.000Z",
+            "updatedAt": "2026-06-12T00:00:00.000Z"
+          },
+          "draggable": true,
+          "selectable": true,
+          "deletable": true,
+          "zIndex": 10
+        },
+        {
+          "id": "tab_timeline_install_process_node_receive_delivery_of_12k_vr",
+          "type": "planningNode",
+          "position": {
+            "x": 700,
+            "y": 230
+          },
+          "width": 260,
+          "data": {
+            "title": "Receive delivery of 12k VR.",
+            "status": "defined",
+            "associatedIds": [
+              "person_artwithme"
+            ],
+            "workstreamId": "workstream_operations",
+            "stageId": "stage_deliveries_sort",
+            "priority": "P0",
+            "targetDate": "2025-11-27",
+            "confidence": "medium",
+            "notes": "Install process scheduled Nov 27.",
+            "createdAt": "2026-06-12T00:00:00.000Z",
+            "updatedAt": "2026-06-12T00:00:00.000Z"
+          },
+          "draggable": true,
+          "selectable": true,
+          "deletable": true,
+          "zIndex": 10
+        },
+        {
+          "id": "tab_timeline_install_process_node_receive_delivery_of_shipping_containers",
+          "type": "planningNode",
+          "position": {
+            "x": 700,
+            "y": 380
+          },
+          "width": 260,
+          "data": {
+            "title": "Receive delivery of shipping containers.",
+            "status": "defined",
+            "associatedIds": [
+              "person_artwithme"
+            ],
+            "workstreamId": "workstream_operations",
+            "stageId": "stage_deliveries_sort",
+            "priority": "P0",
+            "targetDate": "2025-11-27",
+            "confidence": "medium",
+            "notes": "Install process scheduled Nov 27.",
+            "createdAt": "2026-06-12T00:00:00.000Z",
+            "updatedAt": "2026-06-12T00:00:00.000Z"
+          },
+          "draggable": true,
+          "selectable": true,
+          "deletable": true,
+          "zIndex": 10
+        },
+        {
+          "id": "tab_timeline_install_process_node_unload_stage_everything",
+          "type": "planningNode",
+          "position": {
+            "x": 700,
+            "y": 530
+          },
+          "width": 260,
+          "data": {
+            "title": "Unload + stage everything.",
+            "status": "defined",
+            "associatedIds": [
+              "person_nicholas_christie",
+              "person_alexander_morley"
+            ],
+            "workstreamId": "workstream_operations",
+            "stageId": "stage_deliveries_sort",
+            "priority": "P0",
+            "targetDate": "2025-11-28",
+            "confidence": "medium",
+            "notes": "Install process scheduled Nov 28.",
+            "createdAt": "2026-06-12T00:00:00.000Z",
+            "updatedAt": "2026-06-12T00:00:00.000Z"
+          },
+          "draggable": true,
+          "selectable": true,
+          "deletable": true,
+          "zIndex": 10
+        },
+        {
+          "id": "tab_timeline_install_process_node_sort_struts_into_types",
+          "type": "planningNode",
+          "position": {
+            "x": 700,
+            "y": 680
+          },
+          "width": 260,
+          "data": {
+            "title": "Sort struts into types.",
+            "status": "defined",
+            "associatedIds": [
+              "person_nicholas_christie"
+            ],
+            "workstreamId": "workstream_delivery_of_physical_sphere",
+            "stageId": "stage_deliveries_sort",
+            "priority": "P0",
+            "targetDate": "2025-11-28",
+            "confidence": "medium",
+            "notes": "Install process scheduled Nov 28.",
+            "createdAt": "2026-06-12T00:00:00.000Z",
+            "updatedAt": "2026-06-12T00:00:00.000Z"
+          },
+          "draggable": true,
+          "selectable": true,
+          "deletable": true,
+          "zIndex": 10
+        },
+        {
+          "id": "tab_timeline_install_process_node_sort_light_pods_cloths_cables_into_types",
+          "type": "planningNode",
+          "position": {
+            "x": 700,
+            "y": 830
+          },
+          "width": 260,
+          "data": {
+            "title": "Sort light pods, cloths, cables into types.",
+            "status": "defined",
+            "associatedIds": [
+              "person_alexander_morley",
+              "person_chris_linder"
+            ],
+            "workstreamId": "workstream_delivery_of_physical_sphere",
+            "stageId": "stage_deliveries_sort",
+            "priority": "P1",
+            "targetDate": "2025-11-28",
+            "confidence": "medium",
+            "notes": "Install process scheduled Nov 28.",
+            "createdAt": "2026-06-12T00:00:00.000Z",
+            "updatedAt": "2026-06-12T00:00:00.000Z"
+          },
+          "draggable": true,
+          "selectable": true,
+          "deletable": true,
+          "zIndex": 10
+        },
+        {
+          "id": "tab_timeline_install_process_node_assemble_top_half_of_sphere_layer_by_layer",
+          "type": "planningNode",
+          "position": {
+            "x": 1020,
+            "y": 80
+          },
+          "width": 260,
+          "data": {
+            "title": "Assemble top half of sphere layer-by-layer.",
+            "status": "defined",
+            "associatedIds": [
+              "person_nicholas_christie",
+              "person_alexander_morley"
+            ],
+            "workstreamId": "workstream_delivery_of_physical_sphere",
+            "stageId": "stage_sphere_assembly",
+            "priority": "P0",
+            "targetDate": "2025-11-29",
+            "confidence": "medium",
+            "notes": "Scheduled Nov 28-29. Includes structure, lights, and audio layer-by-layer.",
+            "createdAt": "2026-06-12T00:00:00.000Z",
+            "updatedAt": "2026-06-12T00:00:00.000Z"
+          },
+          "draggable": true,
+          "selectable": true,
+          "deletable": true,
+          "zIndex": 10
+        },
+        {
+          "id": "tab_timeline_install_process_node_erect_legs",
+          "type": "planningNode",
+          "position": {
+            "x": 1020,
+            "y": 230
+          },
+          "width": 260,
+          "data": {
+            "title": "Erect legs.",
+            "status": "defined",
+            "associatedIds": [
+              "person_nicholas_christie",
+              "person_alexander_morley"
+            ],
+            "workstreamId": "workstream_delivery_of_physical_sphere",
+            "stageId": "stage_sphere_assembly",
+            "priority": "P0",
+            "targetDate": "2025-11-30",
+            "confidence": "medium",
+            "notes": "Install process scheduled Nov 30.",
+            "createdAt": "2026-06-12T00:00:00.000Z",
+            "updatedAt": "2026-06-12T00:00:00.000Z"
+          },
+          "draggable": true,
+          "selectable": true,
+          "deletable": true,
+          "zIndex": 10
+        },
+        {
+          "id": "tab_timeline_install_process_node_assemble_bottom_half_of_sphere",
+          "type": "planningNode",
+          "position": {
+            "x": 1020,
+            "y": 380
+          },
+          "width": 260,
+          "data": {
+            "title": "Assemble bottom half of sphere.",
+            "status": "defined",
+            "associatedIds": [
+              "person_nicholas_christie",
+              "person_alexander_morley"
+            ],
+            "workstreamId": "workstream_delivery_of_physical_sphere",
+            "stageId": "stage_sphere_assembly",
+            "priority": "P0",
+            "targetDate": "2025-11-30",
+            "confidence": "medium",
+            "notes": "Install process scheduled Nov 30.",
+            "createdAt": "2026-06-12T00:00:00.000Z",
+            "updatedAt": "2026-06-12T00:00:00.000Z"
+          },
+          "draggable": true,
+          "selectable": true,
+          "deletable": true,
+          "zIndex": 10
+        },
+        {
+          "id": "tab_timeline_install_process_node_assemble_floor_rings_and_nest_in_sphere",
+          "type": "planningNode",
+          "position": {
+            "x": 1020,
+            "y": 530
+          },
+          "width": 260,
+          "data": {
+            "title": "Assemble floor rings and nest in sphere.",
+            "status": "defined",
+            "associatedIds": [
+              "person_nicholas_christie",
+              "person_alexander_morley"
+            ],
+            "workstreamId": "workstream_delivery_of_physical_sphere",
+            "stageId": "stage_sphere_assembly",
+            "priority": "P0",
+            "targetDate": "2025-11-30",
+            "confidence": "medium",
+            "notes": "Install process scheduled Nov 30.",
+            "createdAt": "2026-06-12T00:00:00.000Z",
+            "updatedAt": "2026-06-12T00:00:00.000Z"
+          },
+          "draggable": true,
+          "selectable": true,
+          "deletable": true,
+          "zIndex": 10
+        },
+        {
+          "id": "tab_timeline_install_process_node_join_top_to_bottom_with_crane",
+          "type": "planningNode",
+          "position": {
+            "x": 1020,
+            "y": 680
+          },
+          "width": 260,
+          "data": {
+            "title": "Join top to bottom with crane.",
+            "status": "defined",
+            "associatedIds": [
+              "person_nicholas_christie",
+              "person_artwithme"
+            ],
+            "workstreamId": "workstream_delivery_of_physical_sphere",
+            "stageId": "stage_sphere_assembly",
+            "priority": "P0",
+            "targetDate": "2025-12-01",
+            "confidence": "medium",
+            "notes": "Install process scheduled Dec 1. PDF note: need big crane for this step.",
+            "createdAt": "2026-06-12T00:00:00.000Z",
+            "updatedAt": "2026-06-12T00:00:00.000Z"
+          },
+          "draggable": true,
+          "selectable": true,
+          "deletable": true,
+          "zIndex": 10
+        },
+        {
+          "id": "tab_timeline_install_process_node_wire_up_lights_audio_and_test",
+          "type": "planningNode",
+          "position": {
+            "x": 1340,
+            "y": 80
+          },
+          "width": 260,
+          "data": {
+            "title": "Wire up lights + audio and test.",
+            "status": "defined",
+            "associatedIds": [
+              "person_merijn_royaards",
+              "person_jeremy_guillory",
+              "person_chris_linder"
+            ],
+            "workstreamId": "workstream_delivery_of_sound_system",
+            "stageId": "stage_systems_interior",
+            "priority": "P0",
+            "targetDate": "2025-12-01",
+            "confidence": "medium",
+            "notes": "Install process scheduled Dec 1.",
+            "createdAt": "2026-06-12T00:00:00.000Z",
+            "updatedAt": "2026-06-12T00:00:00.000Z"
+          },
+          "draggable": true,
+          "selectable": true,
+          "deletable": true,
+          "zIndex": 10
+        },
+        {
+          "id": "tab_timeline_install_process_node_build_scaffold_stairs",
+          "type": "planningNode",
+          "position": {
+            "x": 1340,
+            "y": 230
+          },
+          "width": 260,
+          "data": {
+            "title": "Build scaffold stairs.",
+            "status": "defined",
+            "associatedIds": [
+              "person_artwithme",
+              "person_alexander_morley"
+            ],
+            "workstreamId": "workstream_operations",
+            "stageId": "stage_systems_interior",
+            "priority": "P1",
+            "targetDate": "2025-12-02",
+            "confidence": "medium",
+            "notes": "Install process scheduled Dec 2.",
+            "createdAt": "2026-06-12T00:00:00.000Z",
+            "updatedAt": "2026-06-12T00:00:00.000Z"
+          },
+          "draggable": true,
+          "selectable": true,
+          "deletable": true,
+          "zIndex": 10
+        },
+        {
+          "id": "tab_timeline_install_process_node_install_floor_truss_legs",
+          "type": "planningNode",
+          "position": {
+            "x": 1340,
+            "y": 380
+          },
+          "width": 260,
+          "data": {
+            "title": "Install floor truss legs.",
+            "status": "defined",
+            "associatedIds": [
+              "person_nicholas_christie"
+            ],
+            "workstreamId": "workstream_delivery_of_physical_sphere",
+            "stageId": "stage_systems_interior",
+            "priority": "P0",
+            "targetDate": "2025-12-03",
+            "confidence": "medium",
+            "notes": "Install process scheduled Dec 3.",
+            "createdAt": "2026-06-12T00:00:00.000Z",
+            "updatedAt": "2026-06-12T00:00:00.000Z"
+          },
+          "draggable": true,
+          "selectable": true,
+          "deletable": true,
+          "zIndex": 10
+        },
+        {
+          "id": "tab_timeline_install_process_node_stretch_net_and_lash",
+          "type": "planningNode",
+          "position": {
+            "x": 1340,
+            "y": 530
+          },
+          "width": 260,
+          "data": {
+            "title": "Stretch net and lash.",
+            "status": "defined",
+            "associatedIds": [
+              "person_nicholas_christie"
+            ],
+            "workstreamId": "workstream_delivery_of_physical_sphere",
+            "stageId": "stage_systems_interior",
+            "priority": "P0",
+            "targetDate": "2025-12-03",
+            "confidence": "medium",
+            "notes": "Install process scheduled Dec 3.",
+            "createdAt": "2026-06-12T00:00:00.000Z",
+            "updatedAt": "2026-06-12T00:00:00.000Z"
+          },
+          "draggable": true,
+          "selectable": true,
+          "deletable": true,
+          "zIndex": 10
+        },
+        {
+          "id": "tab_timeline_install_process_node_install_interior_walkways_dj_platform_entry_platform",
+          "type": "planningNode",
+          "position": {
+            "x": 1340,
+            "y": 680
+          },
+          "width": 260,
+          "data": {
+            "title": "Install interior walkways, DJ platform, entry platform.",
+            "status": "defined",
+            "associatedIds": [
+              "person_nicholas_christie",
+              "person_alexander_morley"
+            ],
+            "workstreamId": "workstream_operations",
+            "stageId": "stage_systems_interior",
+            "priority": "P0",
+            "targetDate": "2025-12-03",
+            "confidence": "medium",
+            "notes": "Install process scheduled Dec 3.",
+            "createdAt": "2026-06-12T00:00:00.000Z",
+            "updatedAt": "2026-06-12T00:00:00.000Z"
+          },
+          "draggable": true,
+          "selectable": true,
+          "deletable": true,
+          "zIndex": 10
+        },
+        {
+          "id": "tab_timeline_install_process_node_set_up_signage_and_bring_in_cushions",
+          "type": "planningNode",
+          "position": {
+            "x": 1340,
+            "y": 830
+          },
+          "width": 260,
+          "data": {
+            "title": "Set up signage and bring in cushions.",
+            "status": "defined",
+            "associatedIds": [
+              "person_artwithme",
+              "person_ed_cooke"
+            ],
+            "workstreamId": "workstream_experience_design",
+            "stageId": "stage_systems_interior",
+            "priority": "P1",
+            "targetDate": "2025-12-04",
+            "confidence": "medium",
+            "notes": "Install process scheduled Dec 4.",
+            "createdAt": "2026-06-12T00:00:00.000Z",
+            "updatedAt": "2026-06-12T00:00:00.000Z"
+          },
+          "draggable": true,
+          "selectable": true,
+          "deletable": true,
+          "zIndex": 10
+        },
+        {
+          "id": "tab_timeline_install_process_node_test_content_live_playback_capability",
+          "type": "planningNode",
+          "position": {
+            "x": 1660,
+            "y": 80
+          },
+          "width": 260,
+          "data": {
+            "title": "Test content + live playback capability.",
+            "status": "defined",
+            "associatedIds": [
+              "person_jeremy_guillory",
+              "person_merijn_royaards",
+              "person_richie_britton"
+            ],
+            "workstreamId": "workstream_show_music_production",
+            "stageId": "stage_commissioning_event",
+            "priority": "P0",
+            "targetDate": "2025-12-04",
+            "confidence": "medium",
+            "notes": "Scheduled Dec 3-4. This is the content/playback readiness check before the public event window.",
+            "createdAt": "2026-06-12T00:00:00.000Z",
+            "updatedAt": "2026-06-12T00:00:00.000Z"
+          },
+          "draggable": true,
+          "selectable": true,
+          "deletable": true,
+          "zIndex": 10
+        },
+        {
+          "id": "tab_timeline_install_process_node_commissioning",
+          "type": "planningNode",
+          "position": {
+            "x": 1660,
+            "y": 230
+          },
+          "width": 260,
+          "data": {
+            "title": "Commissioning.",
+            "status": "defined",
+            "associatedIds": [
+              "person_ed_cooke",
+              "person_nicholas_christie",
+              "person_merijn_royaards"
+            ],
+            "workstreamId": "workstream_operations",
+            "stageId": "stage_commissioning_event",
+            "priority": "P0",
+            "targetDate": "2025-12-04",
+            "confidence": "medium",
+            "notes": "Overview schedule shows Dec 3-4.",
+            "createdAt": "2026-06-12T00:00:00.000Z",
+            "updatedAt": "2026-06-12T00:00:00.000Z"
+          },
+          "draggable": true,
+          "selectable": true,
+          "deletable": true,
+          "zIndex": 10
+        },
+        {
+          "id": "tab_timeline_install_process_node_art_basel_live_operation",
+          "type": "planningNode",
+          "position": {
+            "x": 1660,
+            "y": 380
+          },
+          "width": 260,
+          "data": {
+            "title": "Art Basel live operation.",
+            "status": "defined",
+            "associatedIds": [
+              "person_ed_cooke",
+              "person_richie_britton",
+              "person_dom_joseph"
+            ],
+            "workstreamId": "workstream_operations",
+            "stageId": "stage_commissioning_event",
+            "priority": "P0",
+            "targetDate": "2025-12-07",
+            "confidence": "medium",
+            "notes": "Event window shown Dec 5-7.",
+            "createdAt": "2026-06-12T00:00:00.000Z",
+            "updatedAt": "2026-06-12T00:00:00.000Z"
+          },
+          "draggable": true,
+          "selectable": true,
+          "deletable": true,
+          "zIndex": 10
+        },
+        {
+          "id": "tab_timeline_install_process_node_remove_equator_lights_speakers_and_crossing_cables",
+          "type": "planningNode",
+          "position": {
+            "x": 1980,
+            "y": 80
+          },
+          "width": 260,
+          "data": {
+            "title": "Remove equator lights, speakers, and crossing cables.",
+            "status": "defined",
+            "associatedIds": [
+              "person_merijn_royaards",
+              "person_chris_linder",
+              "person_alexander_morley"
+            ],
+            "workstreamId": "workstream_delivery_of_sound_system",
+            "stageId": "stage_strike_pack_out",
+            "priority": "P0",
+            "targetDate": "2025-12-08",
+            "confidence": "medium",
+            "notes": "Strike process scheduled Dec 8. Combines removal of lights/speakers around the equator and cables that cross the equator.",
+            "createdAt": "2026-06-12T00:00:00.000Z",
+            "updatedAt": "2026-06-12T00:00:00.000Z"
+          },
+          "draggable": true,
+          "selectable": true,
+          "deletable": true,
+          "zIndex": 10
+        },
+        {
+          "id": "tab_timeline_install_process_node_remove_interior_walkways_and_drop_net",
+          "type": "planningNode",
+          "position": {
+            "x": 1980,
+            "y": 230
+          },
+          "width": 260,
+          "data": {
+            "title": "Remove interior walkways and drop net.",
+            "status": "defined",
+            "associatedIds": [
+              "person_nicholas_christie",
+              "person_alexander_morley"
+            ],
+            "workstreamId": "workstream_delivery_of_physical_sphere",
+            "stageId": "stage_strike_pack_out",
+            "priority": "P0",
+            "targetDate": "2025-12-08",
+            "confidence": "medium",
+            "notes": "Strike process scheduled Dec 8.",
+            "createdAt": "2026-06-12T00:00:00.000Z",
+            "updatedAt": "2026-06-12T00:00:00.000Z"
+          },
+          "draggable": true,
+          "selectable": true,
+          "deletable": true,
+          "zIndex": 10
+        },
+        {
+          "id": "tab_timeline_install_process_node_disconnect_floor_truss_legs_and_rig_top_pick_point",
+          "type": "planningNode",
+          "position": {
+            "x": 1980,
+            "y": 380
+          },
+          "width": 260,
+          "data": {
+            "title": "Disconnect floor truss legs and rig top pick-point.",
+            "status": "defined",
+            "associatedIds": [
+              "person_nicholas_christie",
+              "person_artwithme"
+            ],
+            "workstreamId": "workstream_delivery_of_physical_sphere",
+            "stageId": "stage_strike_pack_out",
+            "priority": "P0",
+            "targetDate": "2025-12-08",
+            "confidence": "medium",
+            "notes": "Strike process scheduled Dec 8.",
+            "createdAt": "2026-06-12T00:00:00.000Z",
+            "updatedAt": "2026-06-12T00:00:00.000Z"
+          },
+          "draggable": true,
+          "selectable": true,
+          "deletable": true,
+          "zIndex": 10
+        },
+        {
+          "id": "tab_timeline_install_process_node_crane_pick_for_strike",
+          "type": "planningNode",
+          "position": {
+            "x": 1980,
+            "y": 530
+          },
+          "width": 260,
+          "data": {
+            "title": "Crane pick for strike.",
+            "status": "defined",
+            "associatedIds": [
+              "person_artwithme",
+              "person_nicholas_christie"
+            ],
+            "workstreamId": "workstream_delivery_of_physical_sphere",
+            "stageId": "stage_strike_pack_out",
+            "priority": "P0",
+            "targetDate": "2025-12-09",
+            "confidence": "medium",
+            "notes": "Strike crane window: Dec 9, 8am-12pm.",
+            "createdAt": "2026-06-12T00:00:00.000Z",
+            "updatedAt": "2026-06-12T00:00:00.000Z"
+          },
+          "draggable": true,
+          "selectable": true,
+          "deletable": true,
+          "zIndex": 10
+        },
+        {
+          "id": "tab_timeline_install_process_node_strip_top_and_bottom_of_sphere_strike_stairs",
+          "type": "planningNode",
+          "position": {
+            "x": 1980,
+            "y": 680
+          },
+          "width": 260,
+          "data": {
+            "title": "Strip top and bottom of sphere; strike stairs.",
+            "status": "defined",
+            "associatedIds": [
+              "person_nicholas_christie",
+              "person_alexander_morley"
+            ],
+            "workstreamId": "workstream_delivery_of_physical_sphere",
+            "stageId": "stage_strike_pack_out",
+            "priority": "P0",
+            "targetDate": "2025-12-09",
+            "confidence": "medium",
+            "notes": "Strike process scheduled Dec 9.",
+            "createdAt": "2026-06-12T00:00:00.000Z",
+            "updatedAt": "2026-06-12T00:00:00.000Z"
+          },
+          "draggable": true,
+          "selectable": true,
+          "deletable": true,
+          "zIndex": 10
+        },
+        {
+          "id": "tab_timeline_install_process_node_sort_pack_everything",
+          "type": "planningNode",
+          "position": {
+            "x": 1980,
+            "y": 830
+          },
+          "width": 260,
+          "data": {
+            "title": "Sort + pack everything.",
+            "status": "defined",
+            "associatedIds": [
+              "person_nicholas_christie",
+              "person_alexander_morley"
+            ],
+            "workstreamId": "workstream_operations",
+            "stageId": "stage_strike_pack_out",
+            "priority": "P0",
+            "targetDate": "2025-12-10",
+            "confidence": "medium",
+            "notes": "Strike process scheduled Dec 10.",
+            "createdAt": "2026-06-12T00:00:00.000Z",
+            "updatedAt": "2026-06-12T00:00:00.000Z"
+          },
+          "draggable": true,
+          "selectable": true,
+          "deletable": true,
+          "zIndex": 10
+        },
+        {
+          "id": "tab_timeline_install_process_node_load_containers_and_ship_to_storage",
+          "type": "planningNode",
+          "position": {
+            "x": 1980,
+            "y": 980
+          },
+          "width": 260,
+          "data": {
+            "title": "Load containers and ship to storage.",
+            "status": "defined",
+            "associatedIds": [
+              "person_artwithme",
+              "person_nicholas_christie"
+            ],
+            "workstreamId": "workstream_operations",
+            "stageId": "stage_strike_pack_out",
+            "priority": "P0",
+            "targetDate": "2025-12-10",
+            "confidence": "medium",
+            "notes": "Overview includes Ship to storage on Dec 10. Detailed process includes loading containers on Dec 10.",
+            "createdAt": "2026-06-12T00:00:00.000Z",
+            "updatedAt": "2026-06-12T00:00:00.000Z"
+          },
+          "draggable": true,
+          "selectable": true,
+          "deletable": true,
+          "zIndex": 10
+        }
+      ],
+      "edges": [
+        {
+          "id": "tab_timeline_install_process_edge_notice_to_proceed_initial_payment_to_review_storage_items",
+          "source": "tab_timeline_install_process_node_notice_to_proceed_initial_payment",
+          "target": "tab_timeline_install_process_node_review_storage_items",
+          "type": "planningEdge",
+          "data": {
+            "lineType": "solid"
+          }
+        },
+        {
+          "id": "tab_timeline_install_process_edge_review_storage_items_to_purchase_fabricate_repair",
+          "source": "tab_timeline_install_process_node_review_storage_items",
+          "target": "tab_timeline_install_process_node_purchase_fabricate_repair",
+          "type": "planningEdge",
+          "data": {
+            "lineType": "solid"
+          }
+        },
+        {
+          "id": "tab_timeline_install_process_edge_purchase_fabricate_repair_to_receive_containers_vr_etc",
+          "source": "tab_timeline_install_process_node_purchase_fabricate_repair",
+          "target": "tab_timeline_install_process_node_receive_containers_vr_etc",
+          "type": "planningEdge",
+          "data": {
+            "lineType": "solid"
+          }
+        },
+        {
+          "id": "tab_timeline_install_process_edge_receive_containers_vr_etc_to_arrive_on_site_and_set_up_hq",
+          "source": "tab_timeline_install_process_node_receive_containers_vr_etc",
+          "target": "tab_timeline_install_process_node_arrive_on_site_and_set_up_hq",
+          "type": "planningEdge",
+          "data": {
+            "lineType": "solid"
+          }
+        },
+        {
+          "id": "tab_timeline_install_process_edge_power_available_on_site_to_wire_up_lights_audio_and_test",
+          "source": "tab_timeline_install_process_node_power_available_on_site",
+          "target": "tab_timeline_install_process_node_wire_up_lights_audio_and_test",
+          "type": "planningEdge",
+          "data": {
+            "lineType": "solid"
+          }
+        },
+        {
+          "id": "tab_timeline_install_process_edge_telehandler_available_on_site_to_unload_stage_everything",
+          "source": "tab_timeline_install_process_node_telehandler_available_on_site",
+          "target": "tab_timeline_install_process_node_unload_stage_everything",
+          "type": "planningEdge",
+          "data": {
+            "lineType": "solid"
+          }
+        },
+        {
+          "id": "tab_timeline_install_process_edge_ground_anchors_ready_to_join_top_to_bottom_with_crane",
+          "source": "tab_timeline_install_process_node_ground_anchors_ready",
+          "target": "tab_timeline_install_process_node_join_top_to_bottom_with_crane",
+          "type": "planningEdge",
+          "data": {
+            "lineType": "solid"
+          }
+        },
+        {
+          "id": "tab_timeline_install_process_edge_crane_window_for_install_to_join_top_to_bottom_with_crane",
+          "source": "tab_timeline_install_process_node_crane_window_for_install",
+          "target": "tab_timeline_install_process_node_join_top_to_bottom_with_crane",
+          "type": "planningEdge",
+          "data": {
+            "lineType": "solid"
+          }
+        },
+        {
+          "id": "tab_timeline_install_process_edge_stairs_scaffold_ballast_ready_to_build_scaffold_stairs",
+          "source": "tab_timeline_install_process_node_stairs_scaffold_ballast_ready",
+          "target": "tab_timeline_install_process_node_build_scaffold_stairs",
+          "type": "planningEdge",
+          "data": {
+            "lineType": "solid"
+          }
+        },
+        {
+          "id": "tab_timeline_install_process_edge_arrive_on_site_and_set_up_hq_to_receive_delivery_of_12k_vr",
+          "source": "tab_timeline_install_process_node_arrive_on_site_and_set_up_hq",
+          "target": "tab_timeline_install_process_node_receive_delivery_of_12k_vr",
+          "type": "planningEdge",
+          "data": {
+            "lineType": "solid"
+          }
+        },
+        {
+          "id": "tab_timeline_install_process_edge_receive_delivery_of_12k_vr_to_receive_delivery_of_shipping_containers",
+          "source": "tab_timeline_install_process_node_receive_delivery_of_12k_vr",
+          "target": "tab_timeline_install_process_node_receive_delivery_of_shipping_containers",
+          "type": "planningEdge",
+          "data": {
+            "lineType": "solid"
+          }
+        },
+        {
+          "id": "tab_timeline_install_process_edge_receive_delivery_of_shipping_containers_to_unload_stage_everything",
+          "source": "tab_timeline_install_process_node_receive_delivery_of_shipping_containers",
+          "target": "tab_timeline_install_process_node_unload_stage_everything",
+          "type": "planningEdge",
+          "data": {
+            "lineType": "solid"
+          }
+        },
+        {
+          "id": "tab_timeline_install_process_edge_unload_stage_everything_to_sort_struts_into_types",
+          "source": "tab_timeline_install_process_node_unload_stage_everything",
+          "target": "tab_timeline_install_process_node_sort_struts_into_types",
+          "type": "planningEdge",
+          "data": {
+            "lineType": "solid"
+          }
+        },
+        {
+          "id": "tab_timeline_install_process_edge_unload_stage_everything_to_sort_light_pods_cloths_cables_into_types",
+          "source": "tab_timeline_install_process_node_unload_stage_everything",
+          "target": "tab_timeline_install_process_node_sort_light_pods_cloths_cables_into_types",
+          "type": "planningEdge",
+          "data": {
+            "lineType": "solid"
+          }
+        },
+        {
+          "id": "tab_timeline_install_process_edge_sort_struts_into_types_to_assemble_top_half_of_sphere_layer_by_layer",
+          "source": "tab_timeline_install_process_node_sort_struts_into_types",
+          "target": "tab_timeline_install_process_node_assemble_top_half_of_sphere_layer_by_layer",
+          "type": "planningEdge",
+          "data": {
+            "lineType": "solid"
+          }
+        },
+        {
+          "id": "tab_timeline_install_process_edge_sort_light_pods_cloths_cables_into_types_to_assemble_top_half_of_sphere_layer_by_layer",
+          "source": "tab_timeline_install_process_node_sort_light_pods_cloths_cables_into_types",
+          "target": "tab_timeline_install_process_node_assemble_top_half_of_sphere_layer_by_layer",
+          "type": "planningEdge",
+          "data": {
+            "lineType": "solid"
+          }
+        },
+        {
+          "id": "tab_timeline_install_process_edge_assemble_top_half_of_sphere_layer_by_layer_to_erect_legs",
+          "source": "tab_timeline_install_process_node_assemble_top_half_of_sphere_layer_by_layer",
+          "target": "tab_timeline_install_process_node_erect_legs",
+          "type": "planningEdge",
+          "data": {
+            "lineType": "solid"
+          }
+        },
+        {
+          "id": "tab_timeline_install_process_edge_erect_legs_to_assemble_bottom_half_of_sphere",
+          "source": "tab_timeline_install_process_node_erect_legs",
+          "target": "tab_timeline_install_process_node_assemble_bottom_half_of_sphere",
+          "type": "planningEdge",
+          "data": {
+            "lineType": "solid"
+          }
+        },
+        {
+          "id": "tab_timeline_install_process_edge_assemble_bottom_half_of_sphere_to_assemble_floor_rings_and_nest_in_sphere",
+          "source": "tab_timeline_install_process_node_assemble_bottom_half_of_sphere",
+          "target": "tab_timeline_install_process_node_assemble_floor_rings_and_nest_in_sphere",
+          "type": "planningEdge",
+          "data": {
+            "lineType": "solid"
+          }
+        },
+        {
+          "id": "tab_timeline_install_process_edge_assemble_floor_rings_and_nest_in_sphere_to_join_top_to_bottom_with_crane",
+          "source": "tab_timeline_install_process_node_assemble_floor_rings_and_nest_in_sphere",
+          "target": "tab_timeline_install_process_node_join_top_to_bottom_with_crane",
+          "type": "planningEdge",
+          "data": {
+            "lineType": "solid"
+          }
+        },
+        {
+          "id": "tab_timeline_install_process_edge_join_top_to_bottom_with_crane_to_wire_up_lights_audio_and_test",
+          "source": "tab_timeline_install_process_node_join_top_to_bottom_with_crane",
+          "target": "tab_timeline_install_process_node_wire_up_lights_audio_and_test",
+          "type": "planningEdge",
+          "data": {
+            "lineType": "solid"
+          }
+        },
+        {
+          "id": "tab_timeline_install_process_edge_wire_up_lights_audio_and_test_to_build_scaffold_stairs",
+          "source": "tab_timeline_install_process_node_wire_up_lights_audio_and_test",
+          "target": "tab_timeline_install_process_node_build_scaffold_stairs",
+          "type": "planningEdge",
+          "data": {
+            "lineType": "solid"
+          }
+        },
+        {
+          "id": "tab_timeline_install_process_edge_build_scaffold_stairs_to_install_floor_truss_legs",
+          "source": "tab_timeline_install_process_node_build_scaffold_stairs",
+          "target": "tab_timeline_install_process_node_install_floor_truss_legs",
+          "type": "planningEdge",
+          "data": {
+            "lineType": "solid"
+          }
+        },
+        {
+          "id": "tab_timeline_install_process_edge_install_floor_truss_legs_to_stretch_net_and_lash",
+          "source": "tab_timeline_install_process_node_install_floor_truss_legs",
+          "target": "tab_timeline_install_process_node_stretch_net_and_lash",
+          "type": "planningEdge",
+          "data": {
+            "lineType": "solid"
+          }
+        },
+        {
+          "id": "tab_timeline_install_process_edge_stretch_net_and_lash_to_install_interior_walkways_dj_platform_entry_platform",
+          "source": "tab_timeline_install_process_node_stretch_net_and_lash",
+          "target": "tab_timeline_install_process_node_install_interior_walkways_dj_platform_entry_platform",
+          "type": "planningEdge",
+          "data": {
+            "lineType": "solid"
+          }
+        },
+        {
+          "id": "tab_timeline_install_process_edge_install_interior_walkways_dj_platform_entry_platform_to_set_up_signage_and_bring_in_cushions",
+          "source": "tab_timeline_install_process_node_install_interior_walkways_dj_platform_entry_platform",
+          "target": "tab_timeline_install_process_node_set_up_signage_and_bring_in_cushions",
+          "type": "planningEdge",
+          "data": {
+            "lineType": "solid"
+          }
+        },
+        {
+          "id": "tab_timeline_install_process_edge_wire_up_lights_audio_and_test_to_test_content_live_playback_capability",
+          "source": "tab_timeline_install_process_node_wire_up_lights_audio_and_test",
+          "target": "tab_timeline_install_process_node_test_content_live_playback_capability",
+          "type": "planningEdge",
+          "data": {
+            "lineType": "solid"
+          }
+        },
+        {
+          "id": "tab_timeline_install_process_edge_set_up_signage_and_bring_in_cushions_to_commissioning",
+          "source": "tab_timeline_install_process_node_set_up_signage_and_bring_in_cushions",
+          "target": "tab_timeline_install_process_node_commissioning",
+          "type": "planningEdge",
+          "data": {
+            "lineType": "solid"
+          }
+        },
+        {
+          "id": "tab_timeline_install_process_edge_test_content_live_playback_capability_to_commissioning",
+          "source": "tab_timeline_install_process_node_test_content_live_playback_capability",
+          "target": "tab_timeline_install_process_node_commissioning",
+          "type": "planningEdge",
+          "data": {
+            "lineType": "solid"
+          }
+        },
+        {
+          "id": "tab_timeline_install_process_edge_commissioning_to_art_basel_live_operation",
+          "source": "tab_timeline_install_process_node_commissioning",
+          "target": "tab_timeline_install_process_node_art_basel_live_operation",
+          "type": "planningEdge",
+          "data": {
+            "lineType": "solid"
+          }
+        },
+        {
+          "id": "tab_timeline_install_process_edge_art_basel_live_operation_to_remove_equator_lights_speakers_and_crossing_cables",
+          "source": "tab_timeline_install_process_node_art_basel_live_operation",
+          "target": "tab_timeline_install_process_node_remove_equator_lights_speakers_and_crossing_cables",
+          "type": "planningEdge",
+          "data": {
+            "lineType": "solid"
+          }
+        },
+        {
+          "id": "tab_timeline_install_process_edge_remove_equator_lights_speakers_and_crossing_cables_to_remove_interior_walkways_and_drop_net",
+          "source": "tab_timeline_install_process_node_remove_equator_lights_speakers_and_crossing_cables",
+          "target": "tab_timeline_install_process_node_remove_interior_walkways_and_drop_net",
+          "type": "planningEdge",
+          "data": {
+            "lineType": "solid"
+          }
+        },
+        {
+          "id": "tab_timeline_install_process_edge_remove_interior_walkways_and_drop_net_to_disconnect_floor_truss_legs_and_rig_top_pick_point",
+          "source": "tab_timeline_install_process_node_remove_interior_walkways_and_drop_net",
+          "target": "tab_timeline_install_process_node_disconnect_floor_truss_legs_and_rig_top_pick_point",
+          "type": "planningEdge",
+          "data": {
+            "lineType": "solid"
+          }
+        },
+        {
+          "id": "tab_timeline_install_process_edge_disconnect_floor_truss_legs_and_rig_top_pick_point_to_crane_pick_for_strike",
+          "source": "tab_timeline_install_process_node_disconnect_floor_truss_legs_and_rig_top_pick_point",
+          "target": "tab_timeline_install_process_node_crane_pick_for_strike",
+          "type": "planningEdge",
+          "data": {
+            "lineType": "solid"
+          }
+        },
+        {
+          "id": "tab_timeline_install_process_edge_crane_pick_for_strike_to_strip_top_and_bottom_of_sphere_strike_stairs",
+          "source": "tab_timeline_install_process_node_crane_pick_for_strike",
+          "target": "tab_timeline_install_process_node_strip_top_and_bottom_of_sphere_strike_stairs",
+          "type": "planningEdge",
+          "data": {
+            "lineType": "solid"
+          }
+        },
+        {
+          "id": "tab_timeline_install_process_edge_strip_top_and_bottom_of_sphere_strike_stairs_to_sort_pack_everything",
+          "source": "tab_timeline_install_process_node_strip_top_and_bottom_of_sphere_strike_stairs",
+          "target": "tab_timeline_install_process_node_sort_pack_everything",
+          "type": "planningEdge",
+          "data": {
+            "lineType": "solid"
+          }
+        },
+        {
+          "id": "tab_timeline_install_process_edge_sort_pack_everything_to_load_containers_and_ship_to_storage",
+          "source": "tab_timeline_install_process_node_sort_pack_everything",
+          "target": "tab_timeline_install_process_node_load_containers_and_ship_to_storage",
+          "type": "planningEdge",
+          "data": {
+            "lineType": "solid"
+          }
+        }
+      ],
+      "viewport": {
+        "x": 0,
+        "y": 0,
+        "zoom": 0.8
+      },
+      "filters": {}
+    }
+  ],
+  "snapshots": [],
+  "settings": {
+    "themeId": "clean-light",
+    "showMiniMap": true,
+    "adminMode": false,
+    "presentationMode": false
+  },
+  "createdAt": "2026-06-12T00:00:00.000Z",
+  "updatedAt": "2026-06-12T00:00:00.000Z"
+}

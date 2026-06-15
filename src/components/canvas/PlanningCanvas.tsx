@@ -17,6 +17,7 @@ import { PlanningNode } from "./PlanningNode";
 import { StageBandNode } from "./StageBandNode";
 import { getFilteredFlowElements } from "../../lib/filters";
 import { isPublicViewMode } from "../../lib/appMode";
+import { isTabLayoutLocked, isTabReadOnly } from "../../lib/generatedGraph";
 import { getReactFlowColorMode } from "../../lib/theme";
 import { useProjectStore } from "../../state/projectStore";
 import type { AppEdge, AppNode } from "../../types/planning";
@@ -44,7 +45,9 @@ export function PlanningCanvas() {
   const activeTab = project.tabs.find((tab) => tab.id === activeTabId) ?? project.tabs[0];
   const showMiniMap = project.settings.showMiniMap;
   const colorMode = getReactFlowColorMode(project.settings.themeId);
-  const readOnly = isPublicViewMode(viewMode);
+  const publicView = isPublicViewMode(viewMode);
+  const contentReadOnly = publicView || isTabReadOnly(project, activeTab);
+  const layoutLocked = !publicView && isTabLayoutLocked(project, activeTab);
   const defaultEdgeOptions = useMemo(
     () => ({
       type: "planningEdge" as const,
@@ -78,11 +81,11 @@ export function PlanningCanvas() {
             }
           : {
               ...node,
-              draggable: node.draggable,
-              deletable: readOnly ? false : node.deletable,
+              draggable: layoutLocked ? false : (node.draggable ?? true),
+              deletable: contentReadOnly ? false : node.deletable,
             },
       ),
-    [filteredElements.nodes, readOnly],
+    [contentReadOnly, filteredElements.nodes, layoutLocked],
   );
 
   const edges = useMemo<AppEdge[]>(() => filteredElements.edges, [filteredElements.edges]);
@@ -131,20 +134,20 @@ export function PlanningCanvas() {
       defaultEdgeOptions={defaultEdgeOptions}
       defaultViewport={activeTab.viewport}
       colorMode={colorMode}
-      nodesDraggable
-      nodesConnectable={!readOnly}
-      edgesReconnectable={!readOnly}
+      nodesDraggable={!layoutLocked}
+      nodesConnectable={!contentReadOnly}
+      edgesReconnectable={!contentReadOnly}
       elementsSelectable
-      deleteKeyCode={readOnly ? null : "Backspace"}
-      connectOnClick={!readOnly}
+      deleteKeyCode={contentReadOnly ? null : "Backspace"}
+      connectOnClick={!contentReadOnly}
       fitView={!activeTab.viewport}
       onNodesChange={applyNodesChange}
-      onEdgesChange={readOnly ? undefined : applyEdgesChange}
-      onConnect={readOnly ? undefined : handleConnect}
+      onEdgesChange={contentReadOnly ? undefined : applyEdgesChange}
+      onConnect={contentReadOnly ? undefined : handleConnect}
       onNodeClick={handleNodeClick}
       onEdgeClick={handleEdgeClick}
       onPaneClick={handlePaneClick}
-      onMoveEnd={readOnly ? undefined : handleMoveEnd}
+      onMoveEnd={publicView ? undefined : handleMoveEnd}
     >
       <Background />
       <Controls />

@@ -1,5 +1,6 @@
 import { PanelRight, PanelRightClose } from "lucide-react";
 import { isPublicViewMode } from "../../lib/appMode";
+import { isTabReadOnly } from "../../lib/generatedGraph";
 import { useProjectStore } from "../../state/projectStore";
 import { isPlanningNodeData, type AppNode } from "../../types/planning";
 import { Badge } from "../ui/Badge";
@@ -15,7 +16,7 @@ function getNodeTitle(node: AppNode | undefined) {
 export function RightInspector() {
   const { project, viewMode, activeTabId, selectedElement, setInspectorHidden } = useProjectStore();
   const activeTab = project.tabs.find((tab) => tab.id === activeTabId) ?? project.tabs[0];
-  const readOnly = isPublicViewMode(viewMode);
+  const readOnly = isPublicViewMode(viewMode) || isTabReadOnly(project, activeTab);
   const selectedNode =
     selectedElement?.type === "node"
       ? activeTab.nodes.find((node) => node.id === selectedElement.id)

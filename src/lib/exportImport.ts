@@ -1,4 +1,4 @@
-import type { ProjectFile } from "../types/planning";
+import type { AppEdge, AppNode, LineType, ProjectFile, ProjectSettings } from "../types/planning";
 import { isPlanningNodeData } from "../types/planning";
 import { formatDateTimeForFilename } from "../utils/dates";
 import { validateProjectFile } from "./validation";
@@ -14,6 +14,211 @@ export type ImportProjectResult =
       ok: false;
       error: string;
     };
+
+const VALID_LINE_TYPES = new Set<LineType>(["solid", "dashed", "magic"]);
+const VALID_THEME_IDS = new Set<ProjectSettings["themeId"]>(["clean-light", "clean-dark", "neon-dark"]);
+
+type SimplifiedStickiesFile = {
+  version: 1;
+  name: string;
+  tabs: SimplifiedStickiesTab[];
+  settings?: {
+    theme?: unknown;
+    showMiniMap?: unknown;
+  };
+  snapshots?: unknown[];
+};
+
+type SimplifiedStickiesTab = {
+  id?: unknown;
+  name?: unknown;
+  stages?: unknown;
+  nodes?: unknown;
+  edges?: unknown;
+  viewport?: unknown;
+};
+
+type SimplifiedStickiesNode = {
+  id?: unknown;
+  type?: unknown;
+  position?: unknown;
+  data?: {
+    title?: unknown;
+    note?: unknown;
+    status?: unknown;
+  };
+};
+
+type SimplifiedStickiesEdge = {
+  id?: unknown;
+  source?: unknown;
+  target?: unknown;
+  type?: unknown;
+  label?: unknown;
+  data?: {
+    lineType?: unknown;
+  };
+};
+
+function isRecord(value: unknown): value is Record<string, unknown> {
+  return typeof value === "object" && value !== null && !Array.isArray(value);
+}
+
+function isSimplifiedStickiesFile(value: unknown): value is SimplifiedStickiesFile {
+  return (
+    isRecord(value) &&
+    value.version === 1 &&
+    typeof value.name === "string" &&
+    Array.isArray(value.tabs) &&
+    value.schemaVersion === undefined &&
+    value.projectName === undefined
+  );
+}
+
+function stringOrFallback(value: unknown, fallback: string) {
+  return typeof value === "string" && value.trim() ? value.trim() : fallback;
+}
+
+function numberOrFallback(value: unknown, fallback: number) {
+  return typeof value === "number" && Number.isFinite(value) ? value : fallback;
+}
+
+function normalizeLineType(value: unknown): LineType {
+  return typeof value === "string" && VALID_LINE_TYPES.has(value as LineType) ? (value as LineType) : "solid";
+}
+
+function normalizeThemeId(value: unknown): ProjectSettings["themeId"] {
+  return typeof value === "string" && VALID_THEME_IDS.has(value as ProjectSettings["themeId"])
+    ? (value as ProjectSettings["themeId"])
+    : "clean-light";
+}
+
+function formatImportedCategory(value: unknown) {
+  if (typeof value !== "string" || !value.trim()) {
+    return "";
+  }
+
+  if (value === "pe") {
+    return "PE";
+  }
+
+  return value
+    .replaceAll("_", " ")
+    .split(" ")
+    .filter(Boolean)
+    .map((part) => `${part[0]?.toUpperCase() ?? ""}${part.slice(1)}`)
+    .join(" ");
+}
+
+function createImportedNote(note: unknown, status: unknown) {
+  const importedNote = typeof note === "string" ? note.trim() : "";
+  const category = formatImportedCategory(status);
+
+  if (!category) {
+    return importedNote;
+  }
+
+  return importedNote ? `Category: ${category}. ${importedNote}` : `Category: ${category}.`;
+}
+
+function normalizePosition(value: unknown) {
+  const position = isRecord(value) ? value : {};
+
+  return {
+    x: numberOrFallback(position.x, 0),
+    y: numberOrFallback(position.y, 0),
+  };
+}
+
+function normalizeViewport(value: unknown) {
+  const viewport = isRecord(value) ? value : {};
+
+  return {
+    x: numberOrFallback(viewport.x, 0),
+    y: numberOrFallback(viewport.y, 0),
+    zoom: numberOrFallback(viewport.zoom, 0.8),
+  };
+}
+
+function normalizeSimplifiedNode(node: SimplifiedStickiesNode, index: number, timestamp: string): AppNode {
+  const data = isRecord(node.data) ? node.data : {};
+
+  return {
+    id: stringOrFallback(node.id, `imported-node-${index + 1}`),
+    type: "planningNode",
+    position: normalizePosition(node.position),
+    data: {
+      title: stringOrFallback(data.title, `Imported item ${index + 1}`),
+      status: "idea",
+      associatedIds: [],
+      notes: createImportedNote(data.note, data.status),
+      createdAt: timestamp,
+      updatedAt: timestamp,
+    },
+  };
+}
+
+function normalizeSimplifiedEdge(edge: SimplifiedStickiesEdge, index: number): AppEdge {
+  const data = isRecord(edge.data) ? edge.data : {};
+  const source = stringOrFallback(edge.source, "");
+  const target = stringOrFallback(edge.target, "");
+
+  return {
+    id: stringOrFallback(edge.id, `imported-edge-${index + 1}`),
+    source,
+    target,
+    type: "planningEdge",
+    data: {
+      lineType: normalizeLineType(data.lineType),
+      label: typeof edge.label === "string" && edge.label.trim() ? edge.label.trim() : undefined,
+    },
+  };
+}
+
+function normalizeSimplifiedTab(tab: SimplifiedStickiesTab, index: number, timestamp: string) {
+  const nodes = Array.isArray(tab.nodes) ? (tab.nodes as SimplifiedStickiesNode[]) : [];
+  const edges = Array.isArray(tab.edges) ? (tab.edges as SimplifiedStickiesEdge[]) : [];
+
+  return {
+    id: stringOrFallback(tab.id, `imported-tab-${index + 1}`),
+    name: stringOrFallback(tab.name, `Imported tab ${index + 1}`),
+    orientation: "vertical" as const,
+    stages: [],
+    nodes: nodes.map((node, nodeIndex) => normalizeSimplifiedNode(node, nodeIndex, timestamp)),
+    edges: edges.map(normalizeSimplifiedEdge).filter((edge) => edge.source && edge.target),
+    viewport: normalizeViewport(tab.viewport),
+    filters: {},
+  };
+}
+
+function normalizeImportedProject(value: unknown): unknown {
+  if (!isSimplifiedStickiesFile(value)) {
+    return value;
+  }
+
+  const timestamp = new Date().toISOString();
+  const tabs = value.tabs.map((tab, index) => normalizeSimplifiedTab(tab, index, timestamp));
+  const settings = isRecord(value.settings) ? value.settings : {};
+
+  return {
+    schemaVersion: 1,
+    projectName: value.name.trim(),
+    activeTabId: tabs[0]?.id ?? "imported-tab-1",
+    people: [],
+    workstreams: [],
+    tags: [],
+    tabs,
+    snapshots: [],
+    settings: {
+      themeId: normalizeThemeId(settings.theme),
+      showMiniMap: typeof settings.showMiniMap === "boolean" ? settings.showMiniMap : true,
+      adminMode: false,
+      presentationMode: false,
+    },
+    createdAt: timestamp,
+    updatedAt: timestamp,
+  };
+}
 
 export function createProjectJson(project: ProjectFile) {
   return JSON.stringify(project, null, 2);
@@ -177,6 +382,7 @@ export function createProjectMarkdown(project: ProjectFile) {
       const targetTitle = nodeTitleById.get(edge.target) ?? edge.target;
 
       lines.push(`- **${sourceTitle}** -> **${targetTitle}**`);
+      appendDetail(lines, "Label", edge.data.label);
       appendDetail(lines, "Line type", edge.data.lineType);
     });
 
@@ -398,7 +604,7 @@ export async function parseProjectJsonFile(file: File): Promise<ImportProjectRes
   try {
     const text = await file.text();
     const parsed = JSON.parse(text) as unknown;
-    const validation = validateProjectFile(parsed);
+    const validation = validateProjectFile(normalizeImportedProject(parsed));
 
     if (!validation.ok) {
       return {

@@ -536,6 +536,16 @@ select {
   font-size: 14px;
 }
 
+.software-graph-details {
+  margin-top: 8px;
+}
+
+.software-graph-details h3 {
+  margin: 0;
+  color: var(--text-primary);
+  font-size: 14px;
+}
+
 .field-label {
   display: block;
   margin: 10px 0 5px;
@@ -590,10 +600,51 @@ select {
 }
 
 .stage-editor {
+  box-sizing: border-box;
   display: grid;
   min-height: 0;
   max-height: min(720px, calc(100vh - 220px));
-  grid-template-rows: auto minmax(0, 1fr);
+  grid-template-rows: auto auto minmax(0, 1fr);
+  overflow: hidden;
+}
+
+.stage-editor-orientation {
+  box-sizing: border-box;
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 4px;
+  width: 100%;
+  border: 1px solid var(--border-subtle);
+  border-radius: 8px;
+  background: var(--app-bg);
+  padding: 4px;
+}
+
+.stage-editor-orientation button {
+  box-sizing: border-box;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  width: 100%;
+  min-width: 0;
+  min-height: 30px;
+  border: 0;
+  border-radius: 6px;
+  background: transparent;
+  color: var(--text-secondary);
+  cursor: pointer;
+  font-size: 12px;
+  font-weight: 800;
+  padding: 0 8px;
+  white-space: nowrap;
+}
+
+.stage-editor-orientation button:hover,
+.stage-editor-orientation button:focus-visible,
+.stage-editor-orientation button.is-active {
+  background: var(--panel-bg);
+  color: var(--text-primary);
 }
 
 .stage-editor-list {
@@ -1075,6 +1126,10 @@ select {
   );
 }
 
+.stage-band--horizontal {
+  border-right: 0;
+  border-bottom: 1px solid color-mix(in srgb, var(--accent) 22%, transparent);
+}
 
 .stage-band__header {
   display: flex;
@@ -1116,6 +1171,20 @@ select {
 
 .planning-edge--selected {
   stroke-width: 3;
+}
+
+.planning-edge-label {
+  position: absolute;
+  padding: 3px 7px;
+  border: 1px solid var(--card-border);
+  border-radius: 999px;
+  background: var(--panel-bg);
+  color: var(--muted-text);
+  font-size: 11px;
+  font-weight: 700;
+  line-height: 1;
+  pointer-events: none;
+  white-space: nowrap;
 }
 
 @keyframes magic-edge-flow {

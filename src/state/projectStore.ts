@@ -9,8 +9,15 @@ import { create } from "zustand";
 import { createBlankProject, createSeedProject } from "../data/seedProject";
 import { downloadProjectJson } from "../lib/exportImport";
 import { getAppViewMode, isPublicViewMode, type AppViewMode } from "../lib/appMode";
+import { isTabLayoutLocked, isTabReadOnly } from "../lib/generatedGraph";
 import { loadProjectFromPublicSnapshot } from "../lib/publicProject";
-import { createStageBandNodes, normalizeStagesForLayout } from "../lib/stageLayout";
+import {
+  createStageBandNodes,
+  getTabOrientation,
+  normalizeStagesForLayout,
+  rebuildStageBandNodes,
+  rememberCurrentStageRects,
+} from "../lib/stageLayout";
 import { clearProjectStorage, loadProjectFromStorage, saveProjectToStorage } from "../lib/storage";
 import { isPlanningNodeData } from "../types/planning";
 import type {
@@ -23,6 +30,7 @@ import type {
   ProjectFile,
   ProjectSettings,
   Snapshot,
+  TabOrientation,
   TabFilters,
   ThemeId,
 } from "../types/planning";
@@ -80,6 +88,7 @@ type ProjectState = {
   renameTab: (tabId: string, name: string) => void;
   deleteTab: (tabId: string) => void;
   updateTab: (tabId: string, updates: Partial<Omit<PlanningTab, "id">>) => void;
+  setTabOrientation: (tabId: string, orientation: TabOrientation) => void;
   createNode: (input: CreateNodeInput) => void;
   updateNode: (nodeId: string, data: Partial<PlanningNodeData>) => void;
   addAssociatedEntity: (input: UpsertAssociatedEntityInput) => void;
@@ -104,6 +113,7 @@ type ProjectState = {
   toggleAdminMode: () => void;
   togglePresentationMode: () => void;
   toggleMiniMap: () => void;
+  toggleGeneratedLayoutLock: () => void;
   setInspectorHidden: (inspectorHidden: boolean) => void;
 };
 
@@ -155,7 +165,7 @@ function normalizeAssociatedIds(data: LegacyPlanningNodeData) {
   );
 }
 
-function normalizePlanningNodeData(data: LegacyPlanningNodeData): PlanningNodeData {
+function normalizePlanningNodeData(data: LegacyPlanningNodeData, fallbackTitle: string): PlanningNodeData {
   const {
     ownerIds: _ownerIds,
     supporterIds: _supporterIds,
@@ -164,11 +174,15 @@ function normalizePlanningNodeData(data: LegacyPlanningNodeData): PlanningNodeDa
     status,
     ...rest
   } = data;
+  const timestamp = nowIso();
 
   return {
     ...(rest as Omit<PlanningNodeData, "associatedIds" | "status">),
+    title: typeof rest.title === "string" && rest.title.trim() ? rest.title : fallbackTitle,
     status: normalizeNodeStatus(status),
     associatedIds: normalizeAssociatedIds(data),
+    createdAt: typeof rest.createdAt === "string" ? rest.createdAt : timestamp,
+    updatedAt: typeof rest.updatedAt === "string" ? rest.updatedAt : timestamp,
   };
 }
 
@@ -222,8 +236,17 @@ function normalizeLineType(data: LegacyEdgeData): LineType {
 }
 
 function normalizeEdgeData(data: LegacyEdgeData): AppEdge["data"] {
+  const {
+    relation: _relation,
+    highlighted: _highlighted,
+    notes: _notes,
+    ...rest
+  } = data;
+
   return {
+    ...rest,
     lineType: normalizeLineType(data),
+    label: data.label?.trim() || undefined,
   };
 }
 
@@ -241,7 +264,7 @@ function createUniquePersonId(people: Person[], name: string) {
 }
 
 function createDefaultStagesFromTab(sourceTab: PlanningTab) {
-  return normalizeStagesForLayout(sourceTab.stages.map((stage) => structuredClone(stage)));
+  return normalizeStagesForLayout(sourceTab.stages.map((stage) => structuredClone(stage)), "vertical");
 }
 
 function normalizeProjectStageColumns(project: ProjectFile): ProjectFile {
@@ -260,14 +283,18 @@ function normalizeProjectStageColumns(project: ProjectFile): ProjectFile {
     activeTabId:
       project.tabs.find((tab) => tab.id === project.activeTabId)?.id ?? project.tabs[0]?.id ?? project.activeTabId,
     tabs: project.tabs.map((tab) => {
-      const stages = createDefaultStagesFromTab(tab);
+      const orientation = getTabOrientation(tab.orientation);
+      const stages = normalizeStagesForLayout(
+        tab.stages.map((stage) => structuredClone(stage)),
+        orientation,
+      );
       const planningNodes = tab.nodes
         .filter((node) => node.type !== "stageBand")
-        .map((node) =>
+        .map((node, nodeIndex) =>
           node.type === "planningNode"
             ? {
                 ...node,
-                data: normalizePlanningNodeData(node.data as LegacyPlanningNodeData),
+                data: normalizePlanningNodeData(node.data as LegacyPlanningNodeData, `Imported item ${nodeIndex + 1}`),
               }
             : node,
         );
@@ -275,12 +302,9 @@ function normalizeProjectStageColumns(project: ProjectFile): ProjectFile {
       return {
         ...tab,
         name: tab.name === "Orphans / Parking Lot" ? "Parking Lot" : tab.name,
-        orientation: "vertical",
+        orientation,
         stages,
-        nodes: [
-          ...createStageBandNodes(tab.id, stages),
-          ...planningNodes,
-        ],
+        nodes: [...createStageBandNodes(tab.id, stages, orientation), ...planningNodes],
         edges: tab.edges.map((edge) => ({
           ...edge,
           data: normalizeEdgeData(edge.data as LegacyEdgeData),
@@ -328,11 +352,40 @@ function canEditProject(get: () => ProjectState) {
   return !isPublicViewMode(get().viewMode);
 }
 
+function canEditActiveTab(get: () => ProjectState) {
+  if (!canEditProject(get)) {
+    return false;
+  }
+
+  const { project, activeTabId } = get();
+  const activeTab = getActiveTab(project, activeTabId);
+
+  return !isTabReadOnly(project, activeTab);
+}
+
+function canEditTab(project: ProjectFile, tabId: string) {
+  return !isTabReadOnly(project, project.tabs.find((tab) => tab.id === tabId));
+}
+
 function setReadOnlyWarning(set: (state: Partial<ProjectState>) => void) {
   set({ storageWarning: "Public view is read-only." });
 }
 
+function setGeneratedReadOnlyWarning(set: (state: Partial<ProjectState>) => void) {
+  set({ storageWarning: "This generated graph tab is read-only." });
+}
+
 function getPublicSafeNodeChanges(changes: NodeChange<AppNode>[]) {
+  return changes.filter(
+    (change) => change.type === "position" || change.type === "dimensions" || change.type === "select",
+  );
+}
+
+function getGeneratedReadOnlySafeNodeChanges(changes: NodeChange<AppNode>[]) {
+  return changes.filter((change) => change.type === "dimensions" || change.type === "select");
+}
+
+function getGeneratedUnlockedLayoutNodeChanges(changes: NodeChange<AppNode>[]) {
   return changes.filter(
     (change) => change.type === "position" || change.type === "dimensions" || change.type === "select",
   );
@@ -539,7 +592,7 @@ export const useProjectStore = create<ProjectState>((set, get) => ({
       name,
       orientation: "vertical",
       stages,
-      nodes: createStageBandNodes(tabId, stages),
+      nodes: createStageBandNodes(tabId, stages, "vertical"),
       edges: [],
       viewport: { x: 0, y: 0, zoom: 0.8 },
       filters: {},
@@ -562,6 +615,12 @@ export const useProjectStore = create<ProjectState>((set, get) => ({
     }
 
     const { project } = get();
+
+    if (!canEditTab(project, tabId)) {
+      setGeneratedReadOnlyWarning(set);
+      return;
+    }
+
     const nextProject = updateProject(project, (currentProject) => ({
       ...currentProject,
       tabs: currentProject.tabs.map((tab) => (tab.id === tabId ? { ...tab, name } : tab)),
@@ -577,6 +636,11 @@ export const useProjectStore = create<ProjectState>((set, get) => ({
     }
 
     const { project } = get();
+
+    if (!canEditTab(project, tabId)) {
+      setGeneratedReadOnlyWarning(set);
+      return;
+    }
 
     if (project.tabs.length <= 1) {
       set({ storageWarning: "The last tab cannot be deleted." });
@@ -604,6 +668,12 @@ export const useProjectStore = create<ProjectState>((set, get) => ({
     }
 
     const { project } = get();
+
+    if (!canEditTab(project, tabId)) {
+      setGeneratedReadOnlyWarning(set);
+      return;
+    }
+
     const nextProject = updateProject(project, (currentProject) => ({
       ...currentProject,
       tabs: currentProject.tabs.map((tab) => (tab.id === tabId ? { ...tab, ...updates } : tab)),
@@ -612,9 +682,61 @@ export const useProjectStore = create<ProjectState>((set, get) => ({
     commitProject(nextProject, set);
   },
 
+  setTabOrientation: (tabId, orientation) => {
+    if (!canEditProject(get)) {
+      setReadOnlyWarning(set);
+      return;
+    }
+
+    const targetOrientation = getTabOrientation(orientation);
+    const { project } = get();
+
+    if (!canEditTab(project, tabId)) {
+      setGeneratedReadOnlyWarning(set);
+      return;
+    }
+
+    const tab = project.tabs.find((candidate) => candidate.id === tabId);
+
+    if (!tab || getTabOrientation(tab.orientation) === targetOrientation) {
+      return;
+    }
+
+    const nextProject = updateProject(project, (currentProject) => ({
+      ...currentProject,
+      tabs: currentProject.tabs.map((tab) => {
+        if (tab.id !== tabId) {
+          return tab;
+        }
+
+        const currentOrientation = getTabOrientation(tab.orientation);
+        const planningNodes = tab.nodes.filter((node) => node.type !== "stageBand");
+        const rememberedStages = rememberCurrentStageRects(tab.stages, currentOrientation);
+        const stages = normalizeStagesForLayout(rememberedStages, targetOrientation);
+        const nextTab = {
+          ...tab,
+          orientation: targetOrientation,
+          stages,
+        };
+
+        return {
+          ...nextTab,
+          nodes: rebuildStageBandNodes(nextTab, stages, planningNodes, targetOrientation),
+        };
+      }),
+    }));
+
+    commitProject(nextProject, set);
+  },
+
   createNode: ({ title, position }) => {
     if (!canEditProject(get)) {
       setReadOnlyWarning(set);
+      return;
+    }
+
+    if (!canEditActiveTab(get)) {
+      setGeneratedReadOnlyWarning(set);
       return;
     }
 
@@ -656,6 +778,11 @@ export const useProjectStore = create<ProjectState>((set, get) => ({
   updateNode: (nodeId, data) => {
     if (!canEditProject(get)) {
       setReadOnlyWarning(set);
+      return;
+    }
+
+    if (!canEditActiveTab(get)) {
+      setGeneratedReadOnlyWarning(set);
       return;
     }
 
@@ -795,6 +922,11 @@ export const useProjectStore = create<ProjectState>((set, get) => ({
       return;
     }
 
+    if (!canEditActiveTab(get)) {
+      setGeneratedReadOnlyWarning(set);
+      return;
+    }
+
     const { project, activeTabId } = get();
     const nextProject = updateActiveTab(project, activeTabId, (tab) => ({
       ...tab,
@@ -810,6 +942,11 @@ export const useProjectStore = create<ProjectState>((set, get) => ({
   duplicateNode: (nodeId) => {
     if (!canEditProject(get)) {
       setReadOnlyWarning(set);
+      return;
+    }
+
+    if (!canEditActiveTab(get)) {
+      setGeneratedReadOnlyWarning(set);
       return;
     }
 
@@ -854,6 +991,11 @@ export const useProjectStore = create<ProjectState>((set, get) => ({
       return;
     }
 
+    if (!canEditActiveTab(get)) {
+      setGeneratedReadOnlyWarning(set);
+      return;
+    }
+
     const { project, activeTabId } = get();
     const activeTab = getActiveTab(project, activeTabId);
 
@@ -894,6 +1036,11 @@ export const useProjectStore = create<ProjectState>((set, get) => ({
       return;
     }
 
+    if (!canEditActiveTab(get)) {
+      setGeneratedReadOnlyWarning(set);
+      return;
+    }
+
     const { project, activeTabId } = get();
     const nextProject = updateActiveTab(project, activeTabId, (tab) => ({
       ...tab,
@@ -919,6 +1066,11 @@ export const useProjectStore = create<ProjectState>((set, get) => ({
       return;
     }
 
+    if (!canEditActiveTab(get)) {
+      setGeneratedReadOnlyWarning(set);
+      return;
+    }
+
     const { project, activeTabId } = get();
     const nextProject = updateActiveTab(project, activeTabId, (tab) => ({
       ...tab,
@@ -932,6 +1084,7 @@ export const useProjectStore = create<ProjectState>((set, get) => ({
 
   applyNodesChange: (changes) => {
     const { project, activeTabId, viewMode } = get();
+    const activeTab = getActiveTab(project, activeTabId);
 
     if (isPublicViewMode(viewMode)) {
       const publicSafeChanges = getPublicSafeNodeChanges(changes);
@@ -949,6 +1102,24 @@ export const useProjectStore = create<ProjectState>((set, get) => ({
       return;
     }
 
+    if (isTabReadOnly(project, activeTab)) {
+      const safeChanges = isTabLayoutLocked(project, activeTab)
+        ? getGeneratedReadOnlySafeNodeChanges(changes)
+        : getGeneratedUnlockedLayoutNodeChanges(changes);
+
+      if (safeChanges.length === 0) {
+        return;
+      }
+
+      const nextProject = updateActiveTab(project, activeTabId, (tab) => ({
+        ...tab,
+        nodes: applyNodeChanges(safeChanges, tab.nodes),
+      }));
+
+      commitProject(nextProject, set);
+      return;
+    }
+
     const nextProject = updateActiveTab(project, activeTabId, (tab) => ({
       ...tab,
       nodes: applyNodeChanges(changes, tab.nodes),
@@ -959,6 +1130,10 @@ export const useProjectStore = create<ProjectState>((set, get) => ({
 
   applyEdgesChange: (changes) => {
     if (!canEditProject(get)) {
+      return;
+    }
+
+    if (!canEditActiveTab(get)) {
       return;
     }
 
@@ -1159,6 +1334,21 @@ export const useProjectStore = create<ProjectState>((set, get) => ({
       commitViewProject(nextProject, set);
       return;
     }
+
+    commitProject(nextProject, set);
+  },
+
+  toggleGeneratedLayoutLock: () => {
+    if (!canEditProject(get)) {
+      setReadOnlyWarning(set);
+      return;
+    }
+
+    const { project } = get();
+    const nextProject = updateSettings(project, (settings) => ({
+      ...settings,
+      readOnlyGeneratedTabs: settings.readOnlyGeneratedTabs === false,
+    }));
 
     commitProject(nextProject, set);
   },

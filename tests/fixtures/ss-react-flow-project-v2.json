@@ -1,0 +1,137 @@
+{
+  "schemaVersion": 2,
+  "projectName": "Analyzer Generated Software Graph",
+  "projectOrigin": {
+    "source": "SFW Graph Analyzer",
+    "sourcePath": "/workspace/sample-app",
+    "generatedAt": "2026-06-15T00:00:00.000Z"
+  },
+  "graphSnapshots": [
+    {
+      "id": "snapshot-20260615",
+      "label": "Analyzer snapshot",
+      "buildId": "build-42",
+      "buildIdentity": "main@abc123",
+      "observedAt": "2026-06-15T00:00:00.000Z",
+      "metadata": { "commit": "abc123" }
+    }
+  ],
+  "activeTabId": "tab-project-map",
+  "people": [],
+  "workstreams": [],
+  "tags": [],
+  "tabs": [
+    {
+      "id": "tab-project-map",
+      "name": "Project Map",
+      "kind": "software-graph",
+      "generated": true,
+      "readOnly": true,
+      "layout": { "algorithm": "dagre" },
+      "nodes": [
+        {
+          "id": "module-a",
+          "type": "planningNode",
+          "position": { "x": 0, "y": 0 },
+          "data": {
+            "title": "src/App.tsx",
+            "softwareGraph": {
+              "id": "sg-node-app",
+              "nodeKind": "module",
+              "path": "src/App.tsx",
+              "symbol": "App",
+              "provenance": {
+                "sourceType": "typescript-ast",
+                "extractor": "sfw-graph-analyzer",
+                "observedAt": "2026-06-15T00:00:00.000Z"
+              },
+              "sourcePath": "src/App.tsx",
+              "lineStart": 1,
+              "lineEnd": 54,
+              "confidence": 0.97,
+              "riskLabels": ["ui-entry"],
+              "testCoverage": "partial",
+              "snapshotId": "snapshot-20260615",
+              "buildId": "build-42",
+              "buildIdentity": "main@abc123",
+              "metadata": { "imports": 4 }
+            }
+          }
+        },
+        {
+          "id": "module-b",
+          "type": "planningNode",
+          "position": { "x": 260, "y": 0 },
+          "data": {
+            "title": "src/state/projectStore.ts",
+            "softwareGraph": {
+              "id": "sg-node-store",
+              "nodeKind": "module",
+              "path": "src/state/projectStore.ts",
+              "symbol": "useProjectStore",
+              "provenance": {
+                "sourceType": "typescript-ast",
+                "extractor": "sfw-graph-analyzer",
+                "observedAt": "2026-06-15T00:00:00.000Z"
+              },
+              "sourcePath": "src/state/projectStore.ts",
+              "lineStart": 1,
+              "lineEnd": 320,
+              "confidence": 0.94,
+              "riskLabels": ["state"],
+              "testCoverage": "low",
+              "snapshotId": "snapshot-20260615",
+              "buildId": "build-42",
+              "buildIdentity": "main@abc123",
+              "metadata": { "exports": 1 }
+            }
+          }
+        }
+      ],
+      "edges": [
+        {
+          "id": "edge-app-store",
+          "source": "module-a",
+          "target": "module-b",
+          "type": "planningEdge",
+          "data": {
+            "lineType": "solid",
+            "label": "imports",
+            "softwareGraph": {
+              "id": "sg-edge-app-store",
+              "edgeKind": "import",
+              "provenance": {
+                "sourceType": "typescript-ast",
+                "extractor": "sfw-graph-analyzer",
+                "observedAt": "2026-06-15T00:00:00.000Z"
+              },
+              "sourcePath": "src/App.tsx",
+              "lineStart": 4,
+              "lineEnd": 4,
+              "confidence": 0.99,
+              "snapshotId": "snapshot-20260615",
+              "buildId": "build-42",
+              "buildIdentity": "main@abc123",
+              "metadata": { "specifier": "../state/projectStore" }
+            }
+          }
+        }
+      ],
+      "viewport": { "x": 0, "y": 0, "zoom": 0.8 },
+      "filters": {}
+    }
+  ],
+  "settings": {
+    "generatedSoftwareGraph": true,
+    "readOnlyGeneratedTabs": true,
+    "showMiniMap": true,
+    "adminMode": false,
+    "presentationMode": false
+  },
+  "snapshots": [],
+  "softwareGraphNavigation": {
+    "defaultTabId": "tab-project-map"
+  },
+  "createdAt": "2026-06-15T00:00:00.000Z",
+  "updatedAt": "2026-06-15T00:00:00.000Z"
+}

@@ -1,8 +1,12 @@
-import { ChevronLeft, ChevronRight, Minus, Plus, Trash2 } from "lucide-react";
+import { ChevronDown, ChevronLeft, ChevronRight, ChevronUp, Columns3, Minus, Plus, Rows3, Trash2 } from "lucide-react";
 import {
   GRID_SIZE,
+  MIN_SWIM_LANE_HEIGHT,
   MIN_STAGE_WIDTH,
   createStageColumnRect,
+  createSwimLaneRect,
+  getTabOrientation,
+  normalizeSwimLaneHeight,
   normalizeStageWidth,
   normalizeStagesForLayout,
   rebuildStageBandNodes,
@@ -26,14 +30,18 @@ function getPlanningNodes(tab: PlanningTab) {
 export function StageEditor({ tab }: StageEditorProps) {
   const dialog = useDialog();
   const updateTab = useProjectStore((state) => state.updateTab);
-  const orderedStages = normalizeStagesForLayout(tab.stages);
+  const setTabOrientation = useProjectStore((state) => state.setTabOrientation);
+  const tabOrientation = getTabOrientation(tab.orientation);
+  const isHorizontal = tabOrientation === "horizontal";
+  const orderedStages = normalizeStagesForLayout(tab.stages, tabOrientation);
 
   function commitStages(nextStages: Stage[], planningNodes: AppNode[] = getPlanningNodes(tab)) {
-    const stages = normalizeStagesForLayout(nextStages);
+    const stages = normalizeStagesForLayout(nextStages, tabOrientation);
 
     updateTab(tab.id, {
+      orientation: tabOrientation,
       stages,
-      nodes: rebuildStageBandNodes(tab, stages, planningNodes),
+      nodes: rebuildStageBandNodes(tab, stages, planningNodes, tabOrientation),
     });
   }
 
@@ -57,10 +65,21 @@ export function StageEditor({ tab }: StageEditorProps) {
       name: name.trim(),
       order: orderedStages.length,
       colorToken: `stage-${orderedStages.length + 1}`,
-      rect: createStageColumnRect(orderedStages.length),
     };
+    const rect = isHorizontal
+      ? createSwimLaneRect(orderedStages.length)
+      : createStageColumnRect(orderedStages.length);
 
-    commitStages([...orderedStages, nextStage]);
+    commitStages([
+      ...orderedStages,
+      {
+        ...nextStage,
+        rect,
+        orientationRects: {
+          [tabOrientation]: rect,
+        },
+      },
+    ]);
   }
 
   async function deleteStage(stageId: string) {
@@ -116,15 +135,41 @@ export function StageEditor({ tab }: StageEditorProps) {
           return stage;
         }
 
-        const width = Math.max(MIN_STAGE_WIDTH, normalizeStageWidth(stage.rect?.width) + delta);
+        const rect = stage.rect ?? (isHorizontal ? createSwimLaneRect(stage.order) : createStageColumnRect(stage.order));
+
+        if (isHorizontal) {
+          const height = Math.max(MIN_SWIM_LANE_HEIGHT, normalizeSwimLaneHeight(rect.height) + delta);
+
+          return {
+            ...stage,
+            rect: {
+              ...rect,
+              height,
+            },
+            orientationRects: {
+              ...stage.orientationRects,
+              horizontal: {
+                ...rect,
+                height,
+              },
+            },
+          };
+        }
+
+        const width = Math.max(MIN_STAGE_WIDTH, normalizeStageWidth(rect.width) + delta);
 
         return {
           ...stage,
           rect: {
-            x: stage.rect?.x ?? 0,
-            y: 0,
+            ...rect,
             width,
-            height: stage.rect?.height ?? 0,
+          },
+          orientationRects: {
+            ...stage.orientationRects,
+            vertical: {
+              ...rect,
+              width,
+            },
           },
         };
       }),
@@ -134,15 +179,37 @@ export function StageEditor({ tab }: StageEditorProps) {
   return (
     <section className="field-group stage-editor">
       <div className="inspector-section-header">
-        <h3>Stages</h3>
+        <h3>{isHorizontal ? "Lanes" : "Stages"}</h3>
         <Button onClick={addStage}>
           <Plus size={15} aria-hidden="true" />
           Add
         </Button>
       </div>
+      <div className="stage-editor-orientation" role="group" aria-label="Band orientation">
+        <button
+          type="button"
+          className={tabOrientation === "vertical" ? "is-active" : undefined}
+          aria-pressed={tabOrientation === "vertical"}
+          onClick={() => setTabOrientation(tab.id, "vertical")}
+        >
+          <Columns3 size={14} aria-hidden="true" />
+          Stages
+        </button>
+        <button
+          type="button"
+          className={isHorizontal ? "is-active" : undefined}
+          aria-pressed={isHorizontal}
+          onClick={() => setTabOrientation(tab.id, "horizontal")}
+        >
+          <Rows3 size={14} aria-hidden="true" />
+          Lanes
+        </button>
+      </div>
       <div className="stage-editor-list">
         {orderedStages.map((stage, index) => {
           const width = normalizeStageWidth(stage.rect?.width);
+          const height = normalizeSwimLaneHeight(stage.rect?.height);
+          const size = isHorizontal ? height : width;
 
           return (
             <div key={stage.id} className="stage-editor-card">
@@ -156,34 +223,42 @@ export function StageEditor({ tab }: StageEditorProps) {
                 <div className="stage-editor-controls__group">
                   <Button
                     variant="ghost"
-                    aria-label={`Move ${stage.name} left`}
+                    aria-label={`Move ${stage.name} ${isHorizontal ? "up" : "left"}`}
                     disabled={index === 0}
                     onClick={() => moveStage(stage.id, -1)}
                   >
-                    <ChevronLeft size={15} aria-hidden="true" />
+                    {isHorizontal ? (
+                      <ChevronUp size={15} aria-hidden="true" />
+                    ) : (
+                      <ChevronLeft size={15} aria-hidden="true" />
+                    )}
                   </Button>
                   <Button
                     variant="ghost"
-                    aria-label={`Move ${stage.name} right`}
+                    aria-label={`Move ${stage.name} ${isHorizontal ? "down" : "right"}`}
                     disabled={index === orderedStages.length - 1}
                     onClick={() => moveStage(stage.id, 1)}
                   >
-                    <ChevronRight size={15} aria-hidden="true" />
+                    {isHorizontal ? (
+                      <ChevronDown size={15} aria-hidden="true" />
+                    ) : (
+                      <ChevronRight size={15} aria-hidden="true" />
+                    )}
                   </Button>
                 </div>
                 <div className="stage-editor-controls__group stage-editor-controls__group--width">
                   <Button
                     variant="ghost"
-                    aria-label={`Decrease ${stage.name} width`}
-                    disabled={width <= MIN_STAGE_WIDTH}
+                    aria-label={`Decrease ${stage.name} ${isHorizontal ? "height" : "width"}`}
+                    disabled={isHorizontal ? size <= MIN_SWIM_LANE_HEIGHT : size <= MIN_STAGE_WIDTH}
                     onClick={() => resizeStage(stage.id, -GRID_SIZE)}
                   >
                     <Minus size={15} aria-hidden="true" />
                   </Button>
-                  <span>{width}px</span>
+                  <span>{size}px</span>
                   <Button
                     variant="ghost"
-                    aria-label={`Increase ${stage.name} width`}
+                    aria-label={`Increase ${stage.name} ${isHorizontal ? "height" : "width"}`}
                     onClick={() => resizeStage(stage.id, GRID_SIZE)}
                   >
                     <Plus size={15} aria-hidden="true" />

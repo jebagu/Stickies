@@ -1,0 +1,69 @@
+{
+  "schemaVersion": 2,
+  "projectName": "Invalid Generated Software Graph",
+  "projectOrigin": {
+    "source": "SFW Graph Analyzer"
+  },
+  "graphSnapshots": [
+    {
+      "id": "snapshot-invalid"
+    }
+  ],
+  "activeTabId": "tab-invalid",
+  "people": [],
+  "workstreams": [],
+  "tags": [],
+  "tabs": [
+    {
+      "id": "tab-invalid",
+      "name": "Project Map",
+      "kind": "software-graph",
+      "generated": true,
+      "readOnly": true,
+      "nodes": [
+        {
+          "id": "module-a",
+          "type": "planningNode",
+          "position": { "x": 0, "y": 0 },
+          "data": {
+            "title": "src/App.tsx",
+            "softwareGraph": {
+              "id": "sg-node-app",
+              "nodeKind": "module",
+              "provenance": {
+                "sourceType": "typescript-ast",
+                "extractor": "sfw-graph-analyzer",
+                "observedAt": "2026-06-15T00:00:00.000Z"
+              }
+            }
+          }
+        }
+      ],
+      "edges": [
+        {
+          "id": "edge-invalid",
+          "source": "module-a",
+          "target": "missing-module",
+          "type": "planningEdge",
+          "data": {
+            "lineType": "solid",
+            "softwareGraph": {
+              "id": "sg-edge-invalid",
+              "edgeKind": "import",
+              "provenance": {
+                "sourceType": "typescript-ast",
+                "extractor": "sfw-graph-analyzer",
+                "observedAt": "2026-06-15T00:00:00.000Z"
+              }
+            }
+          }
+        }
+      ]
+    }
+  ],
+  "settings": {
+    "generatedSoftwareGraph": true,
+    "readOnlyGeneratedTabs": true
+  },
+  "snapshots": []
+}

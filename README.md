@@ -2,7 +2,7 @@
 
 Internal sticky-style project-planning canvas for mapping Sonic Sphere workstreams, associated people/organizations, stages, project nodes, and dependencies with React Flow.
 
-This is a static Vite React app. It runs locally, can be deployed to GitHub Pages, and stores v1 project data in the browser with JSON import/export for sharing.
+This is a static Vite React app. It runs locally, can be deployed to GitHub Pages, and stores project data in the browser with JSON import/export for sharing.
 
 The browser favicon is the Material Design Icons `circle-opacity` glyph, flipped horizontally and served from [public/favicon.svg](/Users/jeremyguillory/Documents/vibecode-projects/SS%20React%20Flow%20Charts/public/favicon.svg).
 
@@ -64,6 +64,12 @@ Typecheck only:
 
 ```sh
 npm run typecheck
+```
+
+Run import regression tests:
+
+```sh
+npm run test:imports
 ```
 
 Preview the production build:
@@ -129,6 +135,8 @@ project-planner:v1:last-opened
 
 On startup, the app loads saved localStorage data if it validates. If localStorage is empty or invalid, it loads the seed project from [src/data/seedProject.ts](/Users/jeremyguillory/Documents/vibecode-projects/SS%20React%20Flow%20Charts/src/data/seedProject.ts).
 
+The seed and committed public snapshot include a `Timeline + Install Process` tab derived from the SS Art Basel 2025 Delivery Plan PDF.
+
 Validation lives in [src/lib/validation.ts](/Users/jeremyguillory/Documents/vibecode-projects/SS%20React%20Flow%20Charts/src/lib/validation.ts).
 
 The editor left rail starts with a single `File` menu for browser-local project lifecycle actions:
@@ -168,7 +176,9 @@ To update a published slug, publish again to create a new `public/published/<slu
 
 Export/import helpers live in [src/lib/exportImport.ts](/Users/jeremyguillory/Documents/vibecode-projects/SS%20React%20Flow%20Charts/src/lib/exportImport.ts).
 
-The left-rail `File` menu contains `Open` and `Export`. `Open` only accepts the native `.json` project format, validates schema version `1`, and replaces the current project only after confirmation.
+The left-rail `File` menu contains `Open` and `Export`. `Open` only accepts `.json` project files, validates schema version `1` or `2`, and replaces the current project only after confirmation. It also accepts simplified Stickies JSON shaped as `version`, `name`, and `tabs`; those imports keep nodes, notes, edge labels, and canvas positions while using empty people, workstream, and tag lists internally.
+
+Schema v2 imports are for analyzer-generated software graph projects such as `ss-react-flow-project-v2.json`. The importer preserves `projectOrigin`, `graphSnapshots`, `softwareGraphNavigation`, generated tab metadata, and each node/edge `data.softwareGraph` payload. Generated tabs may omit `stages`; the app normalizes missing stages to an empty array only for renderer compatibility. If a v2 file omits `settings.themeId`, the app applies the default `clean-light` theme while preserving analyzer settings such as `generatedSoftwareGraph` and `readOnlyGeneratedTabs`.
 
 `Export` opens a centered format picker with three options:
 
@@ -208,7 +218,9 @@ Canvas components:
 - [src/components/canvas/StageBandNode.tsx](/Users/jeremyguillory/Documents/vibecode-projects/SS%20React%20Flow%20Charts/src/components/canvas/StageBandNode.tsx)
 - [src/components/canvas/PlanningEdge.tsx](/Users/jeremyguillory/Documents/vibecode-projects/SS%20React%20Flow%20Charts/src/components/canvas/PlanningEdge.tsx)
 
-The canvas renders active-tab nodes and edges from Zustand, writes React Flow changes back to project state in editor mode, creates solid line edges on connect in editor mode, saves viewport movement in editor mode, shows the MiniMap setting, and keeps swim-lane backgrounds fixed behind planning nodes.
+The canvas renders active-tab nodes and edges from Zustand, writes React Flow changes back to project state in editor mode, creates solid line edges on connect in editor mode, saves viewport movement in editor mode, shows the MiniMap setting, and keeps stage/lane backgrounds fixed behind planning nodes.
+
+Each tab has one band orientation at a time. The left sidebar toggle switches between vertical `Stages` and horizontal `Lanes`, rebuilds the background bands in that orientation, and remembers each orientation's band sizes so switching back restores the prior layout. Planning item positions are not moved by the toggle.
 
 Planning item connector handles use enlarged click targets while keeping the visible handle dots small, so nontechnical users can create dependencies without needing pixel-perfect clicks.
 
@@ -228,7 +240,9 @@ Inspector files:
 - [src/components/inspectors/EdgeInspector.tsx](/Users/jeremyguillory/Documents/vibecode-projects/SS%20React%20Flow%20Charts/src/components/inspectors/EdgeInspector.tsx)
 - [src/components/inspectors/TabInspector.tsx](/Users/jeremyguillory/Documents/vibecode-projects/SS%20React%20Flow%20Charts/src/components/inspectors/TabInspector.tsx)
 
-In editor mode, users can add planning items, create/rename/delete tabs, edit the active tab's stages from the left sidebar, edit a selected item's title, note, status, and associations, duplicate/delete items, edit/delete selected edges, set edge line types, hide/show the inspector, create/restore snapshots, import/export JSON, and toggle MiniMap, Settings, and Presentation modes.
+In editor mode, users can add planning items, create/rename/delete tabs, edit the active tab's stages from the left sidebar, switch the active tab between vertical stages and horizontal lanes, edit a selected item's title, note, status, and associations, duplicate/delete items, edit/delete selected edges, set edge line types, hide/show the inspector, create/restore snapshots, import/export JSON, and toggle MiniMap, Settings, and Presentation modes.
+
+Generated software graph tabs are read-only by default, so nodes do not drag, generated contents cannot be accidentally edited, and the left-rail stage editor is hidden for those tabs. Use the top-bar `Unlock Layout` control on a generated tab when node positions need to be adjusted; this unlocks layout movement while keeping generated content edits blocked. Existing planning tabs remain editable. The node and edge inspectors show software graph metadata when present, including kind, source path and line range, confidence, provenance source type, extractor, observed time, build ID, snapshot ID, and metadata summary.
 
 In public mode, the right inspector renders selected tab, node, and edge details as read-only field/value rows. Selected edge details show the source and target item titles plus the edge line type.
 

@@ -23,7 +23,9 @@ import { isPlanningNodeData } from "../types/planning";
 import type {
   AppEdge,
   AppNode,
+  EdgeRoutingMode,
   LineType,
+  NodeHandleMode,
   Person,
   PlanningNodeData,
   PlanningTab,
@@ -96,7 +98,7 @@ type ProjectState = {
   removeAssociatedEntity: (personId: string) => void;
   deleteNode: (nodeId: string) => void;
   duplicateNode: (nodeId: string) => void;
-  createEdge: (source: string, target: string) => void;
+  createEdge: (source: string, target: string, sourceHandle?: string | null, targetHandle?: string | null) => void;
   updateEdge: (edgeId: string, data: Partial<AppEdge["data"]>) => void;
   deleteEdge: (edgeId: string) => void;
   applyNodesChange: (changes: NodeChange<AppNode>[]) => void;
@@ -110,6 +112,8 @@ type ProjectState = {
   exportProject: () => void;
   importProject: (project: ProjectFile) => void;
   setTheme: (themeId: ThemeId) => void;
+  setEdgeRoutingMode: (edgeRoutingMode: EdgeRoutingMode) => void;
+  setNodeHandleMode: (nodeHandleMode: NodeHandleMode) => void;
   toggleAdminMode: () => void;
   togglePresentationMode: () => void;
   toggleMiniMap: () => void;
@@ -274,6 +278,11 @@ function normalizeProjectStageColumns(project: ProjectFile): ProjectFile {
   const normalizedSettings: ProjectSettings = {
     ...settingsWithoutLegacySnap,
     themeId: String(project.settings.themeId) === "react-flow-home" ? "clean-light" : project.settings.themeId,
+    edgeRoutingMode:
+      settingsWithoutLegacySnap.edgeRoutingMode === "smooth-step" || settingsWithoutLegacySnap.edgeRoutingMode === "straight"
+        ? settingsWithoutLegacySnap.edgeRoutingMode
+        : "bezier",
+    nodeHandleMode: settingsWithoutLegacySnap.nodeHandleMode === "all-sides" ? "all-sides" : "side",
   };
 
   return {
@@ -985,7 +994,7 @@ export const useProjectStore = create<ProjectState>((set, get) => ({
     });
   },
 
-  createEdge: (source, target) => {
+  createEdge: (source, target, sourceHandle, targetHandle) => {
     if (!canEditProject(get)) {
       setReadOnlyWarning(set);
       return;
@@ -1015,6 +1024,8 @@ export const useProjectStore = create<ProjectState>((set, get) => ({
       id: createId("edge"),
       source,
       target,
+      sourceHandle,
+      targetHandle,
       type: "planningEdge",
       data: {
         lineType: "solid",
@@ -1289,6 +1300,36 @@ export const useProjectStore = create<ProjectState>((set, get) => ({
       commitViewProject(nextProject, set);
       return;
     }
+
+    commitProject(nextProject, set);
+  },
+
+  setEdgeRoutingMode: (edgeRoutingMode) => {
+    if (!canEditProject(get)) {
+      setReadOnlyWarning(set);
+      return;
+    }
+
+    const { project } = get();
+    const nextProject = updateSettings(project, (settings) => ({
+      ...settings,
+      edgeRoutingMode,
+    }));
+
+    commitProject(nextProject, set);
+  },
+
+  setNodeHandleMode: (nodeHandleMode) => {
+    if (!canEditProject(get)) {
+      setReadOnlyWarning(set);
+      return;
+    }
+
+    const { project } = get();
+    const nextProject = updateSettings(project, (settings) => ({
+      ...settings,
+      nodeHandleMode,
+    }));
 
     commitProject(nextProject, set);
   },

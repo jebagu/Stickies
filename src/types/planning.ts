@@ -11,6 +11,8 @@ export type NodeStatus =
 export type Priority = "P0" | "P1" | "P2";
 export type Confidence = "low" | "medium" | "high";
 export type LineType = "solid" | "dashed" | "magic";
+export type EdgeRoutingMode = "bezier" | "smooth-step" | "straight";
+export type NodeHandleMode = "side" | "all-sides";
 export type ThemeId = "clean-light" | "clean-dark" | "neon-dark";
 export type TabOrientation = "vertical" | "horizontal";
 export type ProjectSchemaVersion = 1 | 2;
@@ -158,6 +160,8 @@ export type AppEdge = {
   id: string;
   source: string;
   target: string;
+  sourceHandle?: string | null;
+  targetHandle?: string | null;
   type: "planningEdge";
   data: {
     lineType: LineType;
@@ -186,6 +190,8 @@ export type ProjectSettings = {
   showMiniMap: boolean;
   adminMode: boolean;
   presentationMode: boolean;
+  edgeRoutingMode?: EdgeRoutingMode;
+  nodeHandleMode?: NodeHandleMode;
   generatedSoftwareGraph?: boolean;
   readOnlyGeneratedTabs?: boolean;
   [key: string]: unknown;

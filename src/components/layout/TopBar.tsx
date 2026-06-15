@@ -2,8 +2,16 @@ import type { CSSProperties } from "react";
 import { Lock, Monitor, Presentation, Settings, Unlock } from "lucide-react";
 import { isPublicViewMode } from "../../lib/appMode";
 import { isGeneratedGraphTab } from "../../lib/generatedGraph";
-import { THEME_OPTIONS, formatThemeLabel } from "../../lib/options";
+import {
+  EDGE_ROUTING_OPTIONS,
+  NODE_HANDLE_OPTIONS,
+  THEME_OPTIONS,
+  formatEdgeRoutingLabel,
+  formatNodeHandleModeLabel,
+  formatThemeLabel,
+} from "../../lib/options";
 import { useProjectStore } from "../../state/projectStore";
+import type { EdgeRoutingMode, NodeHandleMode } from "../../types/planning";
 import { Button } from "../ui/Button";
 import { Select } from "../ui/Select";
 import { Toggle } from "../ui/Toggle";
@@ -16,6 +24,8 @@ export function TopBar() {
   const {
     project,
     viewMode,
+    setEdgeRoutingMode,
+    setNodeHandleMode,
     setTheme,
     toggleAdminMode,
     toggleGeneratedLayoutLock,
@@ -51,6 +61,32 @@ export function TopBar() {
         </Select>
 
         <Toggle checked={project.settings.showMiniMap} label="MiniMap" onChange={toggleMiniMap} />
+        {readOnly ? null : (
+          <Select
+            aria-label="Arrow paths"
+            value={project.settings.edgeRoutingMode ?? "bezier"}
+            onChange={(event) => setEdgeRoutingMode(event.target.value as EdgeRoutingMode)}
+          >
+            {EDGE_ROUTING_OPTIONS.map((routingMode) => (
+              <option key={routingMode} value={routingMode}>
+                {formatEdgeRoutingLabel(routingMode)}
+              </option>
+            ))}
+          </Select>
+        )}
+        {readOnly ? null : (
+          <Select
+            aria-label="Handles"
+            value={project.settings.nodeHandleMode ?? "side"}
+            onChange={(event) => setNodeHandleMode(event.target.value as NodeHandleMode)}
+          >
+            {NODE_HANDLE_OPTIONS.map((handleMode) => (
+              <option key={handleMode} value={handleMode}>
+                {formatNodeHandleModeLabel(handleMode)}
+              </option>
+            ))}
+          </Select>
+        )}
         {generatedTab && !readOnly ? (
           <Button
             variant={generatedLayoutUnlocked ? "primary" : "secondary"}

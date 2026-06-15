@@ -1,9 +1,10 @@
-import { useCallback, useMemo } from "react";
+import { useCallback, useEffect, useMemo, useState } from "react";
 import {
   Background,
   Controls,
   MarkerType,
   MiniMap,
+  Panel,
   ReactFlow,
   type Connection,
   type EdgeTypes,
@@ -11,7 +12,9 @@ import {
   type NodeTypes,
   type OnMoveEnd,
   type EdgeMouseHandler,
+  useUpdateNodeInternals,
 } from "@xyflow/react";
+import { RefreshCw } from "lucide-react";
 import { PlanningEdge } from "./PlanningEdge";
 import { PlanningNode } from "./PlanningNode";
 import { StageBandNode } from "./StageBandNode";
@@ -21,6 +24,7 @@ import { isTabLayoutLocked, isTabReadOnly } from "../../lib/generatedGraph";
 import { getReactFlowColorMode } from "../../lib/theme";
 import { useProjectStore } from "../../state/projectStore";
 import type { AppEdge, AppNode } from "../../types/planning";
+import { Button } from "../ui/Button";
 
 const nodeTypes = {
   planningNode: PlanningNode,
@@ -30,6 +34,48 @@ const nodeTypes = {
 const edgeTypes = {
   planningEdge: PlanningEdge,
 } satisfies EdgeTypes;
+
+type ArrowRecomputePanelProps = {
+  activeTabId: string;
+  edgeRoutingMode: string;
+  nodeHandleMode: string;
+  planningNodeIds: string[];
+  onRecompute: () => void;
+};
+
+function ArrowRecomputePanel({
+  activeTabId,
+  edgeRoutingMode,
+  nodeHandleMode,
+  planningNodeIds,
+  onRecompute,
+}: ArrowRecomputePanelProps) {
+  const updateNodeInternals = useUpdateNodeInternals();
+
+  const recomputeArrows = useCallback(() => {
+    window.requestAnimationFrame(() => {
+      updateNodeInternals(planningNodeIds);
+      onRecompute();
+    });
+  }, [onRecompute, planningNodeIds, updateNodeInternals]);
+
+  useEffect(() => {
+    recomputeArrows();
+  }, [activeTabId, edgeRoutingMode, nodeHandleMode, recomputeArrows]);
+
+  return (
+    <Panel position="top-right" className="arrow-routing-panel">
+      <Button
+        className="arrow-routing-panel__button"
+        onClick={recomputeArrows}
+        title="Recompute arrow paths"
+      >
+        <RefreshCw size={15} aria-hidden="true" />
+        Recompute arrows
+      </Button>
+    </Panel>
+  );
+}
 
 export function PlanningCanvas() {
   const {
@@ -42,9 +88,12 @@ export function PlanningCanvas() {
     setViewport,
     setSelectedElement,
   } = useProjectStore();
+  const [edgeRefreshKey, setEdgeRefreshKey] = useState(0);
   const activeTab = project.tabs.find((tab) => tab.id === activeTabId) ?? project.tabs[0];
   const showMiniMap = project.settings.showMiniMap;
   const colorMode = getReactFlowColorMode(project.settings.themeId);
+  const edgeRoutingMode = project.settings.edgeRoutingMode ?? "bezier";
+  const nodeHandleMode = project.settings.nodeHandleMode ?? "side";
   const publicView = isPublicViewMode(viewMode);
   const contentReadOnly = publicView || isTabReadOnly(project, activeTab);
   const layoutLocked = !publicView && isTabLayoutLocked(project, activeTab);
@@ -88,12 +137,29 @@ export function PlanningCanvas() {
     [contentReadOnly, filteredElements.nodes, layoutLocked],
   );
 
-  const edges = useMemo<AppEdge[]>(() => filteredElements.edges, [filteredElements.edges]);
+  const edges = useMemo<AppEdge[]>(
+    () =>
+      filteredElements.edges.map((edge) => ({
+        ...edge,
+        data: {
+          ...edge.data,
+          edgeRefreshKey,
+        },
+      })),
+    [edgeRefreshKey, filteredElements.edges],
+  );
+  const planningNodeIds = useMemo(
+    () => nodes.flatMap((node) => (node.type === "planningNode" ? [node.id] : [])),
+    [nodes],
+  );
+  const bumpEdgeRefreshKey = useCallback(() => {
+    setEdgeRefreshKey((current) => current + 1);
+  }, []);
 
   const handleConnect = useCallback(
     (connection: Connection) => {
       if (connection.source && connection.target) {
-        createEdge(connection.source, connection.target);
+        createEdge(connection.source, connection.target, connection.sourceHandle, connection.targetHandle);
       }
     },
     [createEdge],
@@ -152,6 +218,13 @@ export function PlanningCanvas() {
       <Background />
       <Controls />
       {showMiniMap ? <MiniMap pannable zoomable /> : null}
+      <ArrowRecomputePanel
+        activeTabId={activeTab.id}
+        edgeRoutingMode={edgeRoutingMode}
+        nodeHandleMode={nodeHandleMode}
+        planningNodeIds={planningNodeIds}
+        onRecompute={bumpEdgeRefreshKey}
+      />
     </ReactFlow>
   );
 }

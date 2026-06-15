@@ -2,6 +2,8 @@ import type { ProjectFile } from "../types/planning";
 
 const VALID_THEME_IDS = new Set(["clean-light", "clean-dark", "neon-dark"]);
 const LEGACY_THEME_IDS = new Set(["react-flow-home"]);
+const VALID_EDGE_ROUTING_MODES = new Set(["bezier", "smooth-step", "straight"]);
+const VALID_NODE_HANDLE_MODES = new Set(["side", "all-sides"]);
 const VALID_ASSOCIATED_ENTITY_KINDS = new Set(["person", "organization", "resource"]);
 const VALID_TAB_ORIENTATIONS = new Set(["vertical", "horizontal"]);
 const DEFAULT_THEME_ID = "clean-light";
@@ -56,11 +58,27 @@ function isGeneratedTab(tab: Record<string, unknown>) {
 }
 
 function normalizeProjectForValidation(value: Record<string, unknown>): Record<string, unknown> {
-  if (value.schemaVersion !== 2) {
-    return value;
-  }
-
   const settings = isRecord(value.settings) ? value.settings : {};
+  const normalizedSettings = isRecord(value.settings)
+    ? {
+        ...settings,
+        edgeRoutingMode:
+          settings.edgeRoutingMode === undefined
+            ? "bezier"
+            : settings.edgeRoutingMode,
+        nodeHandleMode:
+          settings.nodeHandleMode === undefined
+            ? "side"
+            : settings.nodeHandleMode,
+      }
+    : value.settings;
+
+  if (value.schemaVersion !== 2) {
+    return {
+      ...value,
+      settings: normalizedSettings,
+    };
+  }
 
   return {
     ...value,
@@ -68,7 +86,7 @@ function normalizeProjectForValidation(value: Record<string, unknown>): Record<s
       ? value.tabs.map((tab) => (isRecord(tab) ? { ...tab, stages: Array.isArray(tab.stages) ? tab.stages : [] } : tab))
       : value.tabs,
     settings: {
-      ...settings,
+      ...(isRecord(normalizedSettings) ? normalizedSettings : {}),
       themeId:
         typeof settings.themeId === "string" && VALID_THEME_IDS.has(settings.themeId)
           ? settings.themeId
@@ -265,6 +283,20 @@ export function validateProjectFile(value: unknown): ValidationResult {
     (!VALID_THEME_IDS.has(project.settings.themeId) && !LEGACY_THEME_IDS.has(project.settings.themeId))
   ) {
     errors.push("Project settings must include a supported themeId.");
+  } else {
+    if (
+      project.settings.edgeRoutingMode !== undefined &&
+      !VALID_EDGE_ROUTING_MODES.has(String(project.settings.edgeRoutingMode))
+    ) {
+      errors.push("Project settings edgeRoutingMode must be bezier, smooth-step, or straight.");
+    }
+
+    if (
+      project.settings.nodeHandleMode !== undefined &&
+      !VALID_NODE_HANDLE_MODES.has(String(project.settings.nodeHandleMode))
+    ) {
+      errors.push("Project settings nodeHandleMode must be side or all-sides.");
+    }
   }
 
   if (errors.length > 0) {

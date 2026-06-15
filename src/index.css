@@ -1020,6 +1020,14 @@ select {
   padding: 0;
 }
 
+.arrow-routing-panel {
+  margin: 10px;
+}
+
+.arrow-routing-panel__button {
+  box-shadow: 0 8px 22px var(--shadow-color);
+}
+
 .planning-node {
   position: relative;
   width: 260px;

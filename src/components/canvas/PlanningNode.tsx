@@ -9,6 +9,7 @@ type PlanningFlowNode = Node<PlanningNodeData, "planningNode">;
 function PlanningNodeComponent({ data, selected, isConnectable }: NodeProps<PlanningFlowNode>) {
   const project = useProjectStore((state) => state.project);
   const associatedIds = data.associatedIds ?? [];
+  const handleMode = project.settings.nodeHandleMode ?? "side";
   const associated = associatedIds
     .map((associatedId) => project.people.find((person) => person.id === associatedId))
     .filter(Boolean);
@@ -17,11 +18,21 @@ function PlanningNodeComponent({ data, selected, isConnectable }: NodeProps<Plan
   return (
     <article className={clsx("planning-node", selected && "planning-node--selected")}>
       <Handle
-        className="planning-node__handle planning-node__handle--target"
+        id="target-left"
+        className="planning-node__handle planning-node__handle--target planning-node__handle--left"
         type="target"
         position={Position.Left}
         isConnectable={isConnectable}
       />
+      {handleMode === "all-sides" ? (
+        <Handle
+          id="target-top"
+          className="planning-node__handle planning-node__handle--target planning-node__handle--top"
+          type="target"
+          position={Position.Top}
+          isConnectable={isConnectable}
+        />
+      ) : null}
       <h3 className="planning-node__title">{data.title}</h3>
       {note ? <p className="planning-node__note">{note}</p> : null}
       <div className="planning-node__footer">
@@ -34,11 +45,21 @@ function PlanningNodeComponent({ data, selected, isConnectable }: NodeProps<Plan
         </div>
       </div>
       <Handle
-        className="planning-node__handle planning-node__handle--source"
+        id="source-right"
+        className="planning-node__handle planning-node__handle--source planning-node__handle--right"
         type="source"
         position={Position.Right}
         isConnectable={isConnectable}
       />
+      {handleMode === "all-sides" ? (
+        <Handle
+          id="source-bottom"
+          className="planning-node__handle planning-node__handle--source planning-node__handle--bottom"
+          type="source"
+          position={Position.Bottom}
+          isConnectable={isConnectable}
+        />
+      ) : null}
     </article>
   );
 }

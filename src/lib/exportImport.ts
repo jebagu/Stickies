@@ -1,4 +1,4 @@
-import type { AppEdge, AppNode, LineType, ProjectFile, ProjectSettings } from "../types/planning";
+import type { AppEdge, AppNode, EdgeRoutingMode, LineType, NodeHandleMode, ProjectFile, ProjectSettings } from "../types/planning";
 import { isPlanningNodeData } from "../types/planning";
 import { formatDateTimeForFilename } from "../utils/dates";
 import { validateProjectFile } from "./validation";
@@ -17,6 +17,8 @@ export type ImportProjectResult =
 
 const VALID_LINE_TYPES = new Set<LineType>(["solid", "dashed", "magic"]);
 const VALID_THEME_IDS = new Set<ProjectSettings["themeId"]>(["clean-light", "clean-dark", "neon-dark"]);
+const VALID_EDGE_ROUTING_MODES = new Set<EdgeRoutingMode>(["bezier", "smooth-step", "straight"]);
+const VALID_NODE_HANDLE_MODES = new Set<NodeHandleMode>(["side", "all-sides"]);
 
 type SimplifiedStickiesFile = {
   version: 1;
@@ -25,6 +27,8 @@ type SimplifiedStickiesFile = {
   settings?: {
     theme?: unknown;
     showMiniMap?: unknown;
+    edgeRoutingMode?: unknown;
+    nodeHandleMode?: unknown;
   };
   snapshots?: unknown[];
 };
@@ -91,6 +95,18 @@ function normalizeThemeId(value: unknown): ProjectSettings["themeId"] {
   return typeof value === "string" && VALID_THEME_IDS.has(value as ProjectSettings["themeId"])
     ? (value as ProjectSettings["themeId"])
     : "clean-light";
+}
+
+function normalizeEdgeRoutingMode(value: unknown): EdgeRoutingMode {
+  return typeof value === "string" && VALID_EDGE_ROUTING_MODES.has(value as EdgeRoutingMode)
+    ? (value as EdgeRoutingMode)
+    : "bezier";
+}
+
+function normalizeNodeHandleMode(value: unknown): NodeHandleMode {
+  return typeof value === "string" && VALID_NODE_HANDLE_MODES.has(value as NodeHandleMode)
+    ? (value as NodeHandleMode)
+    : "side";
 }
 
 function formatImportedCategory(value: unknown) {
@@ -214,6 +230,8 @@ function normalizeImportedProject(value: unknown): unknown {
       showMiniMap: typeof settings.showMiniMap === "boolean" ? settings.showMiniMap : true,
       adminMode: false,
       presentationMode: false,
+      edgeRoutingMode: normalizeEdgeRoutingMode(settings.edgeRoutingMode),
+      nodeHandleMode: normalizeNodeHandleMode(settings.nodeHandleMode),
     },
     createdAt: timestamp,
     updatedAt: timestamp,

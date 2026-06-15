@@ -163,6 +163,7 @@ Public mode allows:
 - Reading the right inspector.
 - Switching themes for the current browser session.
 - Toggling the MiniMap.
+- Viewing the saved arrow routing and handle placement.
 - Panning and zooming the canvas.
 - Dragging planning items into temporary positions for the current browser session.
 
@@ -179,6 +180,8 @@ Export/import helpers live in [src/lib/exportImport.ts](/Users/jeremyguillory/Do
 The left-rail `File` menu contains `Open` and `Export`. `Open` only accepts `.json` project files, validates schema version `1` or `2`, and replaces the current project only after confirmation. It also accepts simplified Stickies JSON shaped as `version`, `name`, and `tabs`; those imports keep nodes, notes, edge labels, and canvas positions while using empty people, workstream, and tag lists internally.
 
 Schema v2 imports are for analyzer-generated software graph projects such as `ss-react-flow-project-v2.json`. The importer preserves `projectOrigin`, `graphSnapshots`, `softwareGraphNavigation`, generated tab metadata, and each node/edge `data.softwareGraph` payload. Generated tabs may omit `stages`; the app normalizes missing stages to an empty array only for renderer compatibility. If a v2 file omits `settings.themeId`, the app applies the default `clean-light` theme while preserving analyzer settings such as `generatedSoftwareGraph` and `readOnlyGeneratedTabs`.
+
+Project settings may include `edgeRoutingMode` (`bezier`, `smooth-step`, or `straight`) and `nodeHandleMode` (`side` or `all-sides`). Missing values fall back to curved arrows with side handles so older project JSON files continue to load.
 
 `Export` opens a centered format picker with three options:
 
@@ -218,11 +221,11 @@ Canvas components:
 - [src/components/canvas/StageBandNode.tsx](/Users/jeremyguillory/Documents/vibecode-projects/SS%20React%20Flow%20Charts/src/components/canvas/StageBandNode.tsx)
 - [src/components/canvas/PlanningEdge.tsx](/Users/jeremyguillory/Documents/vibecode-projects/SS%20React%20Flow%20Charts/src/components/canvas/PlanningEdge.tsx)
 
-The canvas renders active-tab nodes and edges from Zustand, writes React Flow changes back to project state in editor mode, creates solid line edges on connect in editor mode, saves viewport movement in editor mode, shows the MiniMap setting, and keeps stage/lane backgrounds fixed behind planning nodes.
+The canvas renders active-tab nodes and edges from Zustand, writes React Flow changes back to project state in editor mode, creates solid line edges on connect in editor mode, saves viewport movement in editor mode, shows the MiniMap setting, and keeps stage/lane backgrounds fixed behind planning nodes. Arrow routing is a project-wide setting: `Curved` uses Bezier paths, `Elbow` uses smooth-step paths, and `Straight` uses direct paths. The canvas also includes a `Recompute arrows` control that refreshes React Flow handle measurements after routing or handle changes.
 
 Each tab has one band orientation at a time. The left sidebar toggle switches between vertical `Stages` and horizontal `Lanes`, rebuilds the background bands in that orientation, and remembers each orientation's band sizes so switching back restores the prior layout. Planning item positions are not moved by the toggle.
 
-Planning item connector handles use enlarged click targets while keeping the visible handle dots small, so nontechnical users can create dependencies without needing pixel-perfect clicks.
+Planning item connector handles use enlarged click targets while keeping the visible handle dots small, so nontechnical users can create dependencies without needing pixel-perfect clicks. `Side handles` shows a left input and right output. `All sides` shows left and top inputs plus right and bottom outputs, with stable handle IDs saved on new edges.
 
 ## Editing UI
 
@@ -240,7 +243,7 @@ Inspector files:
 - [src/components/inspectors/EdgeInspector.tsx](/Users/jeremyguillory/Documents/vibecode-projects/SS%20React%20Flow%20Charts/src/components/inspectors/EdgeInspector.tsx)
 - [src/components/inspectors/TabInspector.tsx](/Users/jeremyguillory/Documents/vibecode-projects/SS%20React%20Flow%20Charts/src/components/inspectors/TabInspector.tsx)
 
-In editor mode, users can add planning items, create/rename/delete tabs, edit the active tab's stages from the left sidebar, switch the active tab between vertical stages and horizontal lanes, edit a selected item's title, note, status, and associations, duplicate/delete items, edit/delete selected edges, set edge line types, hide/show the inspector, create/restore snapshots, import/export JSON, and toggle MiniMap, Settings, and Presentation modes.
+In editor mode, users can add planning items, create/rename/delete tabs, edit the active tab's stages from the left sidebar, switch the active tab between vertical stages and horizontal lanes, edit a selected item's title, note, status, and associations, duplicate/delete items, edit/delete selected edges, set edge line types, change arrow routing, change node handle placement, recompute arrows, hide/show the inspector, create/restore snapshots, import/export JSON, and toggle MiniMap, Settings, and Presentation modes.
 
 Generated software graph tabs are read-only by default, so nodes do not drag, generated contents cannot be accidentally edited, and the left-rail stage editor is hidden for those tabs. Use the top-bar `Unlock Layout` control on a generated tab when node positions need to be adjusted; this unlocks layout movement while keeping generated content edits blocked. Existing planning tabs remain editable. The node and edge inspectors show software graph metadata when present, including kind, source path and line range, confidence, provenance source type, extractor, observed time, build ID, snapshot ID, and metadata summary.
 

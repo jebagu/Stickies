@@ -1,5 +1,14 @@
 import { memo } from "react";
-import { BaseEdge, EdgeLabelRenderer, getBezierPath, type Edge, type EdgeProps } from "@xyflow/react";
+import {
+  BaseEdge,
+  EdgeLabelRenderer,
+  getBezierPath,
+  getSmoothStepPath,
+  getStraightPath,
+  type Edge,
+  type EdgeProps,
+} from "@xyflow/react";
+import { useProjectStore } from "../../state/projectStore";
 import type { AppEdge } from "../../types/planning";
 
 type PlanningFlowEdge = Edge<AppEdge["data"], "planningEdge">;
@@ -16,14 +25,21 @@ function PlanningEdgeComponent({
   selected,
   markerEnd,
 }: EdgeProps<PlanningFlowEdge>) {
-  const [edgePath, labelX, labelY] = getBezierPath({
+  const routingMode = useProjectStore((state) => state.project.settings.edgeRoutingMode ?? "bezier");
+  const pathParams = {
     sourceX,
     sourceY,
     sourcePosition,
     targetX,
     targetY,
     targetPosition,
-  });
+  };
+  const [edgePath, labelX, labelY] =
+    routingMode === "straight"
+      ? getStraightPath(pathParams)
+      : routingMode === "smooth-step"
+        ? getSmoothStepPath(pathParams)
+        : getBezierPath(pathParams);
   const lineType = data?.lineType ?? "solid";
   const className = [
     "planning-edge",

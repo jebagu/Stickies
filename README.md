@@ -153,7 +153,7 @@ The editor left rail starts with a single `File` menu for browser-local project 
 
 The public viewer lives at `/Stickies/public/`. It loads the committed static snapshot at [public/public/project.json](/Users/jeremyguillory/Documents/vibecode-projects/SS%20React%20Flow%20Charts/public/public/project.json) instead of browser localStorage.
 
-Published read-only links live at `/Stickies/public/<slug>/`. The `File` menu's `Publish` action asks the local Stickies app server to commit a frozen JSON snapshot to GitHub at `public/published/<slug>.json` and shows the matching GitHub Pages link. It does not download a file or ask for a GitHub token in the browser. Publishing does not create live collaboration and does not update the link when the editor project changes later.
+Published read-only links live at `/Stickies/public/<slug>/`. The `File` menu's `Publish` action must be run from the pinned local app at `http://127.0.0.1:5178/Stickies/`. It asks the local Stickies app server to commit a frozen JSON snapshot to GitHub at `public/published/<slug>.json` and shows the matching GitHub Pages link. The hosted GitHub Pages app is static, so it can view published snapshots but cannot save new files back to GitHub. Publishing does not download a file or ask for a GitHub token in the browser. Publishing does not create live collaboration and does not update the link when the editor project changes later.
 
 Public mode allows:
 

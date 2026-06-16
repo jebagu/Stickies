@@ -40,6 +40,7 @@ type GooglePickerGlobal = {
     };
     ViewId: {
       DOCS: string;
+      FOLDERS: string;
     };
     DocsView: new (viewId: string) => DocsView;
     PickerBuilder: new () => PickerBuilder;
@@ -54,6 +55,12 @@ export type DriveFilePick = {
   id: string;
   name: string;
   mimeType?: string;
+  url?: string;
+};
+
+export type DriveFolderPick = {
+  id: string;
+  name: string;
   url?: string;
 };
 
@@ -133,6 +140,61 @@ export async function pickDriveFile(accessToken: string): Promise<DriveFilePick 
           resolve(pickedDocument ? toDriveFilePick(pickedDocument) : null);
         } catch (error) {
           reject(error instanceof Error ? error : new Error("Google Picker returned an invalid selection."));
+        }
+      })
+      .build();
+
+    googlePicker.setVisible(true);
+  });
+}
+
+export async function pickDriveFolder(accessToken: string): Promise<DriveFolderPick | null> {
+  const config = getGoogleDriveConfig();
+
+  await loadPickerApi();
+
+  const google = getGooglePicker();
+  const picker = google?.picker;
+
+  if (!picker) {
+    throw new Error("Google Picker did not load. Check the browser console and Google Cloud setup.");
+  }
+
+  return new Promise((resolve, reject) => {
+    const folderView = new picker.DocsView(picker.ViewId.FOLDERS)
+      .setIncludeFolders(true)
+      .setSelectFolderEnabled(true);
+
+    const googlePicker = new picker.PickerBuilder()
+      .addView(folderView)
+      .setAppId(config.appId)
+      .setDeveloperKey(config.apiKey)
+      .setOAuthToken(accessToken)
+      .setCallback((response) => {
+        if (response.action === picker.Action.CANCEL) {
+          resolve(null);
+          return;
+        }
+
+        if (response.action !== picker.Action.PICKED) {
+          return;
+        }
+
+        try {
+          const pickedDocument = response.docs?.[0];
+
+          if (!pickedDocument?.id || !pickedDocument.name) {
+            resolve(null);
+            return;
+          }
+
+          resolve({
+            id: pickedDocument.id,
+            name: pickedDocument.name,
+            url: pickedDocument.url,
+          });
+        } catch (error) {
+          reject(error instanceof Error ? error : new Error("Google Picker returned an invalid folder selection."));
         }
       })
       .build();

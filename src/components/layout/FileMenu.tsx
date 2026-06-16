@@ -21,13 +21,15 @@ import {
 import { getGoogleDriveAccessToken, forgetGoogleDriveAccessToken } from "../../lib/googleDrive/auth";
 import { GOOGLE_DRIVE_MISSING_CONFIG_MESSAGE, isGoogleDriveConfigured } from "../../lib/googleDrive/config";
 import {
+  createStickiesDriveFile,
   downloadFileText,
+  ensureStickiesFileName,
   getFileMetadata,
   isDriveAuthError,
   toDriveCloudFile,
   type DriveFileMetadata,
 } from "../../lib/googleDrive/driveClient";
-import { pickDriveFile } from "../../lib/googleDrive/picker";
+import { pickDriveFile, pickDriveFolder } from "../../lib/googleDrive/picker";
 import { publishProjectSnapshot } from "../../lib/publish";
 import { useProjectStore } from "../../state/projectStore";
 import { Button } from "../ui/Button";
@@ -219,6 +221,56 @@ export function FileMenu() {
     }
   }
 
+  async function handleSaveAsToDrive() {
+    if (!isGoogleDriveConfigured()) {
+      await dialog.alert({
+        title: "Save As to Google Drive",
+        message: GOOGLE_DRIVE_MISSING_CONFIG_MESSAGE,
+      });
+      return;
+    }
+
+    const requestedName = await dialog.prompt({
+      title: "Save As to Google Drive",
+      message: "Name this Stickies project file.",
+      defaultValue: ensureStickiesFileName(project.projectName),
+      confirmLabel: "Choose Folder",
+    });
+
+    if (requestedName === null) {
+      return;
+    }
+
+    try {
+      const accessToken = await getGoogleDriveAccessToken();
+      const folder = await pickDriveFolder(accessToken);
+
+      if (!folder) {
+        return;
+      }
+
+      const metadata = await runWithDriveToken((token) =>
+        createStickiesDriveFile(token, folder.id, requestedName, project),
+      );
+      const cloudFile = toDriveCloudFile(metadata);
+      setCloudFile(cloudFile);
+
+      await dialog.alert({
+        title: "Saved to Google Drive",
+        message: cloudFile.webViewLink
+          ? `Saved "${cloudFile.name}" to Google Drive folder "${folder.name}".\n\nDrive link:\n${cloudFile.webViewLink}`
+          : `Saved "${cloudFile.name}" to Google Drive folder "${folder.name}".`,
+        copyLabel: cloudFile.webViewLink ? "Copy Link" : undefined,
+        copyText: cloudFile.webViewLink,
+      });
+    } catch (error) {
+      await dialog.alert({
+        title: "Save As to Google Drive failed",
+        message: error instanceof Error ? error.message : "The project could not be saved to Google Drive.",
+      });
+    }
+  }
+
   async function handleExport() {
     const format = await dialog.choose<ProjectExportFormat>({
       title: "Export project",
@@ -341,7 +393,7 @@ export function FileMenu() {
             <CloudUpload size={15} aria-hidden="true" />
             <span>Save to Google Drive</span>
           </button>
-          <button type="button" role="menuitem" onClick={() => runMenuAction(() => showDrivePlaceholder("Save As to Google Drive"))}>
+          <button type="button" role="menuitem" onClick={() => runMenuAction(handleSaveAsToDrive)}>
             <CloudUpload size={15} aria-hidden="true" />
             <span>Save As to Google Drive</span>
           </button>

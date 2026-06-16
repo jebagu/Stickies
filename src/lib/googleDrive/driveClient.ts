@@ -23,6 +23,7 @@ export type DriveFileMetadata = {
   modifiedTime?: string;
   version?: string;
   webViewLink?: string;
+  appProperties?: Record<string, string>;
   capabilities?: {
     canEdit?: boolean;
     canShare?: boolean;
@@ -98,6 +99,24 @@ async function fetchDrive(url: string, accessToken: string, options: RequestInit
   return response;
 }
 
+function createMultipartBody(metadata: Record<string, unknown>, fileText: string) {
+  const boundary = `stickies_${crypto.randomUUID().replaceAll("-", "")}`;
+  const body = [
+    `--${boundary}`,
+    "Content-Type: application/json; charset=UTF-8",
+    "",
+    JSON.stringify(metadata),
+    `--${boundary}`,
+    "Content-Type: application/json; charset=UTF-8",
+    "",
+    fileText,
+    `--${boundary}--`,
+    "",
+  ].join("\r\n");
+
+  return { boundary, body };
+}
+
 export async function getFileMetadata(fileId: string, accessToken: string) {
   const params = new URLSearchParams({
     fields: DRIVE_FILE_FIELDS,
@@ -114,6 +133,38 @@ export async function downloadFileText(fileId: string, accessToken: string) {
   });
   const response = await fetchDrive(`${DRIVE_API_BASE_URL}/files/${encodeURIComponent(fileId)}?${params}`, accessToken);
   return response.text();
+}
+
+export async function createStickiesDriveFile(
+  accessToken: string,
+  folderId: string,
+  name: string,
+  project: ProjectFile,
+) {
+  const metadata = {
+    name: ensureStickiesFileName(name),
+    mimeType: STICKIES_DRIVE_MIME,
+    parents: [folderId],
+    appProperties: {
+      app: "stickies",
+      schemaVersion: String(project.schemaVersion),
+    },
+  };
+  const { boundary, body } = createMultipartBody(metadata, createProjectUploadBody(project));
+  const params = new URLSearchParams({
+    uploadType: "multipart",
+    fields: DRIVE_FILE_FIELDS,
+    supportsAllDrives: "true",
+  });
+  const response = await fetchDrive(`${DRIVE_UPLOAD_BASE_URL}/files?${params}`, accessToken, {
+    method: "POST",
+    headers: {
+      "Content-Type": `multipart/related; boundary=${boundary}`,
+    },
+    body,
+  });
+
+  return assertMetadata(await response.json());
 }
 
 export function ensureStickiesFileName(name: string) {

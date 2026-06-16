@@ -563,6 +563,46 @@ For real internal data, the safer v1 workflow is:
 
 A future v2 can add authenticated shared storage.
 
+### Addendum: Google Drive Picker Native File Workflow
+
+Stickies will remain a static browser app with no Stickies-owned user accounts. Google Drive is the user's account, file system, storage layer, and sharing layer. The app is an editor for Stickies project files, not a hosted project database.
+
+The primary user workflow is:
+
+1. User can start blank immediately without Google authorization.
+2. User can browse built-in examples without Google authorization.
+3. User clicks `Open from Google Drive` when they want to open a cloud file.
+4. Stickies requests Google authorization only at the moment Drive access is needed.
+5. Google Picker opens as the user's Drive-native file chooser.
+6. User chooses a Stickies-compatible JSON file.
+7. Stickies validates the project JSON using the existing validation path, then replaces the current project only after confirmation.
+8. User clicks `Save to Google Drive` to update the currently bound Drive file.
+9. If there is no currently bound Drive file, `Save to Google Drive` routes to `Save As to Google Drive`.
+10. `Save As to Google Drive` asks for a file name and uses Google Picker folder selection to choose the destination folder.
+11. Stickies creates a `.stickies.json` Drive file in the selected folder.
+12. Existing browser localStorage autosave remains as a local recovery backup.
+13. Drive save is explicit in the first implementation. Do not silently autosave every canvas move to Drive in this package.
+14. `Share` opens Google's Drive sharing dialog for the bound Drive file.
+15. View-only Drive files should open read-only, with a visible `Save a copy` path.
+16. Recently opened Drive files may be remembered locally, but Drive remains the source of truth.
+17. No backend, password system, user profile, app-owned permission database, or custom cloud file browser is introduced.
+18. Current local JSON import/export remains available.
+19. Current GitHub public snapshot publishing remains available but is separate from Drive saving.
+20. Public gallery and Drive UI `Open with Stickies` integration are deferred unless a later work package explicitly adds them.
+
+Technical constraints:
+
+- Use `https://www.googleapis.com/auth/drive.file`, not full Drive scope.
+- Use Google Identity Services for access tokens.
+- Use Google Picker for opening files and choosing save folders.
+- Use Drive API `files.get`, `files.create`, and `files.update`.
+- Use multipart upload for project JSON file creation and update.
+- Keep access tokens in memory only.
+- Do not put client secrets in the browser.
+- Use Vite env variables for public Google client configuration.
+- Drive files created by Stickies should use a clear filename suffix, preferably `.stickies.json`.
+- Project JSON schema should remain compatible with existing `ProjectFile` validation.
+
 ## 16. Data model
 
 Use this as the conceptual TypeScript model.

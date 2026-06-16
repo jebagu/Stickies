@@ -167,6 +167,46 @@ export async function createStickiesDriveFile(
   return assertMetadata(await response.json());
 }
 
+export async function updateStickiesDriveFile(
+  accessToken: string,
+  fileId: string,
+  project: ProjectFile,
+  expectedVersion?: string,
+) {
+  const currentMetadata = await getFileMetadata(fileId, accessToken);
+
+  if (currentMetadata.capabilities?.canEdit === false) {
+    throw new Error("This Google Drive file is view-only. Use Save As to Google Drive to make an editable copy.");
+  }
+
+  if (expectedVersion && currentMetadata.version && currentMetadata.version !== expectedVersion) {
+    throw new Error("This Google Drive file changed outside Stickies. Open the latest Drive file or use Save As to avoid overwriting another change.");
+  }
+
+  const metadata = {
+    mimeType: STICKIES_DRIVE_MIME,
+    appProperties: {
+      app: "stickies",
+      schemaVersion: String(project.schemaVersion),
+    },
+  };
+  const { boundary, body } = createMultipartBody(metadata, createProjectUploadBody(project));
+  const params = new URLSearchParams({
+    uploadType: "multipart",
+    fields: DRIVE_FILE_FIELDS,
+    supportsAllDrives: "true",
+  });
+  const response = await fetchDrive(`${DRIVE_UPLOAD_BASE_URL}/files/${encodeURIComponent(fileId)}?${params}`, accessToken, {
+    method: "PATCH",
+    headers: {
+      "Content-Type": `multipart/related; boundary=${boundary}`,
+    },
+    body,
+  });
+
+  return assertMetadata(await response.json());
+}
+
 export function ensureStickiesFileName(name: string) {
   const trimmedName = name.trim() || "Stickies project";
   return trimmedName.toLowerCase().endsWith(STICKIES_FILE_SUFFIX) ? trimmedName : `${trimmedName}${STICKIES_FILE_SUFFIX}`;

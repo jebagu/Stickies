@@ -1,7 +1,8 @@
 import type { CSSProperties } from "react";
-import { Lock, Monitor, Presentation, Settings, Unlock } from "lucide-react";
+import { Download, Lock, Monitor, Presentation, Settings, Unlock } from "lucide-react";
 import { isPublicViewMode } from "../../lib/appMode";
 import { isGeneratedGraphTab } from "../../lib/generatedGraph";
+import { downloadProjectJson } from "../../lib/exportImport";
 import {
   EDGE_ROUTING_OPTIONS,
   NODE_HANDLE_OPTIONS,
@@ -20,8 +21,31 @@ const logoMaskStyle = {
   "--top-bar-logo-url": `url("${import.meta.env.BASE_URL}favicon.svg")`,
 } as CSSProperties;
 
+function formatCloudStatusLabel(cloudSaveStatus: ReturnType<typeof useProjectStore.getState>["cloudSaveStatus"]) {
+  if (cloudSaveStatus === "saving") {
+    return "Saving to Drive";
+  }
+
+  if (cloudSaveStatus === "saved") {
+    return "Saved to Drive";
+  }
+
+  if (cloudSaveStatus === "error") {
+    return "Drive save failed";
+  }
+
+  if (cloudSaveStatus === "read-only") {
+    return "View-only Drive file";
+  }
+
+  return "Local draft";
+}
+
 export function TopBar() {
   const {
+    cloudError,
+    cloudFile,
+    cloudSaveStatus,
     project,
     viewMode,
     setEdgeRoutingMode,
@@ -37,6 +61,9 @@ export function TopBar() {
   const activeTab = project.tabs.find((tab) => tab.id === project.activeTabId) ?? project.tabs[0];
   const generatedTab = isGeneratedGraphTab(activeTab);
   const generatedLayoutUnlocked = project.settings.readOnlyGeneratedTabs === false;
+  const showDirectJsonExport = project.schemaVersion === 2;
+  const projectSourceName = cloudFile?.name ?? project.projectName;
+  const cloudStatusLabel = formatCloudStatusLabel(cloudSaveStatus);
 
   return (
     <header className="top-bar">
@@ -45,6 +72,9 @@ export function TopBar() {
           <span className="top-bar__logo" style={logoMaskStyle} aria-hidden="true" />
           <h1>Stickies</h1>
         </div>
+        <p title={cloudError ?? undefined}>
+          {projectSourceName} · {cloudStatusLabel}
+        </p>
       </div>
 
       <div className="top-bar__actions">
@@ -95,6 +125,16 @@ export function TopBar() {
           >
             {generatedLayoutUnlocked ? <Unlock size={16} aria-hidden="true" /> : <Lock size={16} aria-hidden="true" />}
             {generatedLayoutUnlocked ? "Layout Unlocked" : "Unlock Layout"}
+          </Button>
+        ) : null}
+        {showDirectJsonExport ? (
+          <Button
+            variant="secondary"
+            onClick={() => downloadProjectJson(project)}
+            title="Export this schema v2 project as JSON"
+          >
+            <Download size={16} aria-hidden="true" />
+            Export JSON
           </Button>
         ) : null}
         {presentationMode || readOnly ? null : (

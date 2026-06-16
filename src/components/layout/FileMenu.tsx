@@ -27,6 +27,7 @@ import {
   getFileMetadata,
   isDriveAuthError,
   toDriveCloudFile,
+  updateStickiesDriveFile,
   type DriveFileMetadata,
 } from "../../lib/googleDrive/driveClient";
 import { pickDriveFile, pickDriveFolder } from "../../lib/googleDrive/picker";
@@ -40,7 +41,17 @@ export function FileMenu() {
   const menuRef = useRef<HTMLDivElement>(null);
   const fileInputRef = useRef<HTMLInputElement>(null);
   const dialog = useDialog();
-  const { project, createNewProject, closeProject, createSnapshot, importProject, setCloudFile } = useProjectStore();
+  const {
+    project,
+    cloudFile,
+    createNewProject,
+    closeProject,
+    createSnapshot,
+    importProject,
+    setCloudError,
+    setCloudFile,
+    setCloudSaveStatus,
+  } = useProjectStore();
 
   useEffect(() => {
     if (!open) {
@@ -271,6 +282,38 @@ export function FileMenu() {
     }
   }
 
+  async function handleSaveToDrive() {
+    if (!cloudFile) {
+      await handleSaveAsToDrive();
+      return;
+    }
+
+    if (!cloudFile.canEdit) {
+      setCloudSaveStatus("read-only");
+      await dialog.alert({
+        title: "View-only Drive file",
+        message: "This Google Drive file is view-only for your account. Use Save As to Google Drive to make an editable copy.",
+      });
+      return;
+    }
+
+    try {
+      setCloudSaveStatus("saving");
+      setCloudError(undefined);
+      const metadata = await runWithDriveToken((token) =>
+        updateStickiesDriveFile(token, cloudFile.id, project, cloudFile.version),
+      );
+      setCloudFile(toDriveCloudFile(metadata));
+    } catch (error) {
+      const message = error instanceof Error ? error.message : "The project could not be saved to Google Drive.";
+      setCloudError(message);
+      await dialog.alert({
+        title: "Save to Google Drive failed",
+        message,
+      });
+    }
+  }
+
   async function handleExport() {
     const format = await dialog.choose<ProjectExportFormat>({
       title: "Export project",
@@ -389,7 +432,7 @@ export function FileMenu() {
             <Cloud size={15} aria-hidden="true" />
             <span>Open from Google Drive</span>
           </button>
-          <button type="button" role="menuitem" onClick={() => runMenuAction(() => showDrivePlaceholder("Save to Google Drive"))}>
+          <button type="button" role="menuitem" onClick={() => runMenuAction(handleSaveToDrive)}>
             <CloudUpload size={15} aria-hidden="true" />
             <span>Save to Google Drive</span>
           </button>

@@ -19,7 +19,14 @@ import {
   rebuildStageBandNodes,
   rememberCurrentStageRects,
 } from "../lib/stageLayout";
-import { clearProjectStorage, loadProjectFromStorage, saveProjectToStorage } from "../lib/storage";
+import {
+  clearDriveFileStorage,
+  clearProjectStorage,
+  loadDriveFileFromStorage,
+  loadProjectFromStorage,
+  saveDriveFileToStorage,
+  saveProjectToStorage,
+} from "../lib/storage";
 import { isPlanningNodeData } from "../types/planning";
 import type {
   AppEdge,
@@ -56,6 +63,7 @@ export type SelectedElement =
   | null;
 
 export type SaveStatus = "saved" | "saving" | "unsaved" | "error";
+export type CloudSaveStatus = "local" | "saving" | "saved" | "error" | "read-only";
 
 type CreateNodeInput = {
   title?: string;
@@ -76,7 +84,10 @@ type ProjectState = {
   filters: TabFilters;
   saveStatus: SaveStatus;
   cloudFile?: DriveCloudFile;
+  cloudSaveStatus: CloudSaveStatus;
+  cloudError?: string;
   lastSavedAt?: string;
+  lastCloudSavedAt?: string;
   storageWarning?: string;
   importError?: string;
   inspectorHidden: boolean;
@@ -114,6 +125,9 @@ type ProjectState = {
   exportProject: () => void;
   importProject: (project: ProjectFile) => void;
   setCloudFile: (cloudFile: DriveCloudFile | undefined) => void;
+  clearCloudFile: () => void;
+  setCloudSaveStatus: (cloudSaveStatus: CloudSaveStatus) => void;
+  setCloudError: (cloudError: string | undefined) => void;
   setTheme: (themeId: ThemeId) => void;
   setEdgeRoutingMode: (edgeRoutingMode: EdgeRoutingMode) => void;
   setNodeHandleMode: (nodeHandleMode: NodeHandleMode) => void;
@@ -455,6 +469,14 @@ function commitViewProject(
   commitProject(project, set, extraState, { persist: false });
 }
 
+function getCloudSaveStatus(cloudFile: DriveCloudFile | undefined): CloudSaveStatus {
+  if (!cloudFile) {
+    return "local";
+  }
+
+  return cloudFile.canEdit ? "saved" : "read-only";
+}
+
 export const useProjectStore = create<ProjectState>((set, get) => ({
   viewMode: getAppViewMode(),
   project: initialProject,
@@ -463,7 +485,10 @@ export const useProjectStore = create<ProjectState>((set, get) => ({
   filters: {},
   saveStatus: "saved",
   cloudFile: undefined,
+  cloudSaveStatus: "local",
+  cloudError: undefined,
   lastSavedAt: undefined,
+  lastCloudSavedAt: undefined,
   storageWarning: undefined,
   importError: undefined,
   inspectorHidden: false,
@@ -481,9 +506,12 @@ export const useProjectStore = create<ProjectState>((set, get) => ({
         selectedElement: null,
         saveStatus: "saved",
         cloudFile: undefined,
+        cloudSaveStatus: "local",
+        cloudError: undefined,
         storageWarning: result.warning,
         importError: undefined,
         lastSavedAt: undefined,
+        lastCloudSavedAt: undefined,
         inspectorHidden: false,
       });
       return;
@@ -491,6 +519,12 @@ export const useProjectStore = create<ProjectState>((set, get) => ({
 
     const result = loadProjectFromStorage();
     const project = normalizeProjectStageColumns(result.project);
+    const cloudFile = result.source === "localStorage" ? loadDriveFileFromStorage(project) : undefined;
+
+    if (!cloudFile) {
+      clearDriveFileStorage();
+    }
+
     set({
       viewMode,
       project,
@@ -498,9 +532,12 @@ export const useProjectStore = create<ProjectState>((set, get) => ({
       filters: getActiveTab(project, project.activeTabId).filters ?? {},
       selectedElement: null,
       saveStatus: "saved",
-      cloudFile: undefined,
+      cloudFile,
+      cloudSaveStatus: getCloudSaveStatus(cloudFile),
+      cloudError: undefined,
       storageWarning: result.warning,
       importError: undefined,
+      lastCloudSavedAt: undefined,
       inspectorHidden: false,
     });
   },
@@ -511,11 +548,15 @@ export const useProjectStore = create<ProjectState>((set, get) => ({
       return;
     }
 
+    clearDriveFileStorage();
     commitProject(createBlankProject(), set, {
       selectedElement: null,
       storageWarning: undefined,
       importError: undefined,
       cloudFile: undefined,
+      cloudSaveStatus: "local",
+      cloudError: undefined,
+      lastCloudSavedAt: undefined,
       inspectorHidden: false,
     });
   },
@@ -527,11 +568,15 @@ export const useProjectStore = create<ProjectState>((set, get) => ({
     }
 
     clearProjectStorage();
+    clearDriveFileStorage();
     commitProject(createBlankProject(), set, {
       selectedElement: null,
       storageWarning: undefined,
       importError: undefined,
       cloudFile: undefined,
+      cloudSaveStatus: "local",
+      cloudError: undefined,
+      lastCloudSavedAt: undefined,
       inspectorHidden: false,
     });
   },
@@ -543,11 +588,15 @@ export const useProjectStore = create<ProjectState>((set, get) => ({
     }
 
     clearProjectStorage();
+    clearDriveFileStorage();
     commitProject(createSeedProject(), set, {
       selectedElement: null,
       storageWarning: undefined,
       importError: undefined,
       cloudFile: undefined,
+      cloudSaveStatus: "local",
+      cloudError: undefined,
+      lastCloudSavedAt: undefined,
     });
   },
 
@@ -1249,6 +1298,7 @@ export const useProjectStore = create<ProjectState>((set, get) => ({
 
     try {
       saveProjectToStorage(editableProject);
+      clearDriveFileStorage();
       set({
         viewMode: "editor",
         project: editableProject,
@@ -1260,6 +1310,9 @@ export const useProjectStore = create<ProjectState>((set, get) => ({
         storageWarning: undefined,
         importError: undefined,
         cloudFile: undefined,
+        cloudSaveStatus: "local",
+        cloudError: undefined,
+        lastCloudSavedAt: undefined,
         inspectorHidden: false,
       });
       return true;
@@ -1286,6 +1339,7 @@ export const useProjectStore = create<ProjectState>((set, get) => ({
       return;
     }
 
+    clearDriveFileStorage();
     commitProject(
       normalizeProjectStageColumns({
         ...structuredClone(project),
@@ -1296,12 +1350,53 @@ export const useProjectStore = create<ProjectState>((set, get) => ({
         selectedElement: null,
         importError: undefined,
         cloudFile: undefined,
+        cloudSaveStatus: "local",
+        cloudError: undefined,
+        lastCloudSavedAt: undefined,
       },
     );
   },
 
   setCloudFile: (cloudFile) => {
-    set({ cloudFile });
+    if (!cloudFile) {
+      clearDriveFileStorage();
+      set({
+        cloudFile: undefined,
+        cloudSaveStatus: "local",
+        cloudError: undefined,
+        lastCloudSavedAt: undefined,
+      });
+      return;
+    }
+
+    saveDriveFileToStorage(cloudFile, get().project);
+    set({
+      cloudFile,
+      cloudSaveStatus: getCloudSaveStatus(cloudFile),
+      cloudError: undefined,
+      lastCloudSavedAt: nowIso(),
+    });
+  },
+
+  clearCloudFile: () => {
+    clearDriveFileStorage();
+    set({
+      cloudFile: undefined,
+      cloudSaveStatus: "local",
+      cloudError: undefined,
+      lastCloudSavedAt: undefined,
+    });
+  },
+
+  setCloudSaveStatus: (cloudSaveStatus) => {
+    set({ cloudSaveStatus });
+  },
+
+  setCloudError: (cloudError) => {
+    set({
+      cloudError,
+      cloudSaveStatus: cloudError ? "error" : getCloudSaveStatus(get().cloudFile),
+    });
   },
 
   setTheme: (themeId) => {

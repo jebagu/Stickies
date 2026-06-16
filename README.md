@@ -147,7 +147,8 @@ The editor left rail starts with a single `File` menu for browser-local project 
 - `Save Snapshot`: creates a named snapshot inside the current project. Autosave to localStorage still happens in the background.
 - `Open from Google Drive`: requests Google authorization when needed, opens Google Picker, validates the selected Stickies-compatible JSON file, and replaces the current project only after confirmation.
 - `Save As to Google Drive`: asks for a file name, uses Google Picker folder selection, creates a `.stickies.json` file in the selected Drive folder, and binds the current project to that Drive file for later cloud actions.
-- `Save to Google Drive` and `Share Drive File`: visible placeholders for upcoming Drive workflow slices. Until those slices are complete, these actions show a setup message and do not change the project.
+- `Save to Google Drive`: updates the currently bound Drive file. If the project is not bound to Drive yet, it routes to `Save As to Google Drive`.
+- `Share Drive File`: visible placeholder for an upcoming Drive workflow slice. Until that slice is complete, this action shows a setup message and does not change the project.
 - `Publish`: saves a frozen read-only snapshot to GitHub with a random slug link. Later edits do not update that published snapshot.
 - `Export`: downloads a JSON project file, Markdown, or DOCX file.
 - `Version History`: shows the most recent saved snapshots.

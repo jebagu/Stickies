@@ -46,6 +46,28 @@ http://127.0.0.1:5178/Stickies/public/
 
 The dev server is pinned in [vite.config.ts](/Users/jeremyguillory/Documents/vibecode-projects/SS%20React%20Flow%20Charts/vite.config.ts) with strict-port behavior. If port `5178` is already occupied, stop the stale server instead of silently changing the permanent URL.
 
+## Google Drive Picker Setup
+
+Stickies can open, save, and share `.stickies.json` files in the user's own Google Drive. Stickies does not create app accounts, store passwords, run a backend, or maintain an app-owned permission database. Google Drive is the account, file system, storage layer, and sharing layer. Browser localStorage remains a local recovery backup, and full real-time collaboration is not included.
+
+To enable Drive actions, create Google Cloud web credentials for this static app:
+
+- Enable the Google Drive API and Google Picker API in the Google Cloud project.
+- Create an OAuth client ID for a web app.
+- Create an API key allowed to use Picker/Drive from the app origins.
+- Add authorized JavaScript origins for local dev and the deployed site, for example `http://127.0.0.1:5178` and the GitHub Pages origin.
+- Keep using the narrow `https://www.googleapis.com/auth/drive.file` scope. Do not switch to full Drive scope unless a later PRD explicitly changes the permission model.
+
+Create `.env.local` from [.env.example](/Users/jeremyguillory/Documents/vibecode-projects/SS%20React%20Flow%20Charts/.env.example):
+
+```txt
+VITE_GOOGLE_CLIENT_ID=your-web-oauth-client-id
+VITE_GOOGLE_API_KEY=your-browser-api-key
+VITE_GOOGLE_APP_ID=your-google-cloud-project-number-or-app-id
+```
+
+These are public browser configuration values, not secrets. Do not add client secrets, refresh tokens, or access tokens to the app. Access tokens are requested with Google Identity Services only when the user chooses a Drive action and are kept in memory only.
+
 ## Commands
 
 Run the local dev server:
@@ -204,7 +226,7 @@ project-planner-YYYY-MM-DD-HHmm.md
 project-planner-YYYY-MM-DD-HHmm.docx
 ```
 
-Use `Save` for an internal snapshot. Use `Export` when you need a file outside this browser.
+Use `Save Snapshot` for an internal snapshot. Use `Export` when you need a file outside this browser.
 
 ## Snapshots
 

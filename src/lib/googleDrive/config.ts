@@ -12,11 +12,17 @@ export type GoogleDriveConfig = {
 export const GOOGLE_DRIVE_MISSING_CONFIG_MESSAGE =
   "Google Drive is not configured. Add VITE_GOOGLE_CLIENT_ID, VITE_GOOGLE_API_KEY, and VITE_GOOGLE_APP_ID to .env.local.";
 
+function getViteEnv() {
+  return import.meta.env ?? {};
+}
+
 export function getGoogleDriveConfig(): GoogleDriveConfig {
+  const env = getViteEnv();
+
   return {
-    clientId: import.meta.env.VITE_GOOGLE_CLIENT_ID?.trim() ?? "",
-    apiKey: import.meta.env.VITE_GOOGLE_API_KEY?.trim() ?? "",
-    appId: import.meta.env.VITE_GOOGLE_APP_ID?.trim() ?? "",
+    clientId: env.VITE_GOOGLE_CLIENT_ID?.trim() ?? "",
+    apiKey: env.VITE_GOOGLE_API_KEY?.trim() ?? "",
+    appId: env.VITE_GOOGLE_APP_ID?.trim() ?? "",
   };
 }
 

@@ -2,7 +2,15 @@ import { readFileSync } from "node:fs";
 import { join } from "node:path";
 import test from "node:test";
 import assert from "node:assert/strict";
+import { createProjectJson, parseProjectJsonText } from "../src/lib/exportImport.ts";
 import { isTabLayoutLocked, isTabReadOnly } from "../src/lib/generatedGraph.ts";
+import { getGoogleDriveConfig, isGoogleDriveConfigured } from "../src/lib/googleDrive/config.ts";
+import { ensureStickiesFileName, type DriveCloudFile } from "../src/lib/googleDrive/driveClient.ts";
+import {
+  DRIVE_RECENTS_STORAGE_KEY,
+  loadDriveRecentFiles,
+  rememberDriveRecentFile,
+} from "../src/lib/googleDrive/recents.ts";
 import { validateProjectFile } from "../src/lib/validation.ts";
 import type { ProjectFile } from "../src/types/planning.ts";
 
@@ -20,6 +28,48 @@ function expectValidProject(name: string): ProjectFile {
   return result.project;
 }
 
+function withMockLocalStorage(runTest: () => void) {
+  const storage = new Map<string, string>();
+  const originalWindow = globalThis.window;
+
+  Object.defineProperty(globalThis, "window", {
+    configurable: true,
+    value: {
+      localStorage: {
+        getItem: (key: string) => storage.get(key) ?? null,
+        setItem: (key: string, value: string) => {
+          storage.set(key, value);
+        },
+        removeItem: (key: string) => {
+          storage.delete(key);
+        },
+      },
+    },
+  });
+
+  try {
+    runTest();
+  } finally {
+    Object.defineProperty(globalThis, "window", {
+      configurable: true,
+      value: originalWindow,
+    });
+  }
+}
+
+function createDriveCloudFile(id: string): DriveCloudFile {
+  return {
+    id,
+    name: `Drive file ${id}.stickies.json`,
+    modifiedTime: `2026-06-16T00:00:${id.padStart(2, "0")}.000Z`,
+    version: id,
+    webViewLink: `https://drive.google.com/file/d/${id}/view`,
+    canEdit: true,
+    canShare: true,
+    canDownload: true,
+  };
+}
+
 test("schema v1 fixture still imports", () => {
   const project = expectValidProject("schema-v1-project.json");
 
@@ -34,6 +84,71 @@ test("schema v2 generated fixture imports and preserves graph project fields", (
   assert.equal(project.projectOrigin?.source, "SFW Graph Analyzer");
   assert.equal(project.graphSnapshots?.[0]?.id, "snapshot-20260615");
   assert.equal(project.softwareGraphNavigation?.defaultTabId, "tab-project-map");
+});
+
+test("schema v2 native export round-trips analyzer metadata", () => {
+  const project = expectValidProject("ss-react-flow-project-v2.json");
+  const exported = JSON.parse(createProjectJson(project)) as unknown;
+  const result = validateProjectFile(exported);
+
+  assert.equal(result.ok, true, result.ok ? "" : result.errors.join("\n"));
+
+  const roundTrippedProject = result.project;
+  const firstNode = roundTrippedProject.tabs[0]?.nodes[0];
+  const firstEdge = roundTrippedProject.tabs[0]?.edges[0];
+
+  assert.equal(roundTrippedProject.schemaVersion, 2);
+  assert.equal(roundTrippedProject.projectOrigin?.sourcePath, "/workspace/sample-app");
+  assert.equal(roundTrippedProject.graphSnapshots?.[0]?.buildIdentity, "main@abc123");
+  assert.equal(roundTrippedProject.softwareGraphNavigation?.defaultTabId, "tab-project-map");
+  assert.equal(firstNode?.data.softwareGraph?.sourcePath, "src/App.tsx");
+  assert.equal(firstEdge?.data.softwareGraph?.edgeKind, "import");
+});
+
+test("project JSON text parser uses the shared validation path", () => {
+  const projectText = JSON.stringify(readFixture("schema-v1-project.json"));
+  const result = parseProjectJsonText(projectText, "schema-v1-project.json");
+
+  assert.equal(result.ok, true, result.ok ? "" : result.error);
+  assert.equal(result.project.schemaVersion, 1);
+});
+
+test("Stickies Drive filenames append suffix exactly once", () => {
+  assert.equal(ensureStickiesFileName("Venue plan"), "Venue plan.stickies.json");
+  assert.equal(ensureStickiesFileName("Venue plan.stickies.json"), "Venue plan.stickies.json");
+  assert.equal(ensureStickiesFileName(""), "Stickies project.stickies.json");
+});
+
+test("Drive recents cap at 10 and deduplicate by file ID", () => {
+  withMockLocalStorage(() => {
+    for (let index = 1; index <= 11; index += 1) {
+      rememberDriveRecentFile(createDriveCloudFile(String(index)), `2026-06-16T00:${String(index).padStart(2, "0")}:00.000Z`);
+    }
+
+    rememberDriveRecentFile(
+      {
+        ...createDriveCloudFile("5"),
+        name: "Updated file 5.stickies.json",
+      },
+      "2026-06-16T01:00:00.000Z",
+    );
+
+    const recents = loadDriveRecentFiles();
+    assert.equal(recents.length, 10);
+    assert.equal(recents[0]?.id, "5");
+    assert.equal(recents[0]?.name, "Updated file 5.stickies.json");
+    assert.equal(recents.filter((recent) => recent.id === "5").length, 1);
+    assert.ok(window.localStorage.getItem(DRIVE_RECENTS_STORAGE_KEY));
+  });
+});
+
+test("Google Drive config reports missing public config", () => {
+  assert.deepEqual(getGoogleDriveConfig(), {
+    clientId: "",
+    apiKey: "",
+    appId: "",
+  });
+  assert.equal(isGoogleDriveConfigured(), false);
 });
 
 test("schema v2 without stages imports with normalized empty stages", () => {

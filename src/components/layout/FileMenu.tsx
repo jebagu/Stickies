@@ -1,6 +1,8 @@
 import { useEffect, useRef, useState, type ChangeEvent } from "react";
 import {
   ChevronDown,
+  Cloud,
+  CloudUpload,
   Download,
   FilePlus2,
   FolderOpen,
@@ -11,6 +13,7 @@ import {
   XCircle,
 } from "lucide-react";
 import { downloadProjectExport, parseProjectJsonFile, type ProjectExportFormat } from "../../lib/exportImport";
+import { GOOGLE_DRIVE_MISSING_CONFIG_MESSAGE, isGoogleDriveConfigured } from "../../lib/googleDrive/config";
 import { publishProjectSnapshot } from "../../lib/publish";
 import { useProjectStore } from "../../state/projectStore";
 import { Button } from "../ui/Button";
@@ -118,6 +121,15 @@ export function FileMenu() {
     }
   }
 
+  async function showDrivePlaceholder(actionLabel: string) {
+    await dialog.alert({
+      title: actionLabel,
+      message: isGoogleDriveConfigured()
+        ? "Google Drive setup is present. This action will be enabled by the next Google Drive implementation slice."
+        : GOOGLE_DRIVE_MISSING_CONFIG_MESSAGE,
+    });
+  }
+
   async function handleExport() {
     const format = await dialog.choose<ProjectExportFormat>({
       title: "Export project",
@@ -126,8 +138,8 @@ export function FileMenu() {
       choices: [
         {
           value: "native",
-          label: "native",
-          description: "the format this flowchart app uses",
+          label: "JSON project file",
+          description: "round-trips schema v1/v2 project data and metadata",
         },
         {
           value: "markdown",
@@ -220,7 +232,7 @@ export function FileMenu() {
           </button>
           <button type="button" role="menuitem" onClick={() => runMenuAction(() => fileInputRef.current?.click())}>
             <FolderOpen size={15} aria-hidden="true" />
-            <span>Open</span>
+            <span>Open local JSON</span>
           </button>
           <button type="button" role="menuitem" onClick={() => runMenuAction(handleCloseProject)}>
             <XCircle size={15} aria-hidden="true" />
@@ -229,8 +241,26 @@ export function FileMenu() {
           <span className="file-menu__separator" aria-hidden="true" />
           <button type="button" role="menuitem" onClick={() => runMenuAction(handleSaveSnapshot)}>
             <Save size={15} aria-hidden="true" />
-            <span>Save</span>
+            <span>Save Snapshot</span>
           </button>
+          <span className="file-menu__separator" aria-hidden="true" />
+          <button type="button" role="menuitem" onClick={() => runMenuAction(() => showDrivePlaceholder("Open from Google Drive"))}>
+            <Cloud size={15} aria-hidden="true" />
+            <span>Open from Google Drive</span>
+          </button>
+          <button type="button" role="menuitem" onClick={() => runMenuAction(() => showDrivePlaceholder("Save to Google Drive"))}>
+            <CloudUpload size={15} aria-hidden="true" />
+            <span>Save to Google Drive</span>
+          </button>
+          <button type="button" role="menuitem" onClick={() => runMenuAction(() => showDrivePlaceholder("Save As to Google Drive"))}>
+            <CloudUpload size={15} aria-hidden="true" />
+            <span>Save As to Google Drive</span>
+          </button>
+          <button type="button" role="menuitem" onClick={() => runMenuAction(() => showDrivePlaceholder("Share Drive File"))}>
+            <Share2 size={15} aria-hidden="true" />
+            <span>Share Drive File</span>
+          </button>
+          <span className="file-menu__separator" aria-hidden="true" />
           <button type="button" role="menuitem" onClick={() => runMenuAction(handlePublish)}>
             <Share2 size={15} aria-hidden="true" />
             <span>Publish</span>

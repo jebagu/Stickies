@@ -142,11 +142,12 @@ Validation lives in [src/lib/validation.ts](/Users/jeremyguillory/Documents/vibe
 The editor left rail starts with a single `File` menu for browser-local project lifecycle actions:
 
 - `New`: replaces the current browser project with a blank project after confirmation.
-- `Open`: imports a native `.json` project file after validation and confirmation.
+- `Open local JSON`: imports a native `.json` project file after validation and confirmation.
 - `Close`: clears the current browser project and switches to a blank project after confirmation.
-- `Save`: creates a named snapshot inside the current project. Autosave to localStorage still happens in the background.
+- `Save Snapshot`: creates a named snapshot inside the current project. Autosave to localStorage still happens in the background.
+- `Open from Google Drive`, `Save to Google Drive`, `Save As to Google Drive`, and `Share Drive File`: visible placeholders for the Drive Picker workflow. Until Google configuration is present and the Drive implementation slices are complete, these actions show a setup message and do not change the project.
 - `Publish`: saves a frozen read-only snapshot to GitHub with a random slug link. Later edits do not update that published snapshot.
-- `Export`: downloads a native JSON, Markdown, or DOCX file.
+- `Export`: downloads a JSON project file, Markdown, or DOCX file.
 - `Version History`: shows the most recent saved snapshots.
 
 ## Public Read-Only View
@@ -177,15 +178,15 @@ To update a published slug, publish again to create a new `public/published/<slu
 
 Export/import helpers live in [src/lib/exportImport.ts](/Users/jeremyguillory/Documents/vibecode-projects/SS%20React%20Flow%20Charts/src/lib/exportImport.ts).
 
-The left-rail `File` menu contains `Open` and `Export`. `Open` only accepts `.json` project files, validates schema version `1` or `2`, and replaces the current project only after confirmation. It also accepts simplified Stickies JSON shaped as `version`, `name`, and `tabs`; those imports keep nodes, notes, edge labels, and canvas positions while using empty people, workstream, and tag lists internally.
+The left-rail `File` menu contains `Open local JSON` and `Export`. `Open local JSON` only accepts `.json` project files, validates schema version `1` or `2`, and replaces the current project only after confirmation. It also accepts simplified Stickies JSON shaped as `version`, `name`, and `tabs`; those imports keep nodes, notes, edge labels, and canvas positions while using empty people, workstream, and tag lists internally.
 
-Schema v2 imports are for analyzer-generated software graph projects such as `ss-react-flow-project-v2.json`. The importer preserves `projectOrigin`, `graphSnapshots`, `softwareGraphNavigation`, generated tab metadata, and each node/edge `data.softwareGraph` payload. Generated tabs may omit `stages`; the app normalizes missing stages to an empty array only for renderer compatibility. If a v2 file omits `settings.themeId`, the app applies the default `clean-light` theme while preserving analyzer settings such as `generatedSoftwareGraph` and `readOnlyGeneratedTabs`.
+Schema v2 imports are for analyzer-generated software graph projects such as `ss-react-flow-project-v2.json`. The importer preserves `projectOrigin`, `graphSnapshots`, `softwareGraphNavigation`, generated tab metadata, and each node/edge `data.softwareGraph` payload. Generated tabs may omit `stages`; the app normalizes missing stages to an empty array only for renderer compatibility. If a v2 file omits `settings.themeId`, the app applies the default `clean-light` theme while preserving analyzer settings such as `generatedSoftwareGraph` and `readOnlyGeneratedTabs`. When a schema v2 project is loaded, the top bar shows a direct `Export JSON` button that downloads the current v2 project file without converting it to a planning-only outline.
 
 Project settings may include `edgeRoutingMode` (`bezier`, `smooth-step`, or `straight`) and `nodeHandleMode` (`side` or `all-sides`). Missing values fall back to curved arrows with side handles so older project JSON files continue to load.
 
 `Export` opens a centered format picker with three options:
 
-- `native`: the JSON format this flowchart app uses.
+- `JSON project file`: the native project JSON format this flowchart app uses, preserving schema v1/v2 project data and metadata.
 - `markdown`: a human-readable `.md` outline that is good to import into AI tools.
 - `DOCX`: a plain human-readable Word document generated from the same outline.
 
@@ -243,7 +244,7 @@ Inspector files:
 - [src/components/inspectors/EdgeInspector.tsx](/Users/jeremyguillory/Documents/vibecode-projects/SS%20React%20Flow%20Charts/src/components/inspectors/EdgeInspector.tsx)
 - [src/components/inspectors/TabInspector.tsx](/Users/jeremyguillory/Documents/vibecode-projects/SS%20React%20Flow%20Charts/src/components/inspectors/TabInspector.tsx)
 
-In editor mode, users can add planning items, create/rename/delete tabs, edit the active tab's stages from the left sidebar, switch the active tab between vertical stages and horizontal lanes, edit a selected item's title, note, status, and associations, duplicate/delete items, edit/delete selected edges, set edge line types, change arrow routing, change node handle placement, recompute arrows, hide/show the inspector, create/restore snapshots, import/export JSON, and toggle MiniMap, Settings, and Presentation modes.
+In editor mode, users can add planning items, create/rename/delete tabs, edit the active tab's stages from the left sidebar, switch the active tab between vertical stages and horizontal lanes, edit a selected item's title, note, status, and associations, duplicate/delete items, edit/delete selected edges, set edge line types, change arrow routing, change node handle placement, recompute arrows, hide/show the inspector, create/restore snapshots, import/export JSON, and toggle MiniMap, Settings, and Presentation modes. Schema v2 projects also expose a direct top-bar `Export JSON` action.
 
 Generated software graph tabs are read-only by default, so nodes do not drag, generated contents cannot be accidentally edited, and the left-rail stage editor is hidden for those tabs. Use the top-bar `Unlock Layout` control on a generated tab when node positions need to be adjusted; this unlocks layout movement while keeping generated content edits blocked. Existing planning tabs remain editable. The node and edge inspectors show software graph metadata when present, including kind, source path and line range, confidence, provenance source type, extractor, observed time, build ID, snapshot ID, and metadata summary.
 

@@ -375,7 +375,8 @@ function updateSettings(
 let saveTimer: number | undefined;
 
 function canEditProject(get: () => ProjectState) {
-  return !isPublicViewMode(get().viewMode);
+  const state = get();
+  return !isPublicViewMode(state.viewMode) && state.cloudSaveStatus !== "read-only";
 }
 
 function canEditActiveTab(get: () => ProjectState) {
@@ -394,7 +395,7 @@ function canEditTab(project: ProjectFile, tabId: string) {
 }
 
 function setReadOnlyWarning(set: (state: Partial<ProjectState>) => void) {
-  set({ storageWarning: "Public view is read-only." });
+  set({ storageWarning: "This project is read-only. Use Save As to Google Drive to make an editable copy." });
 }
 
 function setGeneratedReadOnlyWarning(set: (state: Partial<ProjectState>) => void) {

@@ -31,6 +31,7 @@ import {
   type DriveFileMetadata,
 } from "../../lib/googleDrive/driveClient";
 import { pickDriveFile, pickDriveFolder } from "../../lib/googleDrive/picker";
+import { openDriveSharingDialog } from "../../lib/googleDrive/share";
 import { publishProjectSnapshot } from "../../lib/publish";
 import { useProjectStore } from "../../state/projectStore";
 import { Button } from "../ui/Button";
@@ -314,6 +315,43 @@ export function FileMenu() {
     }
   }
 
+  async function handleShareDriveFile() {
+    if (!cloudFile) {
+      await dialog.alert({
+        title: "Share Drive File",
+        message: "Save this chart to Google Drive first, then use Share Drive File to open Google's sharing dialog.",
+      });
+      return;
+    }
+
+    if (!cloudFile.canShare) {
+      await dialog.alert({
+        title: "Share Drive File",
+        message: cloudFile.webViewLink
+          ? `Your account does not have permission to share this Drive file.\n\nDrive link:\n${cloudFile.webViewLink}`
+          : "Your account does not have permission to share this Drive file.",
+        copyLabel: cloudFile.webViewLink ? "Copy Link" : undefined,
+        copyText: cloudFile.webViewLink,
+      });
+      return;
+    }
+
+    try {
+      await runWithDriveToken((token) => openDriveSharingDialog(token, cloudFile.id));
+    } catch (error) {
+      await dialog.alert({
+        title: "Share Drive File failed",
+        message: cloudFile.webViewLink
+          ? `${error instanceof Error ? error.message : "Google's sharing dialog could not be opened."}\n\nDrive link:\n${cloudFile.webViewLink}`
+          : error instanceof Error
+            ? error.message
+            : "Google's sharing dialog could not be opened.",
+        copyLabel: cloudFile.webViewLink ? "Copy Link" : undefined,
+        copyText: cloudFile.webViewLink,
+      });
+    }
+  }
+
   async function handleExport() {
     const format = await dialog.choose<ProjectExportFormat>({
       title: "Export project",
@@ -440,7 +478,7 @@ export function FileMenu() {
             <CloudUpload size={15} aria-hidden="true" />
             <span>Save As to Google Drive</span>
           </button>
-          <button type="button" role="menuitem" onClick={() => runMenuAction(() => showDrivePlaceholder("Share Drive File"))}>
+          <button type="button" role="menuitem" onClick={() => runMenuAction(handleShareDriveFile)}>
             <Share2 size={15} aria-hidden="true" />
             <span>Share Drive File</span>
           </button>

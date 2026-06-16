@@ -15,22 +15,20 @@ import {
 import {
   downloadProjectExport,
   parseProjectJsonFile,
-  parseProjectJsonText,
   type ProjectExportFormat,
 } from "../../lib/exportImport";
 import { getGoogleDriveAccessToken, forgetGoogleDriveAccessToken } from "../../lib/googleDrive/auth";
 import { GOOGLE_DRIVE_MISSING_CONFIG_MESSAGE, isGoogleDriveConfigured } from "../../lib/googleDrive/config";
 import {
   createStickiesDriveFile,
-  downloadFileText,
   ensureStickiesFileName,
-  getFileMetadata,
   isDriveAuthError,
   toDriveCloudFile,
   updateStickiesDriveFile,
-  type DriveFileMetadata,
 } from "../../lib/googleDrive/driveClient";
+import { loadDriveProject } from "../../lib/googleDrive/openDriveProject";
 import { pickDriveFile, pickDriveFolder } from "../../lib/googleDrive/picker";
+import { forgetDriveRecentFile, loadDriveRecentFiles, rememberDriveRecentFile } from "../../lib/googleDrive/recents";
 import { openDriveSharingDialog } from "../../lib/googleDrive/share";
 import { publishProjectSnapshot } from "../../lib/publish";
 import { useProjectStore } from "../../state/projectStore";
@@ -174,16 +172,29 @@ export function FileMenu() {
     }
   }
 
-  async function loadDriveFileText(fileId: string) {
-    return runWithDriveToken(async (accessToken) => {
-      const metadata = await getFileMetadata(fileId, accessToken);
+  async function openDriveProjectById(fileId: string, sourceName?: string) {
+    const result = await loadDriveProject(fileId, sourceName);
 
-      if (metadata.capabilities?.canDownload === false) {
-        throw new Error("This Google Drive file cannot be downloaded by your account.");
-      }
+    if (
+      await dialog.confirm({
+        title: "Open from Google Drive",
+        message: `Replace the current project with "${result.metadata.name}" from Google Drive?`,
+        confirmLabel: "Open",
+      })
+    ) {
+      importProject(result.project);
+      setCloudFile(result.cloudFile);
+      rememberDriveRecentFile(result.cloudFile);
+      return true;
+    }
 
-      const text = await downloadFileText(fileId, accessToken);
-      return { metadata, text };
+    return false;
+  }
+
+  async function showOpenDriveError(title: string, error: unknown) {
+    await dialog.alert({
+      title,
+      message: error instanceof Error ? error.message : "The Google Drive file could not be opened.",
     });
   }
 
@@ -204,32 +215,57 @@ export function FileMenu() {
         return;
       }
 
-      const { metadata, text } = await loadDriveFileText(pickedFile.id);
-      const result = parseProjectJsonText(text, pickedFile.name);
+      await openDriveProjectById(pickedFile.id, pickedFile.name);
+    } catch (error) {
+      await showOpenDriveError("Open from Google Drive failed", error);
+    }
+  }
 
-      if (!result.ok) {
-        await dialog.alert({
-          title: "Open from Google Drive failed",
-          message: result.error,
-        });
-        return;
-      }
+  async function handleOpenRecentDriveFile() {
+    const recents = loadDriveRecentFiles();
+
+    if (recents.length === 0) {
+      await dialog.alert({
+        title: "Open recent Drive file",
+        message: "No recent Google Drive files yet.",
+      });
+      return;
+    }
+
+    const selectedFileId = await dialog.choose({
+      title: "Open recent Drive file",
+      message: "Choose a recent Google Drive file to reopen.",
+      confirmLabel: "Open",
+      choices: recents.map((recent) => ({
+        value: recent.id,
+        label: recent.name,
+        description: recent.modifiedTime
+          ? `Modified ${new Date(recent.modifiedTime).toLocaleString()}`
+          : `Last opened ${new Date(recent.lastOpenedAt).toLocaleString()}`,
+      })),
+    });
+
+    if (!selectedFileId) {
+      return;
+    }
+
+    const selectedRecent = recents.find((recent) => recent.id === selectedFileId);
+
+    try {
+      await openDriveProjectById(selectedFileId, selectedRecent?.name);
+    } catch (error) {
+      await showOpenDriveError("Open recent Drive file failed", error);
 
       if (
         await dialog.confirm({
-          title: "Open from Google Drive",
-          message: `Replace the current project with "${metadata.name}" from Google Drive?`,
-          confirmLabel: "Open",
+          title: "Remove recent Drive file?",
+          message: "Remove this file from the recent Drive file list?",
+          confirmLabel: "Remove",
+          danger: true,
         })
       ) {
-        importProject(result.project);
-        setCloudFile(toDriveCloudFile(metadata as DriveFileMetadata));
+        forgetDriveRecentFile(selectedFileId);
       }
-    } catch (error) {
-      await dialog.alert({
-        title: "Open from Google Drive failed",
-        message: error instanceof Error ? error.message : "The Google Drive file could not be opened.",
-      });
     }
   }
 
@@ -266,6 +302,7 @@ export function FileMenu() {
       );
       const cloudFile = toDriveCloudFile(metadata);
       setCloudFile(cloudFile);
+      rememberDriveRecentFile(cloudFile);
 
       await dialog.alert({
         title: "Saved to Google Drive",
@@ -304,7 +341,9 @@ export function FileMenu() {
       const metadata = await runWithDriveToken((token) =>
         updateStickiesDriveFile(token, cloudFile.id, project, cloudFile.version),
       );
-      setCloudFile(toDriveCloudFile(metadata));
+      const updatedCloudFile = toDriveCloudFile(metadata);
+      setCloudFile(updatedCloudFile);
+      rememberDriveRecentFile(updatedCloudFile);
     } catch (error) {
       const message = error instanceof Error ? error.message : "The project could not be saved to Google Drive.";
       setCloudError(message);
@@ -469,6 +508,10 @@ export function FileMenu() {
           <button type="button" role="menuitem" onClick={() => runMenuAction(handleOpenFromDrive)}>
             <Cloud size={15} aria-hidden="true" />
             <span>Open from Google Drive</span>
+          </button>
+          <button type="button" role="menuitem" onClick={() => runMenuAction(handleOpenRecentDriveFile)}>
+            <History size={15} aria-hidden="true" />
+            <span>Open recent Drive file</span>
           </button>
           <button type="button" role="menuitem" onClick={() => runMenuAction(handleSaveToDrive)}>
             <CloudUpload size={15} aria-hidden="true" />

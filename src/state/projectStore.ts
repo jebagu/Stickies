@@ -1335,7 +1335,7 @@ export const useProjectStore = create<ProjectState>((set, get) => ({
   },
 
   importProject: (project) => {
-    if (!canEditProject(get)) {
+    if (isPublicViewMode(get().viewMode)) {
       setReadOnlyWarning(set);
       return;
     }

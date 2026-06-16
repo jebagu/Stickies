@@ -146,12 +146,15 @@ The editor left rail starts with a single `File` menu for browser-local project 
 - `Close`: clears the current browser project and switches to a blank project after confirmation.
 - `Save Snapshot`: creates a named snapshot inside the current project. Autosave to localStorage still happens in the background.
 - `Open from Google Drive`: requests Google authorization when needed, opens Google Picker, validates the selected Stickies-compatible JSON file, and replaces the current project only after confirmation.
+- `Open recent Drive file`: reopens a locally remembered Drive file by file ID without using the full Picker. Recents store file metadata only, never access tokens or project JSON.
 - `Save As to Google Drive`: asks for a file name, uses Google Picker folder selection, creates a `.stickies.json` file in the selected Drive folder, and binds the current project to that Drive file for later cloud actions.
 - `Save to Google Drive`: updates the currently bound Drive file. If the project is not bound to Drive yet, it routes to `Save As to Google Drive`.
 - `Share Drive File`: opens Google's native Drive sharing dialog for the currently bound Drive file when the user's account has sharing permission.
 - `Publish`: saves a frozen read-only snapshot to GitHub with a random slug link. Later edits do not update that published snapshot.
 - `Export`: downloads a JSON project file, Markdown, or DOCX file.
 - `Version History`: shows the most recent saved snapshots.
+
+Links shaped like `/Stickies/?driveFileId=<file-id>` show an `Open shared Drive file?` prompt before requesting Google authorization. The app does not force an OAuth popup on page load.
 
 ## Public Read-Only View
 

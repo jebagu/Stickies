@@ -611,16 +611,8 @@ export function downloadProjectExport(project: ProjectFile, format: ProjectExpor
   downloadProjectJson(project);
 }
 
-export async function parseProjectJsonFile(file: File): Promise<ImportProjectResult> {
-  if (!file.name.toLowerCase().endsWith(".json")) {
-    return {
-      ok: false,
-      error: "Choose a native .json project file.",
-    };
-  }
-
+export function parseProjectJsonText(text: string, sourceName = "Project file"): ImportProjectResult {
   try {
-    const text = await file.text();
     const parsed = JSON.parse(text) as unknown;
     const validation = validateProjectFile(normalizeImportedProject(parsed));
 
@@ -635,6 +627,25 @@ export async function parseProjectJsonFile(file: File): Promise<ImportProjectRes
       ok: true,
       project: validation.project,
     };
+  } catch (error) {
+    return {
+      ok: false,
+      error: error instanceof Error ? error.message : `${sourceName} could not be imported.`,
+    };
+  }
+}
+
+export async function parseProjectJsonFile(file: File): Promise<ImportProjectResult> {
+  if (!file.name.toLowerCase().endsWith(".json")) {
+    return {
+      ok: false,
+      error: "Choose a native .json project file.",
+    };
+  }
+
+  try {
+    const text = await file.text();
+    return parseProjectJsonText(text, file.name);
   } catch (error) {
     return {
       ok: false,

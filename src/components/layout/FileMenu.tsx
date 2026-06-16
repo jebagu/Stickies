@@ -12,8 +12,22 @@ import {
   Share2,
   XCircle,
 } from "lucide-react";
-import { downloadProjectExport, parseProjectJsonFile, type ProjectExportFormat } from "../../lib/exportImport";
+import {
+  downloadProjectExport,
+  parseProjectJsonFile,
+  parseProjectJsonText,
+  type ProjectExportFormat,
+} from "../../lib/exportImport";
+import { getGoogleDriveAccessToken, forgetGoogleDriveAccessToken } from "../../lib/googleDrive/auth";
 import { GOOGLE_DRIVE_MISSING_CONFIG_MESSAGE, isGoogleDriveConfigured } from "../../lib/googleDrive/config";
+import {
+  downloadFileText,
+  getFileMetadata,
+  isDriveAuthError,
+  toDriveCloudFile,
+  type DriveFileMetadata,
+} from "../../lib/googleDrive/driveClient";
+import { pickDriveFile } from "../../lib/googleDrive/picker";
 import { publishProjectSnapshot } from "../../lib/publish";
 import { useProjectStore } from "../../state/projectStore";
 import { Button } from "../ui/Button";
@@ -24,7 +38,7 @@ export function FileMenu() {
   const menuRef = useRef<HTMLDivElement>(null);
   const fileInputRef = useRef<HTMLInputElement>(null);
   const dialog = useDialog();
-  const { project, createNewProject, closeProject, createSnapshot, importProject } = useProjectStore();
+  const { project, createNewProject, closeProject, createSnapshot, importProject, setCloudFile } = useProjectStore();
 
   useEffect(() => {
     if (!open) {
@@ -128,6 +142,81 @@ export function FileMenu() {
         ? "Google Drive setup is present. This action will be enabled by the next Google Drive implementation slice."
         : GOOGLE_DRIVE_MISSING_CONFIG_MESSAGE,
     });
+  }
+
+  async function runWithDriveToken<T>(operation: (accessToken: string) => Promise<T>) {
+    const accessToken = await getGoogleDriveAccessToken();
+
+    try {
+      return await operation(accessToken);
+    } catch (error) {
+      if (!isDriveAuthError(error)) {
+        throw error;
+      }
+
+      forgetGoogleDriveAccessToken();
+      const refreshedAccessToken = await getGoogleDriveAccessToken({ forcePrompt: true });
+      return operation(refreshedAccessToken);
+    }
+  }
+
+  async function loadDriveFileText(fileId: string) {
+    return runWithDriveToken(async (accessToken) => {
+      const metadata = await getFileMetadata(fileId, accessToken);
+
+      if (metadata.capabilities?.canDownload === false) {
+        throw new Error("This Google Drive file cannot be downloaded by your account.");
+      }
+
+      const text = await downloadFileText(fileId, accessToken);
+      return { metadata, text };
+    });
+  }
+
+  async function handleOpenFromDrive() {
+    if (!isGoogleDriveConfigured()) {
+      await dialog.alert({
+        title: "Open from Google Drive",
+        message: GOOGLE_DRIVE_MISSING_CONFIG_MESSAGE,
+      });
+      return;
+    }
+
+    try {
+      const accessToken = await getGoogleDriveAccessToken();
+      const pickedFile = await pickDriveFile(accessToken);
+
+      if (!pickedFile) {
+        return;
+      }
+
+      const { metadata, text } = await loadDriveFileText(pickedFile.id);
+      const result = parseProjectJsonText(text, pickedFile.name);
+
+      if (!result.ok) {
+        await dialog.alert({
+          title: "Open from Google Drive failed",
+          message: result.error,
+        });
+        return;
+      }
+
+      if (
+        await dialog.confirm({
+          title: "Open from Google Drive",
+          message: `Replace the current project with "${metadata.name}" from Google Drive?`,
+          confirmLabel: "Open",
+        })
+      ) {
+        importProject(result.project);
+        setCloudFile(toDriveCloudFile(metadata as DriveFileMetadata));
+      }
+    } catch (error) {
+      await dialog.alert({
+        title: "Open from Google Drive failed",
+        message: error instanceof Error ? error.message : "The Google Drive file could not be opened.",
+      });
+    }
   }
 
   async function handleExport() {
@@ -244,7 +333,7 @@ export function FileMenu() {
             <span>Save Snapshot</span>
           </button>
           <span className="file-menu__separator" aria-hidden="true" />
-          <button type="button" role="menuitem" onClick={() => runMenuAction(() => showDrivePlaceholder("Open from Google Drive"))}>
+          <button type="button" role="menuitem" onClick={() => runMenuAction(handleOpenFromDrive)}>
             <Cloud size={15} aria-hidden="true" />
             <span>Open from Google Drive</span>
           </button>

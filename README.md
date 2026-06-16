@@ -145,7 +145,8 @@ The editor left rail starts with a single `File` menu for browser-local project 
 - `Open local JSON`: imports a native `.json` project file after validation and confirmation.
 - `Close`: clears the current browser project and switches to a blank project after confirmation.
 - `Save Snapshot`: creates a named snapshot inside the current project. Autosave to localStorage still happens in the background.
-- `Open from Google Drive`, `Save to Google Drive`, `Save As to Google Drive`, and `Share Drive File`: visible placeholders for the Drive Picker workflow. Until Google configuration is present and the Drive implementation slices are complete, these actions show a setup message and do not change the project.
+- `Open from Google Drive`: requests Google authorization when needed, opens Google Picker, validates the selected Stickies-compatible JSON file, and replaces the current project only after confirmation.
+- `Save to Google Drive`, `Save As to Google Drive`, and `Share Drive File`: visible placeholders for upcoming Drive workflow slices. Until those slices are complete, these actions show a setup message and do not change the project.
 - `Publish`: saves a frozen read-only snapshot to GitHub with a random slug link. Later edits do not update that published snapshot.
 - `Export`: downloads a JSON project file, Markdown, or DOCX file.
 - `Version History`: shows the most recent saved snapshots.

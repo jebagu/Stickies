@@ -9,6 +9,7 @@ import { create } from "zustand";
 import { createBlankProject, createSeedProject } from "../data/seedProject";
 import { downloadProjectJson } from "../lib/exportImport";
 import { getAppViewMode, isPublicViewMode, type AppViewMode } from "../lib/appMode";
+import type { DriveCloudFile } from "../lib/googleDrive/driveClient";
 import { isTabLayoutLocked, isTabReadOnly } from "../lib/generatedGraph";
 import { loadProjectFromPublicSnapshot } from "../lib/publicProject";
 import {
@@ -74,6 +75,7 @@ type ProjectState = {
   selectedElement: SelectedElement;
   filters: TabFilters;
   saveStatus: SaveStatus;
+  cloudFile?: DriveCloudFile;
   lastSavedAt?: string;
   storageWarning?: string;
   importError?: string;
@@ -111,6 +113,7 @@ type ProjectState = {
   copyPublicSnapshotToEditorSession: () => boolean;
   exportProject: () => void;
   importProject: (project: ProjectFile) => void;
+  setCloudFile: (cloudFile: DriveCloudFile | undefined) => void;
   setTheme: (themeId: ThemeId) => void;
   setEdgeRoutingMode: (edgeRoutingMode: EdgeRoutingMode) => void;
   setNodeHandleMode: (nodeHandleMode: NodeHandleMode) => void;
@@ -459,6 +462,7 @@ export const useProjectStore = create<ProjectState>((set, get) => ({
   selectedElement: null,
   filters: {},
   saveStatus: "saved",
+  cloudFile: undefined,
   lastSavedAt: undefined,
   storageWarning: undefined,
   importError: undefined,
@@ -476,6 +480,7 @@ export const useProjectStore = create<ProjectState>((set, get) => ({
         filters: getActiveTab(project, project.activeTabId).filters ?? {},
         selectedElement: null,
         saveStatus: "saved",
+        cloudFile: undefined,
         storageWarning: result.warning,
         importError: undefined,
         lastSavedAt: undefined,
@@ -493,6 +498,7 @@ export const useProjectStore = create<ProjectState>((set, get) => ({
       filters: getActiveTab(project, project.activeTabId).filters ?? {},
       selectedElement: null,
       saveStatus: "saved",
+      cloudFile: undefined,
       storageWarning: result.warning,
       importError: undefined,
       inspectorHidden: false,
@@ -509,6 +515,7 @@ export const useProjectStore = create<ProjectState>((set, get) => ({
       selectedElement: null,
       storageWarning: undefined,
       importError: undefined,
+      cloudFile: undefined,
       inspectorHidden: false,
     });
   },
@@ -524,6 +531,7 @@ export const useProjectStore = create<ProjectState>((set, get) => ({
       selectedElement: null,
       storageWarning: undefined,
       importError: undefined,
+      cloudFile: undefined,
       inspectorHidden: false,
     });
   },
@@ -539,6 +547,7 @@ export const useProjectStore = create<ProjectState>((set, get) => ({
       selectedElement: null,
       storageWarning: undefined,
       importError: undefined,
+      cloudFile: undefined,
     });
   },
 
@@ -1250,6 +1259,7 @@ export const useProjectStore = create<ProjectState>((set, get) => ({
         lastSavedAt: nowIso(),
         storageWarning: undefined,
         importError: undefined,
+        cloudFile: undefined,
         inspectorHidden: false,
       });
       return true;
@@ -1285,8 +1295,13 @@ export const useProjectStore = create<ProjectState>((set, get) => ({
       {
         selectedElement: null,
         importError: undefined,
+        cloudFile: undefined,
       },
     );
+  },
+
+  setCloudFile: (cloudFile) => {
+    set({ cloudFile });
   },
 
   setTheme: (themeId) => {

@@ -128,7 +128,7 @@ export function FileMenu() {
   async function handleSaveSnapshot() {
     const label = await dialog.prompt({
       title: "Checkpoint label",
-      message: "Save a restorable checkpoint inside this Stickies project.",
+      message: "Save a named checkpoint inside this Stickies project. Restore from Version history is planned but not available yet.",
       defaultValue: `Checkpoint ${project.snapshots.length + 1}`,
       confirmLabel: "Save Checkpoint",
     });
@@ -197,10 +197,13 @@ export function FileMenu() {
 
     await dialog.alert({
       title: "Version history",
-      message: project.snapshots
-        .slice(0, 8)
-        .map((snapshot) => `${snapshot.label} - ${new Date(snapshot.createdAt).toLocaleString()}`)
-        .join("\n"),
+      message: [
+        "Checkpoint restore is planned but not available in this menu yet.",
+        "",
+        ...project.snapshots
+          .slice(0, 8)
+          .map((snapshot) => `${snapshot.label} - ${new Date(snapshot.createdAt).toLocaleString()}`),
+      ].join("\n"),
     });
   }
 

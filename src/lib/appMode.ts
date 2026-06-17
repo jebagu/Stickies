@@ -28,6 +28,10 @@ function getRouteSegments(pathname = window.location.pathname) {
   return pathSegments.slice(baseSegments.length);
 }
 
+export function isHostedEditorRoot(pathname = window.location.pathname, hostname = window.location.hostname) {
+  return hostname === "jebagu.github.io" && getRouteSegments(pathname).length === 0;
+}
+
 export function getPublicDriveFileId(pathname = window.location.pathname) {
   const routeSegments = getRouteSegments(pathname);
 

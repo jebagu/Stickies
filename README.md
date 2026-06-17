@@ -174,7 +174,7 @@ project-planner:v1:current
 project-planner:v1:last-opened
 ```
 
-On startup, the editor loads saved localStorage data if it validates. If localStorage is empty or invalid, it opens a new blank project using the `neon-dark` theme.
+On local startup, the editor loads saved localStorage data if it validates. If localStorage is empty or invalid, it opens a new blank project using the `neon-dark` theme. The hosted editor root at `https://jebagu.github.io/Stickies/` always opens a new blank `neon-dark` project, ignoring any older browser-local project saved on that origin.
 
 The seed and committed public snapshot include a `Timeline + Install Process` tab derived from the SS Art Basel 2025 Delivery Plan PDF.
 

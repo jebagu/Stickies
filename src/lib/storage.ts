@@ -21,6 +21,10 @@ type StoredDriveFile = {
   file: DriveCloudFile;
 };
 
+type LoadProjectOptions = {
+  ignoreSavedProject?: boolean;
+};
+
 function canUseLocalStorage() {
   return typeof window !== "undefined" && typeof window.localStorage !== "undefined";
 }
@@ -36,12 +40,19 @@ function normalizeLoadedProjectName(project: ProjectFile): ProjectFile {
   };
 }
 
-export function loadProjectFromStorage(): LoadProjectResult {
+export function loadProjectFromStorage(options: LoadProjectOptions = {}): LoadProjectResult {
   if (!canUseLocalStorage()) {
     return {
       project: createBlankProject(),
       source: "seed",
       warning: "localStorage is not available in this environment.",
+    };
+  }
+
+  if (options.ignoreSavedProject) {
+    return {
+      project: createBlankProject(),
+      source: "seed",
     };
   }
 

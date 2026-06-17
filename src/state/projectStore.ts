@@ -8,7 +8,7 @@ import {
 import { create } from "zustand";
 import { createBlankProject, createSeedProject } from "../data/seedProject";
 import { downloadProjectJson } from "../lib/exportImport";
-import { getAppViewMode, isPublicViewMode, type AppViewMode } from "../lib/appMode";
+import { getAppViewMode, isHostedEditorRoot, isPublicViewMode, type AppViewMode } from "../lib/appMode";
 import type { DriveCloudFile } from "../lib/googleDrive/driveClient";
 import { isTabLayoutLocked, isTabReadOnly } from "../lib/generatedGraph";
 import { loadProjectFromPublicSnapshot } from "../lib/publicProject";
@@ -517,7 +517,7 @@ export const useProjectStore = create<ProjectState>((set, get) => ({
       return;
     }
 
-    const result = loadProjectFromStorage();
+    const result = loadProjectFromStorage({ ignoreSavedProject: isHostedEditorRoot() });
     const project = normalizeProjectStageColumns(result.project);
     const cloudFile = result.source === "localStorage" ? loadDriveFileFromStorage(project) : undefined;
 

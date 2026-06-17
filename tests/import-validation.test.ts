@@ -115,6 +115,26 @@ test("empty local storage starts a blank neon dark project", () => {
   });
 });
 
+test("hosted root can ignore existing local storage for a blank neon default", () => {
+  withMockLocalStorage(() => {
+    window.localStorage.setItem(
+      "project-planner:v1:current",
+      JSON.stringify({
+        ...expectValidProject("schema-v1-project.json"),
+        projectName: "Saved browser project",
+      }),
+    );
+
+    const result = loadProjectFromStorage({ ignoreSavedProject: true });
+
+    assert.equal(result.source, "seed");
+    assert.notEqual(result.project.projectName, "Saved browser project");
+    assert.equal(result.project.tabs.length, 1);
+    assert.equal(result.project.tabs[0]?.name, "Planning");
+    assert.equal(result.project.settings.themeId, "neon-dark");
+  });
+});
+
 test("schema v2 generated fixture imports and preserves graph project fields", () => {
   const project = expectValidProject("ss-react-flow-project-v2.json");
 

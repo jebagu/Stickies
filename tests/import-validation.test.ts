@@ -2,7 +2,12 @@ import { readFileSync } from "node:fs";
 import { join } from "node:path";
 import test from "node:test";
 import assert from "node:assert/strict";
-import { createProjectJson, parseProjectJsonText } from "../src/lib/exportImport.ts";
+import {
+  createProjectExportFilename,
+  createProjectJson,
+  parseProjectJsonFile,
+  parseProjectJsonText,
+} from "../src/lib/exportImport.ts";
 import { isTabLayoutLocked, isTabReadOnly } from "../src/lib/generatedGraph.ts";
 import {
   GOOGLE_DRIVE_SCOPE,
@@ -28,6 +33,7 @@ import {
   saveStickiesDriveFolder,
   toStoredStickiesDriveFolder,
 } from "../src/lib/googleDrive/stickiesFolder.ts";
+import { createFunProjectName, createStickiesFileName } from "../src/lib/stickiesFiles.ts";
 import { validateProjectFile } from "../src/lib/validation.ts";
 import type { ProjectFile } from "../src/types/planning.ts";
 
@@ -130,10 +136,52 @@ test("project JSON text parser uses the shared validation path", () => {
   assert.equal(result.project.schemaVersion, 1);
 });
 
-test("Stickies Drive filenames append suffix exactly once", () => {
-  assert.equal(ensureStickiesFileName("Venue plan"), "Venue plan.stickies.json");
-  assert.equal(ensureStickiesFileName("Venue plan.stickies.json"), "Venue plan.stickies.json");
-  assert.equal(ensureStickiesFileName(""), "Stickies project.stickies.json");
+test("fun project names are two title-case words and can be deterministic", () => {
+  const randomValues = [1 / 16, 4 / 16];
+  const projectName = createFunProjectName(() => randomValues.shift() ?? 0);
+
+  assert.equal(projectName, "Cosmic Lantern");
+  assert.match(projectName, /^[A-Z][a-z]+ [A-Z][a-z]+$/);
+});
+
+test("native export filenames use project-name .stickies files", () => {
+  assert.equal(createProjectExportFilename("Cosmic Lantern", "native"), "cosmic-lantern.stickies");
+  assert.equal(createProjectExportFilename("Cosmic Lantern", "markdown"), "cosmic-lantern.md");
+  assert.equal(createProjectExportFilename("Cosmic Lantern", "docx"), "cosmic-lantern.docx");
+});
+
+test("Stickies filenames normalize new and legacy suffixes", () => {
+  assert.equal(createStickiesFileName("Venue Plan"), "venue-plan.stickies");
+  assert.equal(createStickiesFileName("Venue Plan.stickies"), "venue-plan.stickies");
+  assert.equal(createStickiesFileName("Venue Plan.stickies.json"), "venue-plan.stickies");
+  assert.equal(createStickiesFileName("Venue Plan.json"), "venue-plan.stickies");
+  assert.equal(createStickiesFileName(""), "stickies-project.stickies");
+});
+
+test("local project file parser accepts current and legacy extensions", async () => {
+  const projectText = JSON.stringify(readFixture("schema-v1-project.json"));
+
+  for (const filename of ["venue-plan.stickies", "venue-plan.json", "venue-plan.stickies.json"]) {
+    const result = await parseProjectJsonFile(new File([projectText], filename, { type: "application/json" }));
+
+    assert.equal(result.ok, true, result.ok ? "" : result.error);
+    assert.equal(result.project.schemaVersion, 1);
+  }
+});
+
+test("local project file parser rejects unrelated extensions with Stickies copy", async () => {
+  const projectText = JSON.stringify(readFixture("schema-v1-project.json"));
+  const result = await parseProjectJsonFile(new File([projectText], "venue-plan.txt", { type: "text/plain" }));
+
+  assert.equal(result.ok, false);
+  assert.equal(result.error, "Choose a Stickies project file.");
+});
+
+test("Stickies Drive filenames append the current suffix exactly once", () => {
+  assert.equal(ensureStickiesFileName("Venue Plan"), "venue-plan.stickies");
+  assert.equal(ensureStickiesFileName("Venue Plan.stickies"), "venue-plan.stickies");
+  assert.equal(ensureStickiesFileName("Venue Plan.stickies.json"), "venue-plan.stickies");
+  assert.equal(ensureStickiesFileName(""), "stickies-project.stickies");
 });
 
 test("Drive recents cap at 10 and deduplicate by file ID", () => {

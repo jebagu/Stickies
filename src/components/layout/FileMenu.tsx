@@ -2,7 +2,6 @@ import { useEffect, useRef, useState, type ChangeEvent } from "react";
 import {
   ChevronDown,
   CheckCircle2,
-  Cloud,
   CloudUpload,
   Download,
   FilePlus2,
@@ -18,7 +17,6 @@ import {
   type ProjectExportFormat,
 } from "../../lib/exportImport";
 import { useProjectStore } from "../../state/projectStore";
-import { DriveHubModal } from "../drive/DriveHubModal";
 import { useDriveOpenActions } from "../drive/useDriveOpenActions";
 import { useDrivePublishActions } from "../drive/useDrivePublishActions";
 import { useDriveSaveActions } from "../drive/useDriveSaveActions";
@@ -27,7 +25,6 @@ import { useDialog } from "../ui/DialogProvider";
 
 export function FileMenu() {
   const [open, setOpen] = useState(false);
-  const [driveHubOpen, setDriveHubOpen] = useState(false);
   const menuRef = useRef<HTMLDivElement>(null);
   const fileInputRef = useRef<HTMLInputElement>(null);
   const dialog = useDialog();
@@ -103,7 +100,7 @@ export function FileMenu() {
     if (
       await dialog.confirm({
         title: "New blank project",
-        message: "Replace the current browser project with a new blank project? Export first if you need a file copy.",
+        message: "Replace the current browser project with a new blank project? Save a local file first if you need a file copy.",
         confirmLabel: "New Project",
         danger: true,
       })
@@ -116,7 +113,7 @@ export function FileMenu() {
     if (
       await dialog.confirm({
         title: "Close project",
-        message: "Close the current browser project and switch to a blank project? Export first if you need a file copy.",
+        message: "Close the current browser project and switch to a blank project? Save a local file first if you need a file copy.",
         confirmLabel: "Close Project",
         danger: true,
       })
@@ -138,19 +135,15 @@ export function FileMenu() {
     }
   }
 
-  function handleOpenDriveHub() {
-    setDriveHubOpen(true);
-  }
-
   async function handleExport() {
     const format = await dialog.choose<ProjectExportFormat>({
-      title: "Export project",
-      message: "Choose the export format.",
-      confirmLabel: "Export",
+      title: "Save local file",
+      message: "Choose the local file format.",
+      confirmLabel: "Save local file",
       choices: [
         {
           value: "native",
-          label: "JSON project file",
+          label: "Stickies project file",
           description: "round-trips schema v1/v2 project data and metadata",
         },
         {
@@ -233,33 +226,29 @@ export function FileMenu() {
           </button>
           <button type="button" role="menuitem" onClick={() => runMenuAction(() => fileInputRef.current?.click())}>
             <FolderOpen size={15} aria-hidden="true" />
-            <span>Open local JSON</span>
+            <span>Open local file</span>
+          </button>
+          <button type="button" role="menuitem" onClick={() => runMenuAction(handleExport)}>
+            <Download size={15} aria-hidden="true" />
+            <span>Save local file</span>
           </button>
           <button type="button" role="menuitem" onClick={() => runMenuAction(handleCloseProject)}>
             <XCircle size={15} aria-hidden="true" />
             <span>Close</span>
           </button>
           <span className="file-menu__separator" aria-hidden="true" />
-          <button type="button" role="menuitem" onClick={() => runMenuAction(handleOpenDriveHub)}>
-            <Cloud size={15} aria-hidden="true" />
-            <span>Google Drive...</span>
-          </button>
           <button type="button" role="menuitem" onClick={() => runMenuAction(openRecentDriveFile)}>
             <History size={15} aria-hidden="true" />
             <span>Open recent</span>
           </button>
           <button type="button" role="menuitem" onClick={() => runMenuAction(saveToDrive)}>
             <CloudUpload size={15} aria-hidden="true" />
-            <span>Save to Drive</span>
+            <span>Save to Google Drive</span>
           </button>
           <span className="file-menu__separator" aria-hidden="true" />
           <button type="button" role="menuitem" onClick={() => runMenuAction(handlePublish)}>
             <Share2 size={15} aria-hidden="true" />
             <span>Publish</span>
-          </button>
-          <button type="button" role="menuitem" onClick={() => runMenuAction(handleExport)}>
-            <Download size={15} aria-hidden="true" />
-            <span>Export</span>
           </button>
           <span className="file-menu__separator" aria-hidden="true" />
           <button type="button" role="menuitem" onClick={() => runMenuAction(handleSaveSnapshot)}>
@@ -277,10 +266,9 @@ export function FileMenu() {
         ref={fileInputRef}
         className="hidden"
         type="file"
-        accept="application/json,.json"
+        accept=".stickies,.json,.stickies.json,application/json"
         onChange={handleImport}
       />
-      <DriveHubModal open={driveHubOpen} onClose={() => setDriveHubOpen(false)} />
     </div>
   );
 }

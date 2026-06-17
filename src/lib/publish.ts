@@ -26,6 +26,14 @@ export function createPublishedProject(project: ProjectFile): ProjectFile {
 }
 
 export function getPublishedProjectJsonUrl(slug: string) {
+  return getPublishedProjectSnapshotUrl(slug);
+}
+
+export function getPublishedProjectSnapshotUrl(slug: string) {
+  return `${import.meta.env.BASE_URL}published/${slug}.stickies`;
+}
+
+export function getLegacyPublishedProjectJsonUrl(slug: string) {
   return `${import.meta.env.BASE_URL}published/${slug}.json`;
 }
 

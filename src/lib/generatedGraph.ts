@@ -23,13 +23,13 @@ export function isTabReadOnly(project: ProjectFile, tab: PlanningTab | undefined
   return tab.readOnly === true || isGeneratedGraphTab(tab);
 }
 
-export function isTabLayoutLocked(project: ProjectFile, tab: PlanningTab | undefined) {
+export function isTabLayoutLocked(_project: ProjectFile, tab: PlanningTab | undefined) {
   if (!tab) {
     return false;
   }
 
   if (isGeneratedGraphTab(tab)) {
-    return project.settings.readOnlyGeneratedTabs !== false;
+    return false;
   }
 
   return tab.readOnly === true;

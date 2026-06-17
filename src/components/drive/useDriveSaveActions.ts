@@ -46,6 +46,10 @@ function getDriveSaveErrorMessage(error: unknown) {
   return `Stickies could not save the project file. ${BROWSER_COPY_SAFE_MESSAGE}`;
 }
 
+function getStickiesFolderUrl(folder: StoredStickiesDriveFolder) {
+  return folder.webViewLink ?? `https://drive.google.com/drive/folders/${encodeURIComponent(folder.id)}`;
+}
+
 export function useDriveSaveActions() {
   const dialog = useDialog();
 
@@ -88,6 +92,7 @@ export function useDriveSaveActions() {
   async function validateRememberedStickiesFolder(
     action: PendingGoogleDriveAction,
     accessToken: string,
+    options: { showProgress?: boolean } = {},
   ): Promise<StoredStickiesDriveFolder | undefined> {
     const rememberedFolder = loadStickiesDriveFolder();
 
@@ -95,10 +100,12 @@ export function useDriveSaveActions() {
       return undefined;
     }
 
-    const progress = dialog.progress({
-      title: "Checking Stickies folder",
-      message: "Confirming that the saved Stickies folder is still available.",
-    });
+    const progress = options.showProgress
+      ? dialog.progress({
+          title: "Checking Stickies folder",
+          message: "Confirming that the saved Stickies folder is still available.",
+        })
+      : undefined;
 
     try {
       const metadata = await runWithDriveToken(
@@ -118,7 +125,7 @@ export function useDriveSaveActions() {
       });
       return undefined;
     } finally {
-      progress.close();
+      progress?.close();
     }
   }
 
@@ -131,10 +138,62 @@ export function useDriveSaveActions() {
     });
   }
 
+  async function createStickiesFolderForSave(accessToken: string, progress?: ReturnType<typeof dialog.progress>) {
+    if (!(await confirmCreateStickiesFolder())) {
+      return undefined;
+    }
+
+    const activeProgress =
+      progress ??
+      dialog.progress({
+        title: "Saving to Google Drive",
+        message: "Saving to Google Drive...",
+      });
+
+    activeProgress.update({
+      title: "Saving to Google Drive",
+      message: "Creating the Stickies folder in My Drive.",
+    });
+
+    try {
+      const folderMetadata = await runWithDriveToken("save-as", createStickiesDriveFolder, accessToken);
+      const folder = toStoredStickiesDriveFolder(folderMetadata);
+      saveStickiesDriveFolder(folder);
+      return folder;
+    } catch (error) {
+      activeProgress.close();
+      useProjectStore.getState().setCloudSaveStatus("error");
+      useProjectStore.getState().setCloudError(error instanceof Error ? error.message : "Stickies could not create the Drive folder.");
+      await dialog.alert({
+        title: "Create Stickies folder failed",
+        message: `Stickies could not create the Drive folder. ${BROWSER_COPY_SAFE_MESSAGE}`,
+      });
+      return undefined;
+    } finally {
+      if (!progress) {
+        activeProgress.close();
+      }
+    }
+  }
+
+  async function getOrCreateStickiesFolderForSave(
+    action: PendingGoogleDriveAction,
+    accessToken: string,
+    progress?: ReturnType<typeof dialog.progress>,
+  ) {
+    const folder = await validateRememberedStickiesFolder(action, accessToken, { showProgress: !progress });
+
+    if (folder) {
+      return folder;
+    }
+
+    return createStickiesFolderForSave(accessToken, progress);
+  }
+
   async function saveAsToDrive(options: { accessToken?: string } = {}) {
     if (!isGoogleDriveConfigured()) {
       await dialog.alert({
-        title: "Save to Drive",
+        title: "Save to Google Drive",
         message: getGoogleDriveUnavailableMessage(),
       });
       return;
@@ -144,10 +203,10 @@ export function useDriveSaveActions() {
       const accessToken = options.accessToken ?? (await getAccessTokenForDriveAction("save-as"));
       const { project, setCloudError, setCloudFile, setCloudSaveStatus } = useProjectStore.getState();
       const requestedName = await dialog.prompt({
-        title: "Save to Drive",
+        title: "Save to Google Drive",
         message: "Name this Stickies project file.",
         defaultValue: ensureStickiesFileName(project.projectName),
-        confirmLabel: "Save to Drive",
+        confirmLabel: "Save to Google Drive",
       });
 
       if (requestedName === null) {
@@ -156,52 +215,22 @@ export function useDriveSaveActions() {
 
       setCloudSaveStatus("saving");
       setCloudError(undefined);
-      let folder = await validateRememberedStickiesFolder("save-as", accessToken);
-      let progress: ReturnType<typeof dialog.progress> | undefined;
-
-      if (!folder) {
-        if (!(await confirmCreateStickiesFolder())) {
-          setCloudSaveStatus("local");
-          return;
-        }
-
-        progress = dialog.progress({
-          title: "Saving to Google Drive",
-          message: "Creating the Stickies folder in My Drive.",
-        });
-
-        try {
-          const folderMetadata = await runWithDriveToken("save-as", createStickiesDriveFolder, accessToken);
-          folder = toStoredStickiesDriveFolder(folderMetadata);
-          saveStickiesDriveFolder(folder);
-        } catch (error) {
-          progress.close();
-          setCloudSaveStatus("error");
-          setCloudError(error instanceof Error ? error.message : "Stickies could not create the Drive folder.");
-          await dialog.alert({
-            title: "Create Stickies folder failed",
-            message: `Stickies could not create the Drive folder. ${BROWSER_COPY_SAFE_MESSAGE}`,
-          });
-          return;
-        }
-      }
+      const folder = await getOrCreateStickiesFolderForSave("save-as", accessToken);
 
       if (!folder) {
         setCloudSaveStatus("local");
         return;
       }
 
-      if (!progress) {
-        progress = dialog.progress({
-          title: "Saving to Google Drive",
-          message: "Saving the project file in your Stickies folder.",
-        });
-      } else {
-        progress.update({
-          title: "Saving to Google Drive",
-          message: "Saving the project file in your Stickies folder.",
-        });
-      }
+      const progress = dialog.progress({
+        title: "Saving to Google Drive",
+        message: "Saving to Google Drive...",
+      });
+
+      progress.update({
+        title: "Saving to Google Drive",
+        message: "Saving the project file in your Stickies folder.",
+      });
 
       let metadata;
       try {
@@ -216,7 +245,7 @@ export function useDriveSaveActions() {
       }
 
       progress.close();
-      const cloudFile = toDriveCloudFile(metadata);
+      const cloudFile = toDriveCloudFile(metadata, { folderName: folder.name });
       setCloudFile(cloudFile);
       rememberDriveRecentFile(cloudFile);
 
@@ -225,8 +254,8 @@ export function useDriveSaveActions() {
         message: `Saved "${cloudFile.name}" in your Stickies folder.`,
         copyLabel: cloudFile.webViewLink ? "Copy Link" : undefined,
         copyText: cloudFile.webViewLink,
-        openLabel: cloudFile.webViewLink ? "Open in Drive" : undefined,
-        openUrl: cloudFile.webViewLink,
+        openLabel: "Open Folder in Drive",
+        openUrl: getStickiesFolderUrl(folder),
       });
     } catch (error) {
       if (isGoogleDriveRedirectFallbackError(error)) {
@@ -236,7 +265,7 @@ export function useDriveSaveActions() {
       useProjectStore.getState().setCloudSaveStatus("error");
       useProjectStore.getState().setCloudError(error instanceof Error ? error.message : "The project could not be saved to Google Drive.");
       await dialog.alert({
-        title: "Save to Drive failed",
+        title: "Save to Google Drive failed",
         message: getDriveSaveErrorMessage(error),
       });
     }
@@ -260,15 +289,35 @@ export function useDriveSaveActions() {
       return;
     }
 
+    let progress: ReturnType<typeof dialog.progress> | undefined;
+
     try {
       setCloudSaveStatus("saving");
       setCloudError(undefined);
+      progress = dialog.progress({
+        title: "Saving to Google Drive",
+        message: "Saving to Google Drive...",
+      });
+      const accessToken = options.accessToken ?? (await getAccessTokenForDriveAction("save-existing"));
+      const folder = await getOrCreateStickiesFolderForSave("save-existing", accessToken, progress);
+
+      if (!folder) {
+        progress.close();
+        setCloudSaveStatus("saved");
+        return;
+      }
+
+      progress.update({
+        title: "Saving to Google Drive",
+        message: "Updating the project file in Google Drive.",
+      });
       const metadata = await runWithDriveToken(
         "save-existing",
         (token) => updateStickiesDriveFile(token, cloudFile.id, project),
-        options.accessToken,
+        accessToken,
       );
-      const updatedCloudFile = toDriveCloudFile(metadata);
+      progress.close();
+      const updatedCloudFile = toDriveCloudFile(metadata, { folderName: cloudFile.folderName });
       setCloudFile(updatedCloudFile);
       rememberDriveRecentFile(updatedCloudFile);
       await dialog.alert({
@@ -276,10 +325,12 @@ export function useDriveSaveActions() {
         message: `Saved "${updatedCloudFile.name}" to Google Drive.`,
         copyLabel: updatedCloudFile.webViewLink ? "Copy Link" : undefined,
         copyText: updatedCloudFile.webViewLink,
-        openLabel: updatedCloudFile.webViewLink ? "Open in Drive" : undefined,
-        openUrl: updatedCloudFile.webViewLink,
+        openLabel: "Open Folder in Drive",
+        openUrl: getStickiesFolderUrl(folder),
       });
     } catch (error) {
+      progress?.close();
+
       if (isGoogleDriveRedirectFallbackError(error)) {
         return;
       }

@@ -1,18 +1,10 @@
 import type { CSSProperties } from "react";
-import { Download, Lock, Monitor, Presentation, Settings, Unlock } from "lucide-react";
+import { Monitor, Presentation, Settings } from "lucide-react";
 import { isPublicViewMode } from "../../lib/appMode";
-import { isGeneratedGraphTab } from "../../lib/generatedGraph";
-import { downloadProjectJson } from "../../lib/exportImport";
-import {
-  EDGE_ROUTING_OPTIONS,
-  NODE_HANDLE_OPTIONS,
-  THEME_OPTIONS,
-  formatEdgeRoutingLabel,
-  formatNodeHandleModeLabel,
-  formatThemeLabel,
-} from "../../lib/options";
+import { STICKIES_DRIVE_FOLDER_NAME } from "../../lib/googleDrive/driveClient";
+import { loadStickiesDriveFolder } from "../../lib/googleDrive/stickiesFolder";
+import { THEME_OPTIONS, formatThemeLabel } from "../../lib/options";
 import { useProjectStore } from "../../state/projectStore";
-import type { EdgeRoutingMode, NodeHandleMode } from "../../types/planning";
 import { Button } from "../ui/Button";
 import { Select } from "../ui/Select";
 import { Toggle } from "../ui/Toggle";
@@ -21,7 +13,23 @@ const logoMaskStyle = {
   "--top-bar-logo-url": `url("${import.meta.env.BASE_URL}favicon.svg")`,
 } as CSSProperties;
 
-function formatCloudStatusLabel(cloudSaveStatus: ReturnType<typeof useProjectStore.getState>["cloudSaveStatus"]) {
+function formatLocalStatusLabel(saveStatus: ReturnType<typeof useProjectStore.getState>["saveStatus"]) {
+  if (saveStatus === "saving") {
+    return "Saving locally";
+  }
+
+  if (saveStatus === "unsaved") {
+    return "Not saved";
+  }
+
+  if (saveStatus === "error") {
+    return "Local save failed";
+  }
+
+  return "Locally saved";
+}
+
+function formatDriveStatusLabel(cloudSaveStatus: ReturnType<typeof useProjectStore.getState>["cloudSaveStatus"]) {
   if (cloudSaveStatus === "saving") {
     return "Saving to Drive";
   }
@@ -31,14 +39,36 @@ function formatCloudStatusLabel(cloudSaveStatus: ReturnType<typeof useProjectSto
   }
 
   if (cloudSaveStatus === "error") {
-    return "Drive save failed";
+    return "Not saved to Drive";
   }
 
   if (cloudSaveStatus === "read-only") {
     return "View-only Drive file";
   }
 
-  return "Local draft";
+  return "Not saved to Drive";
+}
+
+function formatProjectSaveLocation(args: {
+  cloudFile: ReturnType<typeof useProjectStore.getState>["cloudFile"];
+  cloudSaveStatus: ReturnType<typeof useProjectStore.getState>["cloudSaveStatus"];
+  fallbackDriveFolderName?: string;
+  projectName: string;
+  saveStatus: ReturnType<typeof useProjectStore.getState>["saveStatus"];
+}) {
+  if (!args.cloudFile || args.cloudSaveStatus === "local") {
+    return `${args.projectName} (${formatLocalStatusLabel(args.saveStatus)})`;
+  }
+
+  const drivePath = [
+    "Google Drive",
+    args.cloudFile.folderName ?? args.fallbackDriveFolderName,
+    args.cloudFile.name,
+  ]
+    .filter(Boolean)
+    .join(" / ");
+
+  return `${drivePath} (${formatDriveStatusLabel(args.cloudSaveStatus)})`;
 }
 
 export function TopBar() {
@@ -47,23 +77,25 @@ export function TopBar() {
     cloudFile,
     cloudSaveStatus,
     project,
+    saveStatus,
     viewMode,
-    setEdgeRoutingMode,
-    setNodeHandleMode,
     setTheme,
     toggleAdminMode,
-    toggleGeneratedLayoutLock,
     toggleMiniMap,
     togglePresentationMode,
   } = useProjectStore();
   const presentationMode = project.settings.presentationMode;
   const readOnly = isPublicViewMode(viewMode);
-  const activeTab = project.tabs.find((tab) => tab.id === project.activeTabId) ?? project.tabs[0];
-  const generatedTab = isGeneratedGraphTab(activeTab);
-  const generatedLayoutUnlocked = project.settings.readOnlyGeneratedTabs === false;
-  const showDirectJsonExport = project.schemaVersion === 2;
-  const projectSourceName = cloudFile?.name ?? project.projectName;
-  const cloudStatusLabel = formatCloudStatusLabel(cloudSaveStatus);
+  const fallbackDriveFolderName = cloudFile?.folderName
+    ? undefined
+    : (loadStickiesDriveFolder()?.name ?? STICKIES_DRIVE_FOLDER_NAME);
+  const projectSaveLocation = formatProjectSaveLocation({
+    cloudFile,
+    cloudSaveStatus,
+    fallbackDriveFolderName,
+    projectName: project.projectName,
+    saveStatus,
+  });
 
   return (
     <header className="top-bar">
@@ -73,7 +105,7 @@ export function TopBar() {
           <h1>Stickies</h1>
         </div>
         <p title={cloudError ?? undefined}>
-          {projectSourceName} · {cloudStatusLabel}
+          {projectSaveLocation}
         </p>
       </div>
 
@@ -91,52 +123,6 @@ export function TopBar() {
         </Select>
 
         <Toggle checked={project.settings.showMiniMap} label="MiniMap" onChange={toggleMiniMap} />
-        {readOnly ? null : (
-          <Select
-            aria-label="Arrow paths"
-            value={project.settings.edgeRoutingMode ?? "bezier"}
-            onChange={(event) => setEdgeRoutingMode(event.target.value as EdgeRoutingMode)}
-          >
-            {EDGE_ROUTING_OPTIONS.map((routingMode) => (
-              <option key={routingMode} value={routingMode}>
-                {formatEdgeRoutingLabel(routingMode)}
-              </option>
-            ))}
-          </Select>
-        )}
-        {readOnly ? null : (
-          <Select
-            aria-label="Handles"
-            value={project.settings.nodeHandleMode ?? "side"}
-            onChange={(event) => setNodeHandleMode(event.target.value as NodeHandleMode)}
-          >
-            {NODE_HANDLE_OPTIONS.map((handleMode) => (
-              <option key={handleMode} value={handleMode}>
-                {formatNodeHandleModeLabel(handleMode)}
-              </option>
-            ))}
-          </Select>
-        )}
-        {generatedTab && !readOnly ? (
-          <Button
-            variant={generatedLayoutUnlocked ? "primary" : "secondary"}
-            onClick={toggleGeneratedLayoutLock}
-            title={generatedLayoutUnlocked ? "Lock generated node positions" : "Unlock generated node positions"}
-          >
-            {generatedLayoutUnlocked ? <Unlock size={16} aria-hidden="true" /> : <Lock size={16} aria-hidden="true" />}
-            {generatedLayoutUnlocked ? "Layout Unlocked" : "Unlock Layout"}
-          </Button>
-        ) : null}
-        {showDirectJsonExport ? (
-          <Button
-            variant="secondary"
-            onClick={() => downloadProjectJson(project)}
-            title="Export this schema v2 project as JSON"
-          >
-            <Download size={16} aria-hidden="true" />
-            Export JSON
-          </Button>
-        ) : null}
         {presentationMode || readOnly ? null : (
           <Button variant={project.settings.adminMode ? "primary" : "secondary"} onClick={toggleAdminMode}>
             <Settings size={16} aria-hidden="true" />

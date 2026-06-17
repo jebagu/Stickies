@@ -1,7 +1,7 @@
 export const GOOGLE_DRIVE_SCOPE = "https://www.googleapis.com/auth/drive.file";
 export const STICKIES_DRIVE_MIME = "application/vnd.jebagu.stickies+json";
 export const LEGACY_JSON_MIME = "application/json";
-export const STICKIES_FILE_SUFFIX = ".stickies.json";
+export const STICKIES_FILE_SUFFIX = ".stickies";
 
 export type GoogleDriveConfig = {
   clientId: string;

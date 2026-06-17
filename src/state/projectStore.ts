@@ -134,7 +134,6 @@ type ProjectState = {
   toggleAdminMode: () => void;
   togglePresentationMode: () => void;
   toggleMiniMap: () => void;
-  toggleGeneratedLayoutLock: () => void;
   setInspectorHidden: (inspectorHidden: boolean) => void;
 };
 
@@ -1486,21 +1485,6 @@ export const useProjectStore = create<ProjectState>((set, get) => ({
       commitViewProject(nextProject, set);
       return;
     }
-
-    commitProject(nextProject, set);
-  },
-
-  toggleGeneratedLayoutLock: () => {
-    if (!canEditProject(get)) {
-      setReadOnlyWarning(set);
-      return;
-    }
-
-    const { project } = get();
-    const nextProject = updateSettings(project, (settings) => ({
-      ...settings,
-      readOnlyGeneratedTabs: settings.readOnlyGeneratedTabs === false,
-    }));
 
     commitProject(nextProject, set);
   },

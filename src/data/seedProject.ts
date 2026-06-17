@@ -12,6 +12,7 @@ import type {
   Workstream,
 } from "../types/planning";
 import { createStageBandNodes, createStageColumnRect, normalizeStagesForLayout } from "../lib/stageLayout";
+import { createFunProjectName } from "../lib/stickiesFiles";
 import { slugId } from "../utils/id";
 
 const SEED_TIMESTAMP = "2026-06-12T00:00:00.000Z";
@@ -1117,7 +1118,7 @@ export function createBlankProject(): ProjectFile {
 
   return {
     schemaVersion: 1,
-    projectName: "Untitled Project",
+    projectName: createFunProjectName(),
     activeTabId: tabId,
     people: [],
     workstreams: [],

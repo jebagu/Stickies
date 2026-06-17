@@ -13,6 +13,10 @@ export function getEditorUrl() {
 }
 
 export function getPublicProjectUrl() {
+  return `${import.meta.env.BASE_URL}public/project.stickies`;
+}
+
+export function getLegacyPublicProjectUrl() {
   return `${import.meta.env.BASE_URL}public/project.json`;
 }
 

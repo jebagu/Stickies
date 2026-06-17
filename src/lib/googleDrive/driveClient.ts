@@ -1,6 +1,7 @@
 import type { ProjectFile } from "../../types/planning";
 import { createProjectJson } from "../exportImport";
-import { STICKIES_DRIVE_MIME, STICKIES_FILE_SUFFIX } from "./config";
+import { createStickiesFileName } from "../stickiesFiles";
+import { STICKIES_DRIVE_MIME } from "./config";
 
 const DRIVE_API_BASE_URL = "https://www.googleapis.com/drive/v3";
 const DRIVE_UPLOAD_BASE_URL = "https://www.googleapis.com/upload/drive/v3";
@@ -38,6 +39,7 @@ export type DriveFileMetadata = {
 export type DriveCloudFile = {
   id: string;
   name: string;
+  folderName?: string;
   mimeType?: string;
   modifiedTime?: string;
   version?: string;
@@ -64,10 +66,11 @@ export function isDriveAuthError(error: unknown): error is DriveAuthError {
   return error instanceof DriveAuthError;
 }
 
-export function toDriveCloudFile(metadata: DriveFileMetadata): DriveCloudFile {
+export function toDriveCloudFile(metadata: DriveFileMetadata, options: { folderName?: string } = {}): DriveCloudFile {
   return {
     id: metadata.id,
     name: metadata.name,
+    folderName: options.folderName,
     mimeType: metadata.mimeType,
     modifiedTime: metadata.modifiedTime,
     version: metadata.version,
@@ -251,7 +254,7 @@ export async function updateStickiesDriveFile(
   const currentMetadata = await getFileMetadata(fileId, accessToken);
 
   if (currentMetadata.capabilities?.canEdit === false) {
-    throw new Error("This Google Drive file is view-only. Use Save to Drive to make an editable copy.");
+    throw new Error("This Google Drive file is view-only. Use Save to Google Drive to make an editable copy.");
   }
 
   if (expectedVersion && currentMetadata.version && currentMetadata.version !== expectedVersion) {
@@ -270,8 +273,7 @@ export async function updateStickiesDriveFile(
 }
 
 export function ensureStickiesFileName(name: string) {
-  const trimmedName = name.trim() || "Stickies project";
-  return trimmedName.toLowerCase().endsWith(STICKIES_FILE_SUFFIX) ? trimmedName : `${trimmedName}${STICKIES_FILE_SUFFIX}`;
+  return createStickiesFileName(name.trim() || "Stickies project");
 }
 
 export function createProjectUploadBody(project: ProjectFile) {

@@ -1,7 +1,11 @@
 import { createSeedProject } from "../data/seedProject";
 import type { ProjectFile } from "../types/planning";
-import { getPublicDriveFileId, getPublicProjectSlug, getPublicProjectUrl } from "./appMode";
-import { downloadPublishedDriveProject, getPublishedProjectJsonUrl } from "./publish";
+import { getLegacyPublicProjectUrl, getPublicDriveFileId, getPublicProjectSlug, getPublicProjectUrl } from "./appMode";
+import {
+  downloadPublishedDriveProject,
+  getLegacyPublishedProjectJsonUrl,
+  getPublishedProjectJsonUrl,
+} from "./publish";
 import { validateProjectFile } from "./validation";
 
 export type LoadPublicProjectResult = {
@@ -16,20 +20,28 @@ export async function loadProjectFromPublicSnapshot(): Promise<LoadPublicProject
   }
 
   const slug = getPublicProjectSlug();
-  const projectUrl = slug ? getPublishedProjectJsonUrl(slug) : getPublicProjectUrl();
+  const projectUrls = slug
+    ? [getPublishedProjectJsonUrl(slug), getLegacyPublishedProjectJsonUrl(slug)]
+    : [getPublicProjectUrl(), getLegacyPublicProjectUrl()];
 
   return loadParsedPublicProject(async () => {
-    const response = await fetch(projectUrl, {
-      headers: {
-        Accept: "application/json",
-      },
-    });
+    let lastStatus = 0;
 
-    if (!response.ok) {
-      throw new Error(`Public project snapshot could not be loaded (${response.status}).`);
+    for (const projectUrl of projectUrls) {
+      const response = await fetch(projectUrl, {
+        headers: {
+          Accept: "application/json",
+        },
+      });
+
+      if (response.ok) {
+        return (await response.json()) as unknown;
+      }
+
+      lastStatus = response.status;
     }
 
-    return (await response.json()) as unknown;
+    throw new Error(`Public project snapshot could not be loaded (${lastStatus}).`);
   });
 }
 

@@ -1,5 +1,5 @@
 import { loadScript } from "../loadScript";
-import { getGoogleDriveConfig, LEGACY_JSON_MIME, STICKIES_DRIVE_MIME } from "./config";
+import { assertGoogleDriveConfigured } from "./config";
 
 const GOOGLE_API_SCRIPT_URL = "https://apis.google.com/js/api.js";
 
@@ -13,13 +13,20 @@ type PickerDocument = {
 type PickerResponse = {
   action?: string;
   docs?: PickerDocument[];
+  error?: string;
 };
 
 type PickerCallback = (response: PickerResponse) => void;
 
 type PickerBuilder = {
   addView: (view: unknown) => PickerBuilder;
+  enableFeature?: (feature: string) => PickerBuilder;
   setAppId: (appId: string) => PickerBuilder;
+  setOrigin?: (origin: string) => PickerBuilder;
+  setMaxItems?: (max: number) => PickerBuilder;
+  setRelayUrl?: (relayUrl: string) => PickerBuilder;
+  setSize?: (width: number, height: number) => PickerBuilder;
+  setTitle?: (title: string) => PickerBuilder;
   setDeveloperKey: (apiKey: string) => PickerBuilder;
   setOAuthToken: (accessToken: string) => PickerBuilder;
   setSelectableMimeTypes: (mimeTypes: string) => PickerBuilder;
@@ -28,6 +35,7 @@ type PickerBuilder = {
 };
 
 type DocsView = {
+  setEnableDrives?: (enableDrives: boolean) => DocsView;
   setIncludeFolders: (includeFolders: boolean) => DocsView;
   setSelectFolderEnabled: (selectFolderEnabled: boolean) => DocsView;
 };
@@ -35,8 +43,12 @@ type DocsView = {
 type GooglePickerGlobal = {
   picker?: {
     Action: {
+      ERROR?: string;
       PICKED: string;
       CANCEL: string;
+    };
+    Feature?: {
+      SUPPORT_DRIVES?: string;
     };
     ViewId: {
       DOCS: string;
@@ -102,8 +114,37 @@ function toDriveFilePick(document: PickerDocument): DriveFilePick {
   };
 }
 
+function getPickerRelayUrl() {
+  return new URL(import.meta.env.BASE_URL, window.location.origin).toString();
+}
+
+function configurePickerBuilder(builder: PickerBuilder, options: { supportSharedDrives?: boolean; title: string }) {
+  const google = getGooglePicker();
+  const supportDrivesFeature = google?.picker?.Feature?.SUPPORT_DRIVES;
+
+  let configuredBuilder = builder.setOrigin?.(window.location.origin) ?? builder;
+  configuredBuilder = configuredBuilder.setMaxItems?.(1) ?? configuredBuilder;
+  configuredBuilder = configuredBuilder.setRelayUrl?.(getPickerRelayUrl()) ?? configuredBuilder;
+  configuredBuilder = configuredBuilder.setSize?.(1051, 650) ?? configuredBuilder;
+  configuredBuilder = configuredBuilder.setTitle?.(options.title) ?? configuredBuilder;
+
+  if (options.supportSharedDrives && supportDrivesFeature) {
+    configuredBuilder = configuredBuilder.enableFeature?.(supportDrivesFeature) ?? configuredBuilder;
+  }
+
+  return configuredBuilder;
+}
+
+function enableSharedDrives<TView extends DocsView>(view: TView) {
+  return view.setEnableDrives?.(true) ?? view;
+}
+
+function rejectPickerError(response: PickerResponse) {
+  return new Error(response.error || "Google Picker returned an error.");
+}
+
 export async function pickDriveFile(accessToken: string): Promise<DriveFilePick | null> {
-  const config = getGoogleDriveConfig();
+  const config = assertGoogleDriveConfigured();
 
   await loadPickerApi();
 
@@ -115,19 +156,26 @@ export async function pickDriveFile(accessToken: string): Promise<DriveFilePick 
   }
 
   return new Promise((resolve, reject) => {
-    const docsView = new picker.DocsView(picker.ViewId.DOCS)
+    const docsView = enableSharedDrives(new picker.DocsView(picker.ViewId.DOCS))
       .setIncludeFolders(true)
       .setSelectFolderEnabled(false);
 
-    const googlePicker = new picker.PickerBuilder()
+    const googlePicker = configurePickerBuilder(new picker.PickerBuilder(), {
+      supportSharedDrives: true,
+      title: "Open from Drive",
+    })
       .addView(docsView)
       .setAppId(config.appId)
       .setDeveloperKey(config.apiKey)
       .setOAuthToken(accessToken)
-      .setSelectableMimeTypes(`${STICKIES_DRIVE_MIME},${LEGACY_JSON_MIME}`)
       .setCallback((response) => {
         if (response.action === picker.Action.CANCEL) {
           resolve(null);
+          return;
+        }
+
+        if (response.action === picker.Action.ERROR) {
+          reject(rejectPickerError(response));
           return;
         }
 
@@ -149,7 +197,7 @@ export async function pickDriveFile(accessToken: string): Promise<DriveFilePick 
 }
 
 export async function pickDriveFolder(accessToken: string): Promise<DriveFolderPick | null> {
-  const config = getGoogleDriveConfig();
+  const config = assertGoogleDriveConfigured();
 
   await loadPickerApi();
 
@@ -165,7 +213,7 @@ export async function pickDriveFolder(accessToken: string): Promise<DriveFolderP
       .setIncludeFolders(true)
       .setSelectFolderEnabled(true);
 
-    const googlePicker = new picker.PickerBuilder()
+    const googlePicker = configurePickerBuilder(new picker.PickerBuilder(), { title: "Choose Drive folder" })
       .addView(folderView)
       .setAppId(config.appId)
       .setDeveloperKey(config.apiKey)
@@ -173,6 +221,11 @@ export async function pickDriveFolder(accessToken: string): Promise<DriveFolderP
       .setCallback((response) => {
         if (response.action === picker.Action.CANCEL) {
           resolve(null);
+          return;
+        }
+
+        if (response.action === picker.Action.ERROR) {
+          reject(rejectPickerError(response));
           return;
         }
 

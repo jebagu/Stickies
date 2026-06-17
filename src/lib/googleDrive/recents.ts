@@ -6,6 +6,7 @@ export const MAX_DRIVE_RECENTS = 10;
 export type DriveRecentFile = {
   id: string;
   name: string;
+  folderName?: string;
   modifiedTime?: string;
   webViewLink?: string;
   lastOpenedAt: string;
@@ -46,6 +47,7 @@ export function rememberDriveRecentFile(file: DriveCloudFile, openedAt = new Dat
   const recentFile: DriveRecentFile = {
     id: file.id,
     name: file.name,
+    folderName: file.folderName,
     modifiedTime: file.modifiedTime,
     webViewLink: file.webViewLink,
     lastOpenedAt: openedAt,

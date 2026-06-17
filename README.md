@@ -2,7 +2,7 @@
 
 Internal sticky-style project-planning canvas for mapping Sonic Sphere workstreams, associated people/organizations, stages, project nodes, and dependencies with React Flow.
 
-This is a static Vite React app. It runs locally, can be deployed to GitHub Pages, and stores project data in the browser, local JSON files, and optional Google Drive `.stickies.json` files.
+This is a static Vite React app. It runs locally, can be deployed to GitHub Pages, and stores project data in the browser, local `.stickies` files, and optional Google Drive `.stickies` files.
 
 The browser favicon is the Material Design Icons `circle-opacity` glyph, flipped horizontally and served from [public/favicon.svg](/Users/jeremyguillory/Documents/vibecode-projects/SS%20React%20Flow%20Charts/public/favicon.svg).
 
@@ -46,9 +46,9 @@ http://127.0.0.1:5178/Stickies/public/
 
 The dev server is pinned in [vite.config.ts](/Users/jeremyguillory/Documents/vibecode-projects/SS%20React%20Flow%20Charts/vite.config.ts) with strict-port behavior. If port `5178` is already occupied, stop the stale server instead of silently changing the permanent URL.
 
-## Google Drive Picker Setup
+## Google Drive Setup
 
-Stickies can open, save, and publish `.stickies.json` files in the user's own Google Drive. Stickies does not create app accounts, store passwords, run a backend, or maintain an app-owned permission database. Google Drive is the account, file system, storage layer, and sharing layer. Browser localStorage remains a local recovery backup, and full real-time collaboration is not included.
+Stickies can open, save, and publish `.stickies` files in the user's own Google Drive. Legacy `.stickies.json` Drive files remain openable. Stickies does not create app accounts, store passwords, run a backend, or maintain an app-owned permission database. Google Drive is the account, file system, storage layer, and sharing layer. Browser localStorage remains a local recovery backup, and full real-time collaboration is not included.
 
 To enable Drive actions, create Google Cloud web credentials for this static app:
 
@@ -81,9 +81,11 @@ If Google Picker shows `The API developer key is invalid`, the local values may 
 - `VITE_GOOGLE_APP_ID` is the numeric Cloud project number from IAM & Admin > Settings, not the project ID string.
 - The Vite dev server was restarted after `.env.local` changed.
 
-`Save to Drive` starts Google authorization before asking for a filename. When no valid Drive token is already in memory, Stickies redirects the current tab to Google, returns to `/Stickies/`, then resumes the same save action. First-time Drive saves ask the user to confirm that Stickies may create a top-level `Stickies` folder in My Drive. After confirmation, Stickies creates and remembers that folder locally, creates the `.stickies.json` file there, binds the browser project to that Drive file, and shows one copyable Drive link plus an `Open in Drive` action. Later saves update the bound Drive file without asking for a folder.
+`Save to Google Drive` starts Google authorization before asking for a filename. When no valid Drive token is already in memory, Stickies redirects the current tab to Google, returns to `/Stickies/`, then resumes the same save action. First-time Drive saves ask the user to confirm that Stickies may create a top-level `Stickies` folder in My Drive. After confirmation, Stickies creates and remembers that folder locally, creates the `.stickies` file there, binds the browser project to that Drive file, and shows one copyable Drive file link plus an `Open Folder in Drive` action. Later saves update the bound Drive file and open the same Stickies folder from the success dialog.
 
-`Open recent` is the preferred cloud-open workflow because it reopens locally remembered Stickies Drive files without relying on broad Drive browsing. `Open by link/ID` is the fallback for files not in recents. Google Picker folder selection and broad Drive browsing are not part of the primary save/open path. An advanced pasted folder link/ID path may be used for an existing manually created Stickies folder, but Stickies does not search Drive for folders by name.
+The top bar shows where the editable project is saved. Browser-local projects read as locally saved, unsaved, or failed local save. Bound Drive projects read as `Google Drive · <folder> · <file> · <Drive save state>`. New Drive saves store the folder label directly, and older saved bindings use the standard `Stickies` Drive folder label.
+
+`Open recent` is the preferred cloud-open workflow because it reopens locally remembered Stickies Drive files without relying on broad Drive browsing. Google Picker folder selection, broad Drive browsing, pasted folder links, and alternate save folders are not part of the save path. Stickies saves only to the top-level `Stickies` folder it creates in My Drive.
 
 ## Commands
 
@@ -181,13 +183,12 @@ Validation lives in [src/lib/validation.ts](/Users/jeremyguillory/Documents/vibe
 The editor left rail starts with a single `File` menu for browser-local project lifecycle actions:
 
 - `New`: replaces the current browser project with a blank project after confirmation.
-- `Open local JSON`: imports a native `.json` project file after validation and confirmation.
+- `Open local file`: imports a native `.stickies` project file after validation and confirmation. Legacy `.json` and `.stickies.json` files still open.
+- `Save local file`: downloads a Stickies project file, Markdown, or DOCX file.
 - `Close`: clears the current browser project and switches to a blank project after confirmation.
-- `Google Drive...`: opens the Drive dashboard for current file status, Stickies folder status, recent files, advanced Save Copy, Open by Link/ID, and latest published link.
 - `Open recent`: reopens a locally remembered Drive file by file ID without using the full Picker. Recents store file metadata only, never access tokens or project JSON.
-- `Save to Drive`: updates the currently bound Drive file. If the project is not bound to Drive yet, it asks for a file name, confirms creation of a top-level `Stickies` folder in My Drive if needed, creates a `.stickies.json` file there, and binds the current project to that Drive file.
-- `Publish`: asks for a snapshot name, saves a frozen read-only Google Drive copy in the Stickies folder, applies anyone-with-the-link reader permission, stores the latest published link locally for the Drive dashboard, and returns a public Stickies viewer link. Later edits do not update that published snapshot.
-- `Export`: downloads a JSON project file, Markdown, or DOCX file.
+- `Save to Google Drive`: updates the currently bound Drive file. If the project is not bound to Drive yet, it asks for a file name, confirms creation of a top-level `Stickies` folder in My Drive if needed, creates a `.stickies` file there, and binds the current project to that Drive file.
+- `Publish`: asks for a snapshot name, saves a frozen read-only Google Drive copy in the Stickies folder, applies anyone-with-the-link reader permission, remembers the latest published link locally, and returns a public Stickies viewer link. Later edits do not update that published snapshot.
 - `Save checkpoint`: creates a named restore point inside the current project. Autosave to localStorage still happens in the background.
 - `Version history`: shows the most recent saved checkpoints. Checkpoint restore is future work and is not exposed in this menu yet.
 
@@ -195,13 +196,13 @@ Links shaped like `/Stickies/?driveFileId=<file-id>` show an `Open shared Drive 
 
 ## Public Read-Only View
 
-The public viewer lives at `/Stickies/public/`. It loads the committed static snapshot at [public/public/project.json](/Users/jeremyguillory/Documents/vibecode-projects/SS%20React%20Flow%20Charts/public/public/project.json) instead of browser localStorage.
+The public viewer lives at `/Stickies/public/`. It loads the committed static snapshot at [public/public/project.stickies](/Users/jeremyguillory/Documents/vibecode-projects/SS%20React%20Flow%20Charts/public/public/project.stickies) instead of browser localStorage, with [public/public/project.json](/Users/jeremyguillory/Documents/vibecode-projects/SS%20React%20Flow%20Charts/public/public/project.json) retained as a legacy fallback.
 
-Drive-published read-only links live at `/Stickies/public/drive/<file-id>/`. The `File` menu's `Publish` action asks for a filename, saves a separate frozen snapshot file in the remembered Stickies folder with no version-history checkpoints inside it, makes that file readable by anyone with the link, and shows the matching Stickies public viewer link. When publishing from `127.0.0.1`, the returned link uses `VITE_PUBLIC_APP_ORIGIN` instead of localhost so it can be shared. The Drive dashboard keeps the latest published link visible as selectable text, so copy failures do not hide the URL. Published snapshot files do not become the current editable Drive save target. Later edits to the editor project do not update already published snapshots.
+Drive-published read-only links live at `/Stickies/public/drive/<file-id>/`. The `File` menu's `Publish` action asks for a filename, saves a separate frozen snapshot file in the remembered Stickies folder with no version-history checkpoints inside it, makes that file readable by anyone with the link, and shows the matching Stickies public viewer link. When publishing from `127.0.0.1`, the returned link uses `VITE_PUBLIC_APP_ORIGIN` instead of localhost so it can be shared. Published snapshot files do not become the current editable Drive save target. Later edits to the editor project do not update already published snapshots.
 
 The public Drive viewer loads the snapshot JSON through the Google Drive API using the configured browser API key, not OAuth. Viewers do not need to sign in when the file has the anyone-with-the-link reader permission. If a Google Workspace policy blocks public sharing, Stickies may save the snapshot file to Drive but will show a failure explaining that it could not apply the public link permission. In that case, the returned Stickies public link will not work until Drive sharing policy allows public-by-link access.
 
-Legacy static published slug links shaped like `/Stickies/public/<slug>/` still try to load `public/published/<slug>.json` if those files already exist, but new publishing does not create GitHub commits or call a local publish endpoint.
+Legacy static published slug links shaped like `/Stickies/public/<slug>/` try to load `public/published/<slug>.stickies` first and fall back to `public/published/<slug>.json` if those files already exist. New publishing does not create GitHub commits or call a local publish endpoint.
 
 Public mode allows:
 
@@ -217,35 +218,35 @@ Public mode allows:
 
 Public mode does not allow durable editing. Add, rename, delete, import, snapshot, settings, connect, and inspector edit controls are hidden or blocked. Temporary item movement is not saved and resets when the public snapshot is loaded again.
 
-To update the static public data at `/Stickies/public/`, export an approved project JSON from the private editor, review it for public-safe content, then replace `public/public/project.json` before deploying. Anything in that file can be public on GitHub Pages.
+To update the static public data at `/Stickies/public/`, save an approved `.stickies` project file from the private editor, review it for public-safe content, then replace `public/public/project.stickies` before deploying. Keep `public/public/project.json` only when you need the legacy fallback updated too. Anything in either file can be public on GitHub Pages.
 
-To publish a new Drive snapshot, run `File -> Publish` again and share the new `/Stickies/public/drive/<file-id>/` link. Treat every published Drive snapshot JSON file as public once anyone-with-the-link permission is applied.
+To publish a new Drive snapshot, run `File -> Publish` again and share the new `/Stickies/public/drive/<file-id>/` link. Treat every published Drive snapshot file as public once anyone-with-the-link permission is applied.
 
-## Import and Export
+## Local Files
 
-Export/import helpers live in [src/lib/exportImport.ts](/Users/jeremyguillory/Documents/vibecode-projects/SS%20React%20Flow%20Charts/src/lib/exportImport.ts).
+Local file helpers live in [src/lib/exportImport.ts](/Users/jeremyguillory/Documents/vibecode-projects/SS%20React%20Flow%20Charts/src/lib/exportImport.ts).
 
-The left-rail `File` menu contains `Open local JSON` and `Export`. `Open local JSON` only accepts `.json` project files, validates schema version `1` or `2`, and replaces the current project only after confirmation. It also accepts simplified Stickies JSON shaped as `version`, `name`, and `tabs`; those imports keep nodes, notes, edge labels, and canvas positions while using empty people, workstream, and tag lists internally.
+The left-rail `File` menu contains `Open local file` and `Save local file`. `Open local file` accepts `.stickies` project files, plus legacy `.json` and `.stickies.json` project files, validates schema version `1` or `2`, and replaces the current project only after confirmation. It also accepts simplified Stickies JSON shaped as `version`, `name`, and `tabs`; those imports keep nodes, notes, edge labels, and canvas positions while using empty people, workstream, and tag lists internally.
 
 Schema v2 imports are for analyzer-generated software graph projects such as `ss-react-flow-project-v2.json`. The importer preserves `projectOrigin`, `graphSnapshots`, `softwareGraphNavigation`, generated tab metadata, and each node/edge `data.softwareGraph` payload. Generated tabs may omit `stages`; the app normalizes missing stages to an empty array only for renderer compatibility. If a v2 file omits `settings.themeId`, the app applies the default `clean-light` theme while preserving analyzer settings such as `generatedSoftwareGraph` and `readOnlyGeneratedTabs`.
 
 Project settings may include `edgeRoutingMode` (`bezier`, `smooth-step`, or `straight`) and `nodeHandleMode` (`side` or `all-sides`). Missing values fall back to curved arrows with side handles so older project JSON files continue to load.
 
-`Export` opens a centered format picker with three options:
+`Save local file` opens a centered format picker with three options:
 
-- `JSON project file`: the native project JSON format this flowchart app uses, preserving schema v1/v2 project data and metadata.
+- `Stickies project file`: the native JSON-backed `.stickies` format this flowchart app uses, preserving schema v1/v2 project data and metadata.
 - `markdown`: a human-readable `.md` outline that is good to import into AI tools.
 - `DOCX`: a plain human-readable Word document generated from the same outline.
 
-Export filenames use this shape:
+Saved local filenames use this shape:
 
 ```txt
-project-planner-YYYY-MM-DD-HHmm.json
-project-planner-YYYY-MM-DD-HHmm.md
-project-planner-YYYY-MM-DD-HHmm.docx
+project-name.stickies
+project-name.md
+project-name.docx
 ```
 
-Use `Save checkpoint` for an internal restore point. Use `Export` when you need a file outside this browser.
+Use `Save checkpoint` for an internal restore point. Use `Save local file` when you need a file outside this browser.
 
 ## Checkpoints
 
@@ -295,7 +296,7 @@ Inspector files:
 - [src/components/inspectors/EdgeInspector.tsx](/Users/jeremyguillory/Documents/vibecode-projects/SS%20React%20Flow%20Charts/src/components/inspectors/EdgeInspector.tsx)
 - [src/components/inspectors/TabInspector.tsx](/Users/jeremyguillory/Documents/vibecode-projects/SS%20React%20Flow%20Charts/src/components/inspectors/TabInspector.tsx)
 
-In editor mode, users can add planning items, create/rename/delete tabs, edit the active tab's stages from the left sidebar, switch the active tab between vertical stages and horizontal lanes, edit a selected item's title, note, status, and associations, duplicate/delete items, edit/delete selected edges, set edge line types, change arrow routing, change node handle placement, recompute arrows, hide/show the inspector, create checkpoints, import/export JSON, and toggle MiniMap, Settings, and Presentation modes.
+In editor mode, users can add planning items, create/rename/delete tabs, edit the active tab's stages from the left sidebar, switch the active tab between vertical stages and horizontal lanes, edit a selected item's title, note, status, and associations, duplicate/delete items, edit/delete selected edges, set edge line types, change arrow routing, change node handle placement, recompute arrows, hide/show the inspector, create checkpoints, open/save local files, and toggle MiniMap, Settings, and Presentation modes.
 
 Generated software graph tabs keep generated contents read-only by default, so nodes and edges cannot be accidentally edited and the left-rail stage editor is hidden for those tabs. Node positions can still be adjusted in editor mode so generated graph layouts can be cleaned up without unlocking content edits. Existing planning tabs remain editable. The node and edge inspectors show software graph metadata when present, including kind, source path and line range, confidence, provenance source type, extractor, observed time, build ID, snapshot ID, and metadata summary.
 
@@ -338,9 +339,9 @@ The app applies the selected theme with `data-theme` on the app root. Theme valu
 
 GitHub Pages is static hosting. Anything committed to this repository can become public depending on repository and Pages settings.
 
-Do not commit confidential project JSON into the repository unless the team has intentionally approved that. This includes [public/public/project.json](/Users/jeremyguillory/Documents/vibecode-projects/SS%20React%20Flow%20Charts/public/public/project.json), which is the source for the public read-only viewer.
+Do not commit confidential project data into the repository unless the team has intentionally approved that. This includes [public/public/project.stickies](/Users/jeremyguillory/Documents/vibecode-projects/SS%20React%20Flow%20Charts/public/public/project.stickies) and the legacy fallback [public/public/project.json](/Users/jeremyguillory/Documents/vibecode-projects/SS%20React%20Flow%20Charts/public/public/project.json), which are sources for the public read-only viewer.
 
-For internal planning data, use browser localStorage, JSON import/export, or private Google Drive `.stickies.json` files. Do not use `Publish` for confidential projects; published Drive snapshots are intended to be public to anyone with the link.
+For internal planning data, use browser localStorage, `.stickies` import/export, or private Google Drive `.stickies` files. Do not use `Publish` for confidential projects; published Drive snapshots are intended to be public to anyone with the link.
 
 ## Known Limitations
 

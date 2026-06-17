@@ -1,6 +1,6 @@
 import type { AppEdge, AppNode, EdgeRoutingMode, LineType, NodeHandleMode, ProjectFile, ProjectSettings } from "../types/planning";
 import { isPlanningNodeData } from "../types/planning";
-import { formatDateTimeForFilename } from "../utils/dates";
+import { createFileBasename, createStickiesFileName, isSupportedStickiesFileName } from "./stickiesFiles";
 import { validateProjectFile } from "./validation";
 
 export type ProjectExportFormat = "native" | "markdown" | "docx";
@@ -242,9 +242,13 @@ export function createProjectJson(project: ProjectFile) {
   return JSON.stringify(project, null, 2);
 }
 
-export function createProjectExportFilename(format: ProjectExportFormat = "native", date = new Date()) {
-  const extension = format === "native" ? "json" : format === "markdown" ? "md" : format;
-  return `project-planner-${formatDateTimeForFilename(date)}.${extension}`;
+export function createProjectExportFilename(projectName: string, format: ProjectExportFormat = "native") {
+  if (format === "native") {
+    return createStickiesFileName(projectName);
+  }
+
+  const extension = format === "markdown" ? "md" : format;
+  return `${createFileBasename(projectName)}.${extension}`;
 }
 
 function downloadBlob(blob: Blob, filename: string) {
@@ -262,7 +266,7 @@ export function downloadProjectJson(project: ProjectFile) {
     type: "application/json;charset=utf-8",
   });
 
-  downloadBlob(blob, createProjectExportFilename("native"));
+  downloadBlob(blob, createProjectExportFilename(project.projectName, "native"));
 }
 
 function normalizeLine(value: string) {
@@ -415,7 +419,7 @@ export function downloadProjectMarkdown(project: ProjectFile) {
     type: "text/markdown;charset=utf-8",
   });
 
-  downloadBlob(blob, createProjectExportFilename("markdown"));
+  downloadBlob(blob, createProjectExportFilename(project.projectName, "markdown"));
 }
 
 function escapeXml(value: string) {
@@ -594,7 +598,7 @@ export function downloadProjectDocx(project: ProjectFile) {
     type: "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
   });
 
-  downloadBlob(blob, createProjectExportFilename("docx"));
+  downloadBlob(blob, createProjectExportFilename(project.projectName, "docx"));
 }
 
 export function downloadProjectExport(project: ProjectFile, format: ProjectExportFormat) {
@@ -636,10 +640,10 @@ export function parseProjectJsonText(text: string, sourceName = "Project file"):
 }
 
 export async function parseProjectJsonFile(file: File): Promise<ImportProjectResult> {
-  if (!file.name.toLowerCase().endsWith(".json")) {
+  if (!isSupportedStickiesFileName(file.name)) {
     return {
       ok: false,
-      error: "Choose a native .json project file.",
+      error: "Choose a Stickies project file.",
     };
   }
 

@@ -6,6 +6,7 @@ import {
   Download,
   FilePlus2,
   FolderOpen,
+  Globe2,
   History,
   Menu,
   Share2,
@@ -28,7 +29,7 @@ export function FileMenu() {
   const menuRef = useRef<HTMLDivElement>(null);
   const fileInputRef = useRef<HTMLInputElement>(null);
   const dialog = useDialog();
-  const { openRecentDriveFile } = useDriveOpenActions();
+  const { openPublicGallery, openRecentDriveFile } = useDriveOpenActions();
   const { publishToDrive } = useDrivePublishActions();
   const { saveToDrive } = useDriveSaveActions();
   const {
@@ -240,6 +241,10 @@ export function FileMenu() {
           <button type="button" role="menuitem" onClick={() => runMenuAction(openRecentDriveFile)}>
             <History size={15} aria-hidden="true" />
             <span>Open recent</span>
+          </button>
+          <button type="button" role="menuitem" onClick={() => runMenuAction(openPublicGallery)}>
+            <Globe2 size={15} aria-hidden="true" />
+            <span>Open from Public Gallery</span>
           </button>
           <button type="button" role="menuitem" onClick={() => runMenuAction(saveToDrive)}>
             <CloudUpload size={15} aria-hidden="true" />

@@ -7,6 +7,7 @@ import {
 import { loadDriveProject } from "../../lib/googleDrive/openDriveProject";
 import { pickDriveFile } from "../../lib/googleDrive/picker";
 import { forgetDriveRecentFile, loadDriveRecentFiles, rememberDriveRecentFile } from "../../lib/googleDrive/recents";
+import { loadPublicGalleryFiles, loadPublicGallerySources, type PublicGalleryFile } from "../../lib/publicGallery";
 import { useProjectStore } from "../../state/projectStore";
 import { useDialog } from "../ui/DialogProvider";
 
@@ -33,6 +34,12 @@ function parseDriveFileId(input: string) {
   }
 
   return /^[A-Za-z0-9_-]+$/.test(trimmedInput) ? trimmedInput : null;
+}
+
+function formatGalleryFileDescription(sourceName: string, file: PublicGalleryFile) {
+  const modifiedDescription = file.modifiedTime ? `Modified ${new Date(file.modifiedTime).toLocaleString()}` : "No modified date";
+
+  return `${sourceName} - ${modifiedDescription}`;
 }
 
 export function useDriveOpenActions() {
@@ -169,10 +176,61 @@ export function useDriveOpenActions() {
     }
   }
 
+  async function openPublicGallery() {
+    try {
+      const sources = await loadPublicGallerySources();
+      const source = sources[0];
+
+      if (!source) {
+        await dialog.alert({
+          title: "Open from Public Gallery",
+          message: "No public gallery sources are configured.",
+        });
+        return false;
+      }
+
+      const files = await loadPublicGalleryFiles(source);
+
+      if (files.length === 0) {
+        await dialog.alert({
+          title: "Open from Public Gallery",
+          message:
+            "Stickies Public Gallery is empty or unavailable. The Drive folder may be private, blocked by API key restrictions, or contain no published Stickies files.",
+        });
+        return false;
+      }
+
+      const selectedUrl = await dialog.choose({
+        title: "Open from Public Gallery",
+        message: "Choose a published Stickies file to open read-only.",
+        confirmLabel: "Open",
+        choices: files.map((file) => ({
+          value: file.publicUrl,
+          label: file.name,
+          description: formatGalleryFileDescription(source.name, file),
+        })),
+      });
+
+      if (!selectedUrl) {
+        return false;
+      }
+
+      window.location.assign(selectedUrl);
+      return true;
+    } catch (error) {
+      await dialog.alert({
+        title: "Open from Public Gallery failed",
+        message: error instanceof Error ? error.message : "The public gallery could not be loaded.",
+      });
+      return false;
+    }
+  }
+
   return {
     openDriveFileByLink,
     openDriveProjectById,
     openFromDrive,
+    openPublicGallery,
     openRecentDriveFile,
   };
 }

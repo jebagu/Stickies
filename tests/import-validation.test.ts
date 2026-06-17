@@ -38,6 +38,14 @@ import {
   toStoredStickiesDriveFolder,
 } from "../src/lib/googleDrive/stickiesFolder.ts";
 import { getHostedDefaultProjectUrl, loadHostedDefaultProject } from "../src/lib/hostedDefaultProject.ts";
+import {
+  createPublicGalleryFolderFilesUrl,
+  isPublicGalleryCompatibleFile,
+  loadPublicGalleryFiles,
+  parsePublicGallerySources,
+  toPublicGalleryFiles,
+  type PublicGallerySource,
+} from "../src/lib/publicGallery.ts";
 import { loadProjectFromStorage } from "../src/lib/storage.ts";
 import { createFunProjectName, createStickiesFileName } from "../src/lib/stickiesFiles.ts";
 import { validateProjectFile } from "../src/lib/validation.ts";
@@ -86,6 +94,29 @@ function withMockLocalStorage(runTest: () => void) {
   }
 }
 
+async function withMockWindowLocation<T>(runTest: () => T | Promise<T>) {
+  const originalWindow = globalThis.window;
+
+  Object.defineProperty(globalThis, "window", {
+    configurable: true,
+    value: {
+      location: {
+        hostname: "jebagu.github.io",
+        origin: "https://jebagu.github.io",
+      },
+    },
+  });
+
+  try {
+    return await runTest();
+  } finally {
+    Object.defineProperty(globalThis, "window", {
+      configurable: true,
+      value: originalWindow,
+    });
+  }
+}
+
 function createDriveCloudFile(id: string): DriveCloudFile {
   return {
     id,
@@ -98,6 +129,18 @@ function createDriveCloudFile(id: string): DriveCloudFile {
     canDownload: true,
   };
 }
+
+const publicGallerySource: PublicGallerySource = {
+  id: "stickies-public-gallery",
+  name: "Stickies Public Gallery",
+  driveFolderId: "1nvVvcCc4ML1Iyd4mXUHo4ZuKoRpPd4UT",
+};
+
+const publicGalleryConfig = {
+  clientId: "",
+  apiKey: `AIza${"b".repeat(35)}`,
+  appId: "",
+};
 
 test("schema v1 fixture still imports", () => {
   const project = expectValidProject("schema-v1-project.json");
@@ -161,6 +204,121 @@ test("hosted default project loader falls back to blank on failure", async () =>
     assert.equal(result.project.tabs.length, 1);
     assert.equal(result.project.tabs[0]?.name, "Planning");
     assert.equal(result.project.settings.themeId, "neon-dark");
+  } finally {
+    globalThis.fetch = originalFetch;
+  }
+});
+
+test("public gallery registry parses the committed source", () => {
+  const registry = JSON.parse(
+    readFileSync(join(process.cwd(), "public", "published", "gallery-sources.json"), "utf8"),
+  ) as unknown;
+  const sources = parsePublicGallerySources(registry);
+
+  assert.deepEqual(sources, [publicGallerySource]);
+});
+
+test("public gallery folder listing URL uses the Drive files endpoint and public API key", () => {
+  const url = new URL(createPublicGalleryFolderFilesUrl(publicGallerySource.driveFolderId, publicGalleryConfig.apiKey, "next-page"));
+
+  assert.equal(url.origin, "https://www.googleapis.com");
+  assert.equal(url.pathname, "/drive/v3/files");
+  assert.equal(url.searchParams.get("key"), publicGalleryConfig.apiKey);
+  assert.equal(url.searchParams.get("q"), "'1nvVvcCc4ML1Iyd4mXUHo4ZuKoRpPd4UT' in parents and trashed = false");
+  assert.equal(url.searchParams.get("fields"), "nextPageToken,files(id,name,mimeType,modifiedTime,webViewLink)");
+  assert.equal(url.searchParams.get("orderBy"), "modifiedTime desc");
+  assert.equal(url.searchParams.get("supportsAllDrives"), "true");
+  assert.equal(url.searchParams.get("includeItemsFromAllDrives"), "true");
+  assert.equal(url.searchParams.get("pageToken"), "next-page");
+});
+
+test("public gallery filters compatible Stickies files and creates public viewer links", async () => {
+  await withMockWindowLocation(() => {
+    const files = toPublicGalleryFiles([
+      {
+        id: "older",
+        name: "Older.stickies",
+        mimeType: "text/plain",
+        modifiedTime: "2026-06-15T10:00:00.000Z",
+      },
+      {
+        id: "newer",
+        name: "Newer",
+        mimeType: "application/vnd.jebagu.stickies+json",
+        modifiedTime: "2026-06-16T10:00:00.000Z",
+      },
+      {
+        id: "notes",
+        name: "notes.txt",
+        mimeType: "text/plain",
+        modifiedTime: "2026-06-17T10:00:00.000Z",
+      },
+    ]);
+
+    assert.deepEqual(
+      files.map((file) => file.id),
+      ["newer", "older"],
+    );
+    assert.equal(files[0]?.publicUrl, "https://jebagu.github.io/Stickies/public/drive/newer/");
+  });
+});
+
+test("public gallery compatibility accepts current and legacy Stickies files", () => {
+  assert.equal(isPublicGalleryCompatibleFile({ name: "project.stickies" }), true);
+  assert.equal(isPublicGalleryCompatibleFile({ name: "project.stickies.json" }), true);
+  assert.equal(isPublicGalleryCompatibleFile({ name: "project.json", mimeType: "application/json" }), true);
+  assert.equal(isPublicGalleryCompatibleFile({ name: "project", mimeType: "application/vnd.jebagu.stickies+json" }), true);
+  assert.equal(isPublicGalleryCompatibleFile({ name: "notes.txt", mimeType: "text/plain" }), false);
+  assert.equal(isPublicGalleryCompatibleFile({ name: "notes.json", mimeType: "text/plain" }), false);
+});
+
+test("public gallery loader returns empty compatible files when folder has no Stickies files", async () => {
+  const originalFetch = globalThis.fetch;
+
+  globalThis.fetch = async () =>
+    new Response(
+      JSON.stringify({
+        files: [
+          {
+            id: "notes",
+            name: "notes.txt",
+            mimeType: "text/plain",
+            modifiedTime: "2026-06-17T10:00:00.000Z",
+          },
+        ],
+      }),
+      {
+        headers: {
+          "Content-Type": "application/json",
+        },
+        status: 200,
+      },
+    );
+
+  try {
+    await withMockWindowLocation(async () => {
+      const files = await loadPublicGalleryFiles(publicGallerySource, publicGalleryConfig);
+
+      assert.deepEqual(files, []);
+    });
+  } finally {
+    globalThis.fetch = originalFetch;
+  }
+});
+
+test("public gallery loader reports Drive API errors", async () => {
+  const originalFetch = globalThis.fetch;
+
+  globalThis.fetch = async () =>
+    new Response("Forbidden", {
+      status: 403,
+    });
+
+  try {
+    await assert.rejects(
+      () => loadPublicGalleryFiles(publicGallerySource, publicGalleryConfig),
+      /Stickies Public Gallery could not be loaded \(403\)/,
+    );
   } finally {
     globalThis.fetch = originalFetch;
   }

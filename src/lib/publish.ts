@@ -17,6 +17,10 @@ const DRIVE_API_BASE_URL = "https://www.googleapis.com/drive/v3";
 const DEFAULT_PUBLIC_APP_ORIGIN = "https://jebagu.github.io";
 const LOCAL_HOSTNAMES = new Set(["127.0.0.1", "localhost", "::1"]);
 
+function getBaseUrl() {
+  return import.meta.env?.BASE_URL ?? "/Stickies/";
+}
+
 export function createPublishedProject(project: ProjectFile): ProjectFile {
   return {
     ...project,
@@ -30,16 +34,16 @@ export function getPublishedProjectJsonUrl(slug: string) {
 }
 
 export function getPublishedProjectSnapshotUrl(slug: string) {
-  return `${import.meta.env.BASE_URL}published/${slug}.stickies`;
+  return `${getBaseUrl()}published/${slug}.stickies`;
 }
 
 export function getLegacyPublishedProjectJsonUrl(slug: string) {
-  return `${import.meta.env.BASE_URL}published/${slug}.json`;
+  return `${getBaseUrl()}published/${slug}.json`;
 }
 
 export function getPublicDriveProjectUrl(fileId: string) {
   const encodedFileId = encodeURIComponent(fileId);
-  return new URL(`${import.meta.env.BASE_URL}public/drive/${encodedFileId}/`, getPublicAppOrigin()).toString();
+  return new URL(`${getBaseUrl()}public/drive/${encodedFileId}/`, getPublicAppOrigin()).toString();
 }
 
 function getPublicAppOrigin() {

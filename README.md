@@ -2,7 +2,7 @@
 
 Internal sticky-style project-planning canvas for mapping Sonic Sphere workstreams, associated people/organizations, stages, project nodes, and dependencies with React Flow.
 
-This is a static Vite React app. It runs locally, can be deployed to GitHub Pages, and stores project data in the browser with JSON import/export for sharing.
+This is a static Vite React app. It runs locally, can be deployed to GitHub Pages, and stores project data in the browser, local JSON files, and optional Google Drive `.stickies.json` files.
 
 The browser favicon is the Material Design Icons `circle-opacity` glyph, flipped horizontally and served from [public/favicon.svg](/Users/jeremyguillory/Documents/vibecode-projects/SS%20React%20Flow%20Charts/public/favicon.svg).
 
@@ -15,7 +15,7 @@ The browser favicon is the Material Design Icons `circle-opacity` glyph, flipped
 ## What It Is Not
 
 - It is not a backend project-management database.
-- It does not include login, permissions, collaboration, notifications, time tracking, budget tracking, or third-party integrations.
+- It does not include app-owned accounts, collaboration, notifications, time tracking, budget tracking, or a backend database.
 - It is not a React Flow props playground. User-facing controls should stay planning-focused.
 
 ## Local Setup
@@ -48,25 +48,42 @@ The dev server is pinned in [vite.config.ts](/Users/jeremyguillory/Documents/vib
 
 ## Google Drive Picker Setup
 
-Stickies can open, save, and share `.stickies.json` files in the user's own Google Drive. Stickies does not create app accounts, store passwords, run a backend, or maintain an app-owned permission database. Google Drive is the account, file system, storage layer, and sharing layer. Browser localStorage remains a local recovery backup, and full real-time collaboration is not included.
+Stickies can open, save, and publish `.stickies.json` files in the user's own Google Drive. Stickies does not create app accounts, store passwords, run a backend, or maintain an app-owned permission database. Google Drive is the account, file system, storage layer, and sharing layer. Browser localStorage remains a local recovery backup, and full real-time collaboration is not included.
 
 To enable Drive actions, create Google Cloud web credentials for this static app:
 
 - Enable the Google Drive API and Google Picker API in the Google Cloud project.
 - Create an OAuth client ID for a web app.
-- Create an API key allowed to use Picker/Drive from the app origins.
+- Create a browser API key allowed to use Google Picker API and Google Drive API from the app origins.
 - Add authorized JavaScript origins for local dev and the deployed site, for example `http://127.0.0.1:5178` and the GitHub Pages origin.
-- Keep using the narrow `https://www.googleapis.com/auth/drive.file` scope. Do not switch to full Drive scope unless a later PRD explicitly changes the permission model.
+- Add authorized redirect URIs for Drive save and publish fallback authorization:
+  - `http://127.0.0.1:5178/Stickies/`
+  - `https://jebagu.github.io/Stickies/` if the deployed GitHub Pages app should also save to Drive.
+- Add API key HTTP referrers for local dev and the deployed site, for example `http://127.0.0.1:5178/*` and the GitHub Pages origin with a path wildcard.
+- OAuth uses only `https://www.googleapis.com/auth/drive.file` to create, open, update, and publish Stickies files. Do not switch to full Drive content scope or Drive metadata scope unless a later PRD explicitly changes the permission model.
 
 Create `.env.local` from [.env.example](/Users/jeremyguillory/Documents/vibecode-projects/SS%20React%20Flow%20Charts/.env.example):
 
 ```txt
 VITE_GOOGLE_CLIENT_ID=your-web-oauth-client-id
 VITE_GOOGLE_API_KEY=your-browser-api-key
-VITE_GOOGLE_APP_ID=your-google-cloud-project-number-or-app-id
+VITE_GOOGLE_APP_ID=your-google-cloud-project-number
+VITE_PUBLIC_APP_ORIGIN=https://jebagu.github.io
 ```
 
-These are public browser configuration values, not secrets. Do not add client secrets, refresh tokens, or access tokens to the app. Access tokens are requested with Google Identity Services only when the user chooses a Drive action and are kept in memory only.
+These are public browser configuration values, not secrets. Do not add client secrets, refresh tokens, or access tokens to the app. Access tokens are requested only when the user chooses a Drive action and are kept in memory only. When popup authorization fails in the in-app browser, Stickies falls back to a full-page Google redirect; the returned token is read from the URL hash and the hash is immediately removed. To keep OAuth narrow, Stickies does not request a Drive metadata scope to list every folder. `VITE_PUBLIC_APP_ORIGIN` controls the origin used in published viewer links when publishing from local dev; it defaults to the current hosted Stickies origin.
+
+If Google Picker shows `The API developer key is invalid`, the local values may be present but the browser API key is not accepted by Picker for this origin. In Google Cloud, confirm that:
+
+- `VITE_GOOGLE_API_KEY` is an API key credential, not an OAuth client ID.
+- The Google Picker API and Google Drive API are enabled and allowed by the API key's API restrictions.
+- The key's website restrictions include the current local origin as `http://127.0.0.1:5178/*`.
+- `VITE_GOOGLE_APP_ID` is the numeric Cloud project number from IAM & Admin > Settings, not the project ID string.
+- The Vite dev server was restarted after `.env.local` changed.
+
+`Save to Drive` starts Google authorization before asking for a filename. When no valid Drive token is already in memory, Stickies redirects the current tab to Google, returns to `/Stickies/`, then resumes the same save action. First-time Drive saves ask the user to confirm that Stickies may create a top-level `Stickies` folder in My Drive. After confirmation, Stickies creates and remembers that folder locally, creates the `.stickies.json` file there, binds the browser project to that Drive file, and shows one copyable Drive link plus an `Open in Drive` action. Later saves update the bound Drive file without asking for a folder.
+
+`Open recent` is the preferred cloud-open workflow because it reopens locally remembered Stickies Drive files without relying on broad Drive browsing. `Open by link/ID` is the fallback for files not in recents. Google Picker folder selection and broad Drive browsing are not part of the primary save/open path. An advanced pasted folder link/ID path may be used for an existing manually created Stickies folder, but Stickies does not search Drive for folders by name.
 
 ## Commands
 
@@ -166,15 +183,13 @@ The editor left rail starts with a single `File` menu for browser-local project 
 - `New`: replaces the current browser project with a blank project after confirmation.
 - `Open local JSON`: imports a native `.json` project file after validation and confirmation.
 - `Close`: clears the current browser project and switches to a blank project after confirmation.
-- `Save Snapshot`: creates a named snapshot inside the current project. Autosave to localStorage still happens in the background.
-- `Open from Google Drive`: requests Google authorization when needed, opens Google Picker, validates the selected Stickies-compatible JSON file, and replaces the current project only after confirmation.
-- `Open recent Drive file`: reopens a locally remembered Drive file by file ID without using the full Picker. Recents store file metadata only, never access tokens or project JSON.
-- `Save As to Google Drive`: asks for a file name, uses Google Picker folder selection, creates a `.stickies.json` file in the selected Drive folder, and binds the current project to that Drive file for later cloud actions.
-- `Save to Google Drive`: updates the currently bound Drive file. If the project is not bound to Drive yet, it routes to `Save As to Google Drive`.
-- `Share Drive File`: opens Google's native Drive sharing dialog for the currently bound Drive file when the user's account has sharing permission.
-- `Publish`: saves a frozen read-only snapshot to GitHub with a random slug link. Later edits do not update that published snapshot.
+- `Google Drive...`: opens the Drive dashboard for current file status, Stickies folder status, recent files, advanced Save Copy, Open by Link/ID, and latest published link.
+- `Open recent`: reopens a locally remembered Drive file by file ID without using the full Picker. Recents store file metadata only, never access tokens or project JSON.
+- `Save to Drive`: updates the currently bound Drive file. If the project is not bound to Drive yet, it asks for a file name, confirms creation of a top-level `Stickies` folder in My Drive if needed, creates a `.stickies.json` file there, and binds the current project to that Drive file.
+- `Publish`: asks for a snapshot name, saves a frozen read-only Google Drive copy in the Stickies folder, applies anyone-with-the-link reader permission, stores the latest published link locally for the Drive dashboard, and returns a public Stickies viewer link. Later edits do not update that published snapshot.
 - `Export`: downloads a JSON project file, Markdown, or DOCX file.
-- `Version History`: shows the most recent saved snapshots.
+- `Save checkpoint`: creates a named restore point inside the current project. Autosave to localStorage still happens in the background.
+- `Version history`: shows the most recent saved checkpoints. Checkpoint restore is future work and is not exposed in this menu yet.
 
 Links shaped like `/Stickies/?driveFileId=<file-id>` show an `Open shared Drive file?` prompt before requesting Google authorization. The app does not force an OAuth popup on page load.
 
@@ -182,7 +197,11 @@ Links shaped like `/Stickies/?driveFileId=<file-id>` show an `Open shared Drive 
 
 The public viewer lives at `/Stickies/public/`. It loads the committed static snapshot at [public/public/project.json](/Users/jeremyguillory/Documents/vibecode-projects/SS%20React%20Flow%20Charts/public/public/project.json) instead of browser localStorage.
 
-Published read-only links live at `/Stickies/public/<slug>/`. The `File` menu's `Publish` action must be run from the pinned local app at `http://127.0.0.1:5178/Stickies/`. It asks the local Stickies app server to commit a frozen JSON snapshot to GitHub at `public/published/<slug>.json` and shows the matching GitHub Pages link. The hosted GitHub Pages app is static, so it can view published snapshots but cannot save new files back to GitHub. Publishing does not download a file or ask for a GitHub token in the browser. Publishing does not create live collaboration and does not update the link when the editor project changes later.
+Drive-published read-only links live at `/Stickies/public/drive/<file-id>/`. The `File` menu's `Publish` action asks for a filename, saves a separate frozen snapshot file in the remembered Stickies folder with no version-history checkpoints inside it, makes that file readable by anyone with the link, and shows the matching Stickies public viewer link. When publishing from `127.0.0.1`, the returned link uses `VITE_PUBLIC_APP_ORIGIN` instead of localhost so it can be shared. The Drive dashboard keeps the latest published link visible as selectable text, so copy failures do not hide the URL. Published snapshot files do not become the current editable Drive save target. Later edits to the editor project do not update already published snapshots.
+
+The public Drive viewer loads the snapshot JSON through the Google Drive API using the configured browser API key, not OAuth. Viewers do not need to sign in when the file has the anyone-with-the-link reader permission. If a Google Workspace policy blocks public sharing, Stickies may save the snapshot file to Drive but will show a failure explaining that it could not apply the public link permission. In that case, the returned Stickies public link will not work until Drive sharing policy allows public-by-link access.
+
+Legacy static published slug links shaped like `/Stickies/public/<slug>/` still try to load `public/published/<slug>.json` if those files already exist, but new publishing does not create GitHub commits or call a local publish endpoint.
 
 Public mode allows:
 
@@ -198,9 +217,9 @@ Public mode allows:
 
 Public mode does not allow durable editing. Add, rename, delete, import, snapshot, settings, connect, and inspector edit controls are hidden or blocked. Temporary item movement is not saved and resets when the public snapshot is loaded again.
 
-To update the public data, export an approved project JSON from the private editor, review it for public-safe content, then replace `public/public/project.json` before deploying. Anything in that file can be public on GitHub Pages.
+To update the static public data at `/Stickies/public/`, export an approved project JSON from the private editor, review it for public-safe content, then replace `public/public/project.json` before deploying. Anything in that file can be public on GitHub Pages.
 
-To update a published slug, publish again to create a new `public/published/<slug>.json` file. Treat every published JSON file as public.
+To publish a new Drive snapshot, run `File -> Publish` again and share the new `/Stickies/public/drive/<file-id>/` link. Treat every published Drive snapshot JSON file as public once anyone-with-the-link permission is applied.
 
 ## Import and Export
 
@@ -208,7 +227,7 @@ Export/import helpers live in [src/lib/exportImport.ts](/Users/jeremyguillory/Do
 
 The left-rail `File` menu contains `Open local JSON` and `Export`. `Open local JSON` only accepts `.json` project files, validates schema version `1` or `2`, and replaces the current project only after confirmation. It also accepts simplified Stickies JSON shaped as `version`, `name`, and `tabs`; those imports keep nodes, notes, edge labels, and canvas positions while using empty people, workstream, and tag lists internally.
 
-Schema v2 imports are for analyzer-generated software graph projects such as `ss-react-flow-project-v2.json`. The importer preserves `projectOrigin`, `graphSnapshots`, `softwareGraphNavigation`, generated tab metadata, and each node/edge `data.softwareGraph` payload. Generated tabs may omit `stages`; the app normalizes missing stages to an empty array only for renderer compatibility. If a v2 file omits `settings.themeId`, the app applies the default `clean-light` theme while preserving analyzer settings such as `generatedSoftwareGraph` and `readOnlyGeneratedTabs`. When a schema v2 project is loaded, the top bar shows a direct `Export JSON` button that downloads the current v2 project file without converting it to a planning-only outline.
+Schema v2 imports are for analyzer-generated software graph projects such as `ss-react-flow-project-v2.json`. The importer preserves `projectOrigin`, `graphSnapshots`, `softwareGraphNavigation`, generated tab metadata, and each node/edge `data.softwareGraph` payload. Generated tabs may omit `stages`; the app normalizes missing stages to an empty array only for renderer compatibility. If a v2 file omits `settings.themeId`, the app applies the default `clean-light` theme while preserving analyzer settings such as `generatedSoftwareGraph` and `readOnlyGeneratedTabs`.
 
 Project settings may include `edgeRoutingMode` (`bezier`, `smooth-step`, or `straight`) and `nodeHandleMode` (`side` or `all-sides`). Missing values fall back to curved arrows with side handles so older project JSON files continue to load.
 
@@ -226,11 +245,11 @@ project-planner-YYYY-MM-DD-HHmm.md
 project-planner-YYYY-MM-DD-HHmm.docx
 ```
 
-Use `Save Snapshot` for an internal snapshot. Use `Export` when you need a file outside this browser.
+Use `Save checkpoint` for an internal restore point. Use `Export` when you need a file outside this browser.
 
-## Snapshots
+## Checkpoints
 
-Snapshots are saved inside the project file. A snapshot includes:
+Checkpoints are saved inside the project file. A checkpoint includes:
 
 - Snapshot ID.
 - Label.
@@ -238,7 +257,11 @@ Snapshots are saved inside the project file. A snapshot includes:
 - Created timestamp.
 - Full project state without duplicating the snapshot list.
 
-Restoring a snapshot replaces the project with that saved state while keeping the current snapshot history.
+Checkpoint restore is planned future work. The current `Version history` menu lists saved checkpoints but does not restore them yet.
+
+## Future Work
+
+- Restore a saved checkpoint from `Version history` while keeping the current checkpoint history.
 
 ## Canvas
 
@@ -272,9 +295,9 @@ Inspector files:
 - [src/components/inspectors/EdgeInspector.tsx](/Users/jeremyguillory/Documents/vibecode-projects/SS%20React%20Flow%20Charts/src/components/inspectors/EdgeInspector.tsx)
 - [src/components/inspectors/TabInspector.tsx](/Users/jeremyguillory/Documents/vibecode-projects/SS%20React%20Flow%20Charts/src/components/inspectors/TabInspector.tsx)
 
-In editor mode, users can add planning items, create/rename/delete tabs, edit the active tab's stages from the left sidebar, switch the active tab between vertical stages and horizontal lanes, edit a selected item's title, note, status, and associations, duplicate/delete items, edit/delete selected edges, set edge line types, change arrow routing, change node handle placement, recompute arrows, hide/show the inspector, create/restore snapshots, import/export JSON, and toggle MiniMap, Settings, and Presentation modes. Schema v2 projects also expose a direct top-bar `Export JSON` action.
+In editor mode, users can add planning items, create/rename/delete tabs, edit the active tab's stages from the left sidebar, switch the active tab between vertical stages and horizontal lanes, edit a selected item's title, note, status, and associations, duplicate/delete items, edit/delete selected edges, set edge line types, change arrow routing, change node handle placement, recompute arrows, hide/show the inspector, create/restore snapshots, import/export JSON, and toggle MiniMap, Settings, and Presentation modes.
 
-Generated software graph tabs are read-only by default, so nodes do not drag, generated contents cannot be accidentally edited, and the left-rail stage editor is hidden for those tabs. Use the top-bar `Unlock Layout` control on a generated tab when node positions need to be adjusted; this unlocks layout movement while keeping generated content edits blocked. Existing planning tabs remain editable. The node and edge inspectors show software graph metadata when present, including kind, source path and line range, confidence, provenance source type, extractor, observed time, build ID, snapshot ID, and metadata summary.
+Generated software graph tabs keep generated contents read-only by default, so nodes and edges cannot be accidentally edited and the left-rail stage editor is hidden for those tabs. Node positions can still be adjusted in editor mode so generated graph layouts can be cleaned up without unlocking content edits. Existing planning tabs remain editable. The node and edge inspectors show software graph metadata when present, including kind, source path and line range, confidence, provenance source type, extractor, observed time, build ID, snapshot ID, and metadata summary.
 
 In public mode, the right inspector renders selected tab, node, and edge details as read-only field/value rows. Selected edge details show the source and target item titles plus the edge line type.
 
@@ -317,7 +340,7 @@ GitHub Pages is static hosting. Anything committed to this repository can become
 
 Do not commit confidential project JSON into the repository unless the team has intentionally approved that. This includes [public/public/project.json](/Users/jeremyguillory/Documents/vibecode-projects/SS%20React%20Flow%20Charts/public/public/project.json), which is the source for the public read-only viewer.
 
-For v1 internal planning data, use browser localStorage and JSON import/export. Share exported JSON through an internal channel.
+For internal planning data, use browser localStorage, JSON import/export, or private Google Drive `.stickies.json` files. Do not use `Publish` for confidential projects; published Drive snapshots are intended to be public to anyone with the link.
 
 ## Known Limitations
 
@@ -325,5 +348,5 @@ For v1 internal planning data, use browser localStorage and JSON import/export. 
 - No real-time collaboration.
 - No mobile-first editing.
 - No automatic layout engine.
-- No third-party integrations.
+- No real-time third-party sync beyond user-initiated Google Drive file actions.
 - GitHub Pages workflow exists, but deployment is not proven until Actions runs.

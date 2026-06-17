@@ -33,6 +33,7 @@ import {
   saveStickiesDriveFolder,
   toStoredStickiesDriveFolder,
 } from "../src/lib/googleDrive/stickiesFolder.ts";
+import { getHostedDefaultProjectUrl, loadHostedDefaultProject } from "../src/lib/hostedDefaultProject.ts";
 import { loadProjectFromStorage } from "../src/lib/storage.ts";
 import { createFunProjectName, createStickiesFileName } from "../src/lib/stickiesFiles.ts";
 import { validateProjectFile } from "../src/lib/validation.ts";
@@ -101,6 +102,66 @@ test("schema v1 fixture still imports", () => {
   assert.equal(project.tabs[0]?.stages.length, 0);
 });
 
+test("hosted welcome project asset is valid", () => {
+  const welcomeProject = JSON.parse(
+    readFileSync(join(process.cwd(), "public", "welcome-to-stickies.stickies"), "utf8"),
+  ) as unknown;
+  const result = validateProjectFile(welcomeProject);
+
+  assert.equal(result.ok, true, result.ok ? "" : result.errors.join("\n"));
+  assert.equal(result.project.projectName, "Daring Workshop");
+  assert.equal(result.project.tabs.length, 1);
+  assert.equal(result.project.tabs[0]?.nodes.length, 9);
+  assert.equal(result.project.tabs[0]?.edges.length, 6);
+  assert.equal(result.project.settings.themeId, "neon-dark");
+});
+
+test("hosted default project loader returns the welcome asset", async () => {
+  const originalFetch = globalThis.fetch;
+  const welcomeProjectText = readFileSync(join(process.cwd(), "public", "welcome-to-stickies.stickies"), "utf8");
+
+  globalThis.fetch = async (url) => {
+    assert.equal(url, getHostedDefaultProjectUrl());
+    return new Response(welcomeProjectText, {
+      headers: {
+        "Content-Type": "application/json",
+      },
+      status: 200,
+    });
+  };
+
+  try {
+    const result = await loadHostedDefaultProject();
+
+    assert.equal(result.warning, undefined);
+    assert.equal(result.project.projectName, "Daring Workshop");
+    assert.equal(result.project.tabs.length, 1);
+  } finally {
+    globalThis.fetch = originalFetch;
+  }
+});
+
+test("hosted default project loader falls back to blank on failure", async () => {
+  const originalFetch = globalThis.fetch;
+
+  globalThis.fetch = async () =>
+    new Response("Not found", {
+      status: 404,
+    });
+
+  try {
+    const result = await loadHostedDefaultProject();
+
+    assert.match(result.warning ?? "", /Welcome project could not be loaded/);
+    assert.notEqual(result.project.projectName, "Daring Workshop");
+    assert.equal(result.project.tabs.length, 1);
+    assert.equal(result.project.tabs[0]?.name, "Planning");
+    assert.equal(result.project.settings.themeId, "neon-dark");
+  } finally {
+    globalThis.fetch = originalFetch;
+  }
+});
+
 test("empty local storage starts a blank neon dark project", () => {
   withMockLocalStorage(() => {
     const result = loadProjectFromStorage();
@@ -115,7 +176,7 @@ test("empty local storage starts a blank neon dark project", () => {
   });
 });
 
-test("hosted root can ignore existing local storage for a blank neon default", () => {
+test("storage loader can ignore existing local storage for a blank neon default", () => {
   withMockLocalStorage(() => {
     window.localStorage.setItem(
       "project-planner:v1:current",

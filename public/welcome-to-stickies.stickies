@@ -1,0 +1,404 @@
+{
+  "schemaVersion": 1,
+  "projectName": "Daring Workshop",
+  "activeTabId": "tab_planning",
+  "people": [],
+  "workstreams": [],
+  "tags": [],
+  "tabs": [
+    {
+      "id": "tab_planning",
+      "name": "Planning",
+      "orientation": "vertical",
+      "stages": [
+        {
+          "id": "stage_partner_confirmation",
+          "name": "Stage 1",
+          "order": 0,
+          "colorToken": "stage-3",
+          "rect": {
+            "x": 0,
+            "y": 0,
+            "width": 380,
+            "height": 2200
+          },
+          "orientationRects": {
+            "vertical": {
+              "x": 0,
+              "y": 0,
+              "width": 380,
+              "height": 2200
+            }
+          }
+        },
+        {
+          "id": "stage_design",
+          "name": "Another stage!",
+          "order": 1,
+          "colorToken": "stage-4",
+          "rect": {
+            "x": 400,
+            "y": 0,
+            "width": 380,
+            "height": 2200
+          },
+          "orientationRects": {
+            "vertical": {
+              "x": 400,
+              "y": 0,
+              "width": 380,
+              "height": 2200
+            }
+          }
+        },
+        {
+          "id": "stage_production",
+          "name": "More staging.",
+          "order": 2,
+          "colorToken": "stage-5",
+          "rect": {
+            "x": 800,
+            "y": 0,
+            "width": 300,
+            "height": 2200
+          },
+          "orientationRects": {
+            "vertical": {
+              "x": 800,
+              "y": 0,
+              "width": 300,
+              "height": 2200
+            }
+          }
+        }
+      ],
+      "nodes": [
+        {
+          "id": "tab_planning_band_stage_partner_confirmation",
+          "type": "stageBand",
+          "position": {
+            "x": 0,
+            "y": 0
+          },
+          "width": 380,
+          "height": 2200,
+          "data": {
+            "title": "Stage 1",
+            "stageId": "stage_partner_confirmation",
+            "orientation": "vertical",
+            "locked": true,
+            "colorToken": "stage-3"
+          },
+          "draggable": false,
+          "selectable": false,
+          "deletable": false,
+          "zIndex": 0,
+          "measured": {
+            "width": 380,
+            "height": 2200
+          }
+        },
+        {
+          "id": "tab_planning_band_stage_design",
+          "type": "stageBand",
+          "position": {
+            "x": 400,
+            "y": 0
+          },
+          "width": 380,
+          "height": 2200,
+          "data": {
+            "title": "Another stage!",
+            "stageId": "stage_design",
+            "orientation": "vertical",
+            "locked": true,
+            "colorToken": "stage-4"
+          },
+          "draggable": false,
+          "selectable": false,
+          "deletable": false,
+          "zIndex": 0,
+          "measured": {
+            "width": 380,
+            "height": 2200
+          }
+        },
+        {
+          "id": "tab_planning_band_stage_production",
+          "type": "stageBand",
+          "position": {
+            "x": 800,
+            "y": 0
+          },
+          "width": 300,
+          "height": 2200,
+          "data": {
+            "title": "More staging.",
+            "stageId": "stage_production",
+            "orientation": "vertical",
+            "locked": true,
+            "colorToken": "stage-5"
+          },
+          "draggable": false,
+          "selectable": false,
+          "deletable": false,
+          "zIndex": 0,
+          "measured": {
+            "width": 300,
+            "height": 2200
+          }
+        },
+        {
+          "id": "node_6KQvv5-A",
+          "type": "planningNode",
+          "position": {
+            "x": 52.27213023691223,
+            "y": 91.92015335346987
+          },
+          "width": 260,
+          "data": {
+            "title": "Welcome",
+            "status": "idea",
+            "associatedIds": [],
+            "confidence": "medium",
+            "createdAt": "2026-06-17T14:54:45.625Z",
+            "updatedAt": "2026-06-17T14:54:52.005Z"
+          },
+          "draggable": true,
+          "selectable": true,
+          "deletable": true,
+          "zIndex": 10,
+          "measured": {
+            "width": 260,
+            "height": 83
+          },
+          "selected": false,
+          "dragging": false
+        },
+        {
+          "id": "node_SBs93Lbn",
+          "type": "planningNode",
+          "position": {
+            "x": 440.24863092107,
+            "y": 91.6951367511969
+          },
+          "width": 260,
+          "data": {
+            "title": "To",
+            "status": "idea",
+            "associatedIds": [],
+            "confidence": "medium",
+            "createdAt": "2026-06-17T14:54:56.992Z",
+            "updatedAt": "2026-06-17T15:03:21.182Z"
+          },
+          "draggable": true,
+          "selectable": true,
+          "deletable": true,
+          "zIndex": 10,
+          "measured": {
+            "width": 260,
+            "height": 83
+          },
+          "selected": false,
+          "dragging": false
+        },
+        {
+          "id": "node_Y8LnxGaS",
+          "type": "planningNode",
+          "position": {
+            "x": 442.11715094192294,
+            "y": 252.55070224365826
+          },
+          "width": 260,
+          "data": {
+            "title": "Stickies",
+            "status": "idea",
+            "associatedIds": [],
+            "confidence": "medium",
+            "createdAt": "2026-06-17T14:56:36.692Z",
+            "updatedAt": "2026-06-17T15:03:29.676Z"
+          },
+          "draggable": true,
+          "selectable": true,
+          "deletable": true,
+          "zIndex": 10,
+          "measured": {
+            "width": 260,
+            "height": 83
+          },
+          "selected": false,
+          "dragging": false
+        },
+        {
+          "id": "node_fxT1iPSL",
+          "type": "planningNode",
+          "position": {
+            "x": 815.3490648007902,
+            "y": 169.04074837557246
+          },
+          "width": 260,
+          "data": {
+            "title": "And save them",
+            "status": "idea",
+            "associatedIds": [],
+            "confidence": "medium",
+            "createdAt": "2026-06-17T14:56:41.476Z",
+            "updatedAt": "2026-06-17T15:04:56.189Z",
+            "notes": "to google drive"
+          },
+          "draggable": true,
+          "selectable": true,
+          "deletable": true,
+          "zIndex": 10,
+          "measured": {
+            "width": 260,
+            "height": 107
+          },
+          "selected": false,
+          "dragging": false
+        },
+        {
+          "id": "node_D47lp1sk",
+          "type": "planningNode",
+          "position": {
+            "x": 450.44598529594555,
+            "y": 409.54689974706605
+          },
+          "width": 260,
+          "data": {
+            "title": "Where you",
+            "status": "idea",
+            "associatedIds": [],
+            "confidence": "medium",
+            "createdAt": "2026-06-17T14:56:43.342Z",
+            "updatedAt": "2026-06-17T15:03:53.433Z",
+            "notes": "can easily make flow charts like this one."
+          },
+          "draggable": true,
+          "selectable": true,
+          "deletable": true,
+          "zIndex": 10,
+          "measured": {
+            "width": 260,
+            "height": 107
+          },
+          "selected": false,
+          "dragging": false
+        },
+        {
+          "id": "node_kmXEbGNF",
+          "type": "planningNode",
+          "position": {
+            "x": 817.9519745496705,
+            "y": 335.80498953082383
+          },
+          "width": 260,
+          "data": {
+            "title": "Or publish them",
+            "status": "idea",
+            "associatedIds": [],
+            "confidence": "medium",
+            "createdAt": "2026-06-17T15:03:56.435Z",
+            "updatedAt": "2026-06-17T15:05:09.864Z",
+            "notes": "to the web"
+          },
+          "draggable": true,
+          "selectable": true,
+          "deletable": true,
+          "zIndex": 10,
+          "measured": {
+            "width": 260,
+            "height": 107
+          },
+          "selected": false,
+          "dragging": false
+        }
+      ],
+      "edges": [
+        {
+          "id": "edge_3kfEzJxB",
+          "source": "node_6KQvv5-A",
+          "target": "node_SBs93Lbn",
+          "sourceHandle": "source-right",
+          "targetHandle": "target-left",
+          "type": "planningEdge",
+          "data": {
+            "lineType": "solid"
+          }
+        },
+        {
+          "id": "edge_HPEfzEX2",
+          "source": "node_6KQvv5-A",
+          "target": "node_Y8LnxGaS",
+          "sourceHandle": "source-right",
+          "targetHandle": "target-left",
+          "type": "planningEdge",
+          "data": {
+            "lineType": "solid"
+          }
+        },
+        {
+          "id": "edge_N6uPRSNE",
+          "source": "node_6KQvv5-A",
+          "target": "node_D47lp1sk",
+          "sourceHandle": "source-right",
+          "targetHandle": "target-left",
+          "type": "planningEdge",
+          "data": {
+            "lineType": "solid"
+          }
+        },
+        {
+          "id": "edge_hd8NnGe9",
+          "source": "node_D47lp1sk",
+          "target": "node_fxT1iPSL",
+          "sourceHandle": "source-right",
+          "targetHandle": "target-left",
+          "type": "planningEdge",
+          "data": {
+            "lineType": "solid"
+          }
+        },
+        {
+          "id": "edge_kT_StzgR",
+          "source": "node_D47lp1sk",
+          "target": "node_kmXEbGNF",
+          "sourceHandle": "source-right",
+          "targetHandle": "target-left",
+          "type": "planningEdge",
+          "data": {
+            "lineType": "solid"
+          }
+        },
+        {
+          "id": "edge_uVsXDvme",
+          "source": "node_SBs93Lbn",
+          "target": "node_fxT1iPSL",
+          "sourceHandle": "source-right",
+          "targetHandle": "target-left",
+          "type": "planningEdge",
+          "data": {
+            "lineType": "solid"
+          }
+        }
+      ],
+      "viewport": {
+        "x": 118.83669957536279,
+        "y": 84.43113025940698,
+        "zoom": 1.120445056709764
+      },
+      "filters": {}
+    }
+  ],
+  "snapshots": [],
+  "settings": {
+    "themeId": "neon-dark",
+    "showMiniMap": true,
+    "adminMode": false,
+    "presentationMode": false,
+    "edgeRoutingMode": "bezier",
+    "nodeHandleMode": "side"
+  },
+  "createdAt": "2026-06-17T14:54:01.958Z",
+  "updatedAt": "2026-06-17T15:05:35.098Z"
+}

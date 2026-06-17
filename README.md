@@ -174,7 +174,7 @@ project-planner:v1:current
 project-planner:v1:last-opened
 ```
 
-On local startup, the editor loads saved localStorage data if it validates. If localStorage is empty or invalid, it opens a new blank project using the `neon-dark` theme. The hosted editor root at `https://jebagu.github.io/Stickies/` always opens a new blank `neon-dark` project, ignoring any older browser-local project saved on that origin.
+On local startup, the editor loads saved localStorage data if it validates. If localStorage is empty or invalid, it opens a new blank project using the `neon-dark` theme. The hosted editor root at `https://jebagu.github.io/Stickies/` opens the committed welcome project at [public/welcome-to-stickies.stickies](/Users/jeremyguillory/Documents/vibecode-projects/SS%20React%20Flow%20Charts/public/welcome-to-stickies.stickies), ignoring any older browser-local project saved on that origin. `File > New` and `File > Close` still start a new blank `neon-dark` project.
 
 The seed and committed public snapshot include a `Timeline + Install Process` tab derived from the SS Art Basel 2025 Delivery Plan PDF.
 
@@ -339,7 +339,7 @@ The app applies the selected theme with `data-theme` on the app root. Theme valu
 
 GitHub Pages is static hosting. Anything committed to this repository can become public depending on repository and Pages settings.
 
-Do not commit confidential project data into the repository unless the team has intentionally approved that. This includes [public/public/project.stickies](/Users/jeremyguillory/Documents/vibecode-projects/SS%20React%20Flow%20Charts/public/public/project.stickies) and the legacy fallback [public/public/project.json](/Users/jeremyguillory/Documents/vibecode-projects/SS%20React%20Flow%20Charts/public/public/project.json), which are sources for the public read-only viewer.
+Do not commit confidential project data into the repository unless the team has intentionally approved that. This includes [public/welcome-to-stickies.stickies](/Users/jeremyguillory/Documents/vibecode-projects/SS%20React%20Flow%20Charts/public/welcome-to-stickies.stickies), which is the hosted editor root default, plus [public/public/project.stickies](/Users/jeremyguillory/Documents/vibecode-projects/SS%20React%20Flow%20Charts/public/public/project.stickies) and the legacy fallback [public/public/project.json](/Users/jeremyguillory/Documents/vibecode-projects/SS%20React%20Flow%20Charts/public/public/project.json), which are sources for the public read-only viewer.
 
 For internal planning data, use browser localStorage, `.stickies` import/export, or private Google Drive `.stickies` files. Do not use `Publish` for confidential projects; published Drive snapshots are intended to be public to anyone with the link.
 

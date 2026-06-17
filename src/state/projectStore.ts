@@ -11,6 +11,7 @@ import { downloadProjectJson } from "../lib/exportImport";
 import { getAppViewMode, isHostedEditorRoot, isPublicViewMode, type AppViewMode } from "../lib/appMode";
 import type { DriveCloudFile } from "../lib/googleDrive/driveClient";
 import { isTabLayoutLocked, isTabReadOnly } from "../lib/generatedGraph";
+import { loadHostedDefaultProject } from "../lib/hostedDefaultProject";
 import { loadProjectFromPublicSnapshot } from "../lib/publicProject";
 import {
   createStageBandNodes,
@@ -517,7 +518,31 @@ export const useProjectStore = create<ProjectState>((set, get) => ({
       return;
     }
 
-    const result = loadProjectFromStorage({ ignoreSavedProject: isHostedEditorRoot() });
+    if (isHostedEditorRoot()) {
+      const result = await loadHostedDefaultProject();
+      const project = normalizeProjectStageColumns(result.project);
+
+      clearDriveFileStorage();
+
+      set({
+        viewMode,
+        project,
+        activeTabId: project.activeTabId,
+        filters: getActiveTab(project, project.activeTabId).filters ?? {},
+        selectedElement: null,
+        saveStatus: "saved",
+        cloudFile: undefined,
+        cloudSaveStatus: "local",
+        cloudError: undefined,
+        storageWarning: result.warning,
+        importError: undefined,
+        lastCloudSavedAt: undefined,
+        inspectorHidden: false,
+      });
+      return;
+    }
+
+    const result = loadProjectFromStorage();
     const project = normalizeProjectStageColumns(result.project);
     const cloudFile = result.source === "localStorage" ? loadDriveFileFromStorage(project) : undefined;
 

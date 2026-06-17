@@ -1,72 +1,103 @@
-import { customAlphabet } from "nanoid";
 import type { ProjectFile } from "../types/planning";
+import { getPublicProjectUrl } from "./appMode";
+import { getGoogleDriveConfig } from "./googleDrive/config";
+import {
+  createPublishedStickiesDriveFile,
+  publishDriveFileForAnyone,
+  toDriveCloudFile,
+  type DriveCloudFile,
+} from "./googleDrive/driveClient";
 
-const GITHUB_PAGES_ORIGIN = "https://jebagu.github.io";
-
-const createSlug = customAlphabet("abcdefghijklmnopqrstuvwxyz0123456789", 10);
-const localPublishHostnames = new Set(["127.0.0.1", "localhost", "::1"]);
-
-type PublishResponse = {
-  ok: boolean;
-  slug?: string;
-  publicUrl?: string;
-  error?: string;
+export type DrivePublishResult = {
+  file: DriveCloudFile;
+  publicUrl: string;
 };
 
-export function createPublishSlug() {
-  return createSlug();
-}
+const DRIVE_API_BASE_URL = "https://www.googleapis.com/drive/v3";
+const DEFAULT_PUBLIC_APP_ORIGIN = "https://jebagu.github.io";
+const LOCAL_HOSTNAMES = new Set(["127.0.0.1", "localhost", "::1"]);
 
 export function createPublishedProject(project: ProjectFile): ProjectFile {
   return {
-    ...structuredClone(project),
+    ...project,
     snapshots: [],
+    updatedAt: new Date().toISOString(),
   };
-}
-
-export function getPublishedProjectUrl(slug: string) {
-  return new URL(`${import.meta.env.BASE_URL}public/${slug}/`, GITHUB_PAGES_ORIGIN).toString();
 }
 
 export function getPublishedProjectJsonUrl(slug: string) {
   return `${import.meta.env.BASE_URL}published/${slug}.json`;
 }
 
-export function getPublishedProjectTargetPath(slug: string) {
-  return `public/published/${slug}.json`;
+export function getPublicDriveProjectUrl(fileId: string) {
+  const encodedFileId = encodeURIComponent(fileId);
+  return new URL(`${import.meta.env.BASE_URL}public/drive/${encodedFileId}/`, getPublicAppOrigin()).toString();
 }
 
-function canReachLocalPublishEndpoint() {
-  return window.location.protocol === "http:" && localPublishHostnames.has(window.location.hostname);
-}
+function getPublicAppOrigin() {
+  const configuredOrigin = import.meta.env.VITE_PUBLIC_APP_ORIGIN?.trim();
 
-export async function publishProjectSnapshot(project: ProjectFile) {
-  if (!canReachLocalPublishEndpoint()) {
-    throw new Error(
-      "Publishing must be started from the local Stickies app server at http://127.0.0.1:5178/Stickies/. The GitHub Pages site is static and cannot save new files back to GitHub.",
-    );
+  if (configuredOrigin) {
+    return configuredOrigin;
   }
 
-  const response = await fetch(`${import.meta.env.BASE_URL}__stickies_publish`, {
-    method: "POST",
-    headers: {
-      "Content-Type": "application/json",
-    },
-    body: JSON.stringify({
-      project: createPublishedProject(project),
-    }),
+  if (LOCAL_HOSTNAMES.has(window.location.hostname)) {
+    return DEFAULT_PUBLIC_APP_ORIGIN;
+  }
+
+  return window.location.origin;
+}
+
+export function getPublicDriveProjectApiUrl(fileId: string) {
+  const config = getGoogleDriveConfig();
+  const params = new URLSearchParams({
+    alt: "media",
+    key: config.apiKey,
+    supportsAllDrives: "true",
   });
-  const result = (await response.json().catch(() => ({
-    ok: false,
-    error: "Publish did not return a valid response.",
-  }))) as PublishResponse;
 
-  if (!response.ok || !result.ok || !result.slug || !result.publicUrl) {
+  return `${DRIVE_API_BASE_URL}/files/${encodeURIComponent(fileId)}?${params}`;
+}
+
+export async function downloadPublishedDriveProject(fileId: string) {
+  const response = await fetch(getPublicDriveProjectApiUrl(fileId), {
+    headers: {
+      Accept: "application/json",
+    },
+  });
+
+  if (!response.ok) {
+    throw new Error(`Public Drive snapshot could not be loaded (${response.status}).`);
+  }
+
+  return (await response.json()) as unknown;
+}
+
+export async function publishProjectSnapshotToDrive(args: {
+  accessToken: string;
+  name: string;
+  folderId?: string;
+  project: ProjectFile;
+}): Promise<DrivePublishResult> {
+  const publishedProject = createPublishedProject(args.project);
+  const metadata = await createPublishedStickiesDriveFile(args.accessToken, args.name, publishedProject, args.folderId);
+  const file = toDriveCloudFile(metadata);
+
+  try {
+    await publishDriveFileForAnyone(args.accessToken, file.id);
+  } catch (error) {
+    const message = error instanceof Error ? error.message : "Google Drive blocked public link sharing.";
+    const driveLink = file.webViewLink ? `\n\nDrive file:\n${file.webViewLink}` : "";
+
     throw new Error(
-      result.error ??
-        "Publishing is only available from the local Stickies app server. Start the local app and try again.",
+      `Snapshot was saved to Google Drive, but Stickies could not make it public by link. ${message}${driveLink}`,
     );
   }
 
-  return result;
+  return {
+    file,
+    publicUrl: getPublicDriveProjectUrl(file.id),
+  };
 }
+
+export { getPublicProjectUrl };

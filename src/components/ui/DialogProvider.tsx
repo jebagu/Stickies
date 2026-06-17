@@ -13,7 +13,7 @@ import {
 import { Button } from "./Button";
 import { Input } from "./Input";
 
-type DialogChoice<T extends string = string> = {
+export type DialogChoice<T extends string = string> = {
   value: T;
   label: string;
   description: string;
@@ -29,6 +29,8 @@ type DialogRequest =
       kind: "alert";
       copyLabel?: string;
       copyText?: string;
+      openLabel?: string;
+      openUrl?: string;
       resolve: () => void;
     })
   | (BaseDialogRequest & {
@@ -48,15 +50,22 @@ type DialogRequest =
       choices: DialogChoice[];
       confirmLabel?: string;
       resolve: (value: string | null) => void;
+    })
+  | (BaseDialogRequest & {
+      kind: "progress";
     });
 
-type DialogContextValue = {
-  alert: (request: BaseDialogRequest & { copyLabel?: string; copyText?: string }) => Promise<void>;
+export type DialogContextValue = {
+  alert: (request: BaseDialogRequest & { copyLabel?: string; copyText?: string; openLabel?: string; openUrl?: string }) => Promise<void>;
   confirm: (request: BaseDialogRequest & { confirmLabel?: string; danger?: boolean }) => Promise<boolean>;
   prompt: (request: BaseDialogRequest & { defaultValue?: string; confirmLabel?: string }) => Promise<string | null>;
   choose: <T extends string>(
     request: BaseDialogRequest & { choices: DialogChoice<T>[]; confirmLabel?: string },
   ) => Promise<T | null>;
+  progress: (request: BaseDialogRequest) => {
+    close: () => void;
+    update: (request: BaseDialogRequest) => void;
+  };
 };
 
 const DialogContext = createContext<DialogContextValue | null>(null);
@@ -116,14 +125,39 @@ export function DialogProvider({ children }: DialogProviderProps) {
     [],
   );
 
+  const progress = useCallback<DialogContextValue["progress"]>((dialogRequest) => {
+    setRequest({
+      ...dialogRequest,
+      kind: "progress",
+    });
+
+    return {
+      close: () => {
+        setRequest((currentRequest) => (currentRequest?.kind === "progress" ? null : currentRequest));
+      },
+      update: (nextRequest) => {
+        setRequest((currentRequest) =>
+          currentRequest?.kind === "progress"
+            ? {
+                ...currentRequest,
+                ...nextRequest,
+                kind: "progress",
+              }
+            : currentRequest,
+        );
+      },
+    };
+  }, []);
+
   const value = useMemo(
     () => ({
       alert,
       confirm,
       prompt,
       choose,
+      progress,
     }),
-    [alert, choose, confirm, prompt],
+    [alert, choose, confirm, progress, prompt],
   );
 
   function closeDialog() {
@@ -164,6 +198,8 @@ function CenteredDialog({ request, onClose }: { request: DialogRequest; onClose:
   function cancel() {
     if (request.kind === "alert") {
       request.resolve();
+    } else if (request.kind === "progress") {
+      return;
     } else if (request.kind === "confirm") {
       request.resolve(false);
     } else {
@@ -178,6 +214,8 @@ function CenteredDialog({ request, onClose }: { request: DialogRequest; onClose:
 
     if (request.kind === "alert") {
       request.resolve();
+    } else if (request.kind === "progress") {
+      return;
     } else if (request.kind === "confirm") {
       request.resolve(true);
     } else if (request.kind === "prompt") {
@@ -202,12 +240,24 @@ function CenteredDialog({ request, onClose }: { request: DialogRequest; onClose:
     }
   }
 
+  function openAlertLink() {
+    if (request.kind !== "alert" || !request.openUrl) {
+      return;
+    }
+
+    window.open(request.openUrl, "_blank", "noopener,noreferrer");
+  }
+
   return (
     <div className="dialog-overlay" role="presentation" onMouseDown={(event) => event.target === event.currentTarget && cancel()}>
       <form className="dialog-panel" aria-labelledby={titleId} aria-modal="true" role="dialog" onSubmit={confirm}>
         <div ref={dialogRef} className="dialog-panel__focus-target" tabIndex={-1}>
           <h2 id={titleId}>{request.title}</h2>
           {request.message ? <p>{request.message}</p> : null}
+
+          {request.kind === "alert" && request.copyText ? (
+            <textarea className="dialog-panel__copy-text" readOnly value={request.copyText} onFocus={(event) => event.currentTarget.select()} />
+          ) : null}
 
           {request.kind === "prompt" ? (
             <Input
@@ -238,8 +288,15 @@ function CenteredDialog({ request, onClose }: { request: DialogRequest; onClose:
             </div>
           ) : null}
 
+          {request.kind === "progress" ? (
+            <div className="dialog-panel__progress" role="status" aria-live="polite">
+              <span />
+              <span>Working...</span>
+            </div>
+          ) : null}
+
           <div className="dialog-panel__actions">
-            {request.kind === "alert" ? null : (
+            {request.kind === "alert" || request.kind === "progress" ? null : (
               <Button variant="secondary" onClick={cancel}>
                 Cancel
               </Button>
@@ -249,6 +306,12 @@ function CenteredDialog({ request, onClose }: { request: DialogRequest; onClose:
                 {copyLabel}
               </Button>
             ) : null}
+            {request.kind === "alert" && request.openUrl ? (
+              <Button variant="secondary" onClick={openAlertLink}>
+                {request.openLabel ?? "Open"}
+              </Button>
+            ) : null}
+            {request.kind === "progress" ? null : (
             <Button
               variant={request.kind === "confirm" && request.danger ? "danger" : "primary"}
               type="submit"
@@ -256,6 +319,7 @@ function CenteredDialog({ request, onClose }: { request: DialogRequest; onClose:
             >
               {request.kind === "alert" ? "OK" : request.confirmLabel ?? "Continue"}
             </Button>
+            )}
           </div>
         </div>
       </form>

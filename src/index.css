@@ -352,6 +352,200 @@ select {
   margin: 5px 4px;
 }
 
+.drive-hub {
+  width: min(780px, 100%);
+  max-height: min(780px, calc(100vh - 36px));
+  overflow: auto;
+  border: 1px solid var(--border-subtle);
+  border-radius: 8px;
+  background: var(--panel-bg);
+  box-shadow: 0 24px 70px var(--shadow-color);
+  color: var(--text-primary);
+}
+
+.drive-hub__header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 16px;
+  border-bottom: 1px solid var(--border-subtle);
+  padding: 18px;
+}
+
+.drive-hub__header h2,
+.drive-hub__header p {
+  margin: 0;
+}
+
+.drive-hub__header h2 {
+  font-size: 18px;
+  line-height: 1.25;
+}
+
+.drive-hub__header p {
+  margin-top: 4px;
+  color: var(--text-muted);
+  font-size: 13px;
+}
+
+.drive-hub__grid {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+  gap: 12px;
+  padding: 14px;
+}
+
+.drive-hub__card {
+  min-width: 0;
+  border: 1px solid var(--border-subtle);
+  border-radius: 8px;
+  background: var(--app-bg);
+  padding: 13px;
+}
+
+.drive-hub__section-heading {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  margin-bottom: 10px;
+}
+
+.drive-hub__section-heading span {
+  color: var(--text-muted);
+  font-size: 11px;
+  font-weight: 800;
+  letter-spacing: 0;
+  text-transform: uppercase;
+}
+
+.drive-hub__section-heading strong {
+  color: var(--text-secondary);
+  font-size: 12px;
+}
+
+.drive-hub__file-name {
+  margin: 0;
+  overflow-wrap: anywhere;
+  color: var(--text-primary);
+  font-size: 14px;
+  font-weight: 760;
+  line-height: 1.3;
+}
+
+.drive-hub__error {
+  margin: 8px 0 0;
+  color: var(--danger-text);
+  font-size: 12px;
+  line-height: 1.4;
+}
+
+.drive-hub__link {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  margin-top: 10px;
+  color: var(--accent);
+  font-size: 13px;
+  font-weight: 750;
+  text-decoration: none;
+}
+
+.drive-hub__actions {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 8px;
+}
+
+.drive-hub__actions .ui-button,
+.drive-hub__link-actions .ui-button {
+  min-width: 0;
+  min-height: 36px;
+  white-space: normal;
+}
+
+.drive-hub__recent-list {
+  display: grid;
+  gap: 8px;
+  max-height: 220px;
+  overflow: auto;
+}
+
+.drive-hub__recent-row {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  gap: 8px;
+  align-items: center;
+}
+
+.drive-hub__recent-row > button:first-child {
+  display: grid;
+  min-width: 0;
+  border: 1px solid var(--border-subtle);
+  border-radius: 7px;
+  background: var(--panel-bg);
+  color: var(--text-primary);
+  cursor: pointer;
+  padding: 9px;
+  text-align: left;
+}
+
+.drive-hub__recent-row strong,
+.drive-hub__recent-row small {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.drive-hub__recent-row strong {
+  font-size: 13px;
+}
+
+.drive-hub__recent-row small {
+  margin-top: 3px;
+  color: var(--text-muted);
+  font-size: 12px;
+}
+
+.drive-hub__icon-button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 30px;
+  height: 30px;
+  border: 1px solid var(--border-subtle);
+  border-radius: 7px;
+  background: var(--panel-bg);
+  color: var(--text-secondary);
+  cursor: pointer;
+}
+
+.drive-hub__published {
+  display: grid;
+  gap: 9px;
+}
+
+.drive-hub__published textarea,
+.dialog-panel__copy-text {
+  width: 100%;
+  min-height: 68px;
+  resize: vertical;
+  border: 1px solid var(--border-subtle);
+  border-radius: 7px;
+  background: var(--panel-bg);
+  color: var(--text-secondary);
+  font: inherit;
+  font-size: 12px;
+  line-height: 1.45;
+  padding: 9px;
+}
+
+.drive-hub__link-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
 .tab-bar {
   display: flex;
   align-items: center;
@@ -424,6 +618,35 @@ select {
 .left-sidebar__controls {
   display: grid;
   gap: 8px;
+}
+
+.left-sidebar__connector-controls {
+  display: grid;
+  gap: 8px;
+  padding: 4px 0;
+}
+
+.left-sidebar__field {
+  display: grid;
+  gap: 5px;
+}
+
+.left-sidebar__field span {
+  color: var(--text-muted);
+  font-size: 11px;
+  font-weight: 800;
+  letter-spacing: 0;
+  text-transform: uppercase;
+}
+
+.left-sidebar__field .ui-field {
+  width: 100%;
+}
+
+.left-sidebar__divider {
+  height: 1px;
+  background: var(--border-subtle);
+  margin: 2px 0;
 }
 
 .left-sidebar {
@@ -830,10 +1053,42 @@ select {
   margin-top: 14px;
 }
 
+.dialog-panel__copy-text {
+  margin-top: 14px;
+}
+
+.dialog-panel__progress {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  margin-top: 14px;
+  color: var(--text-secondary);
+  font-size: 13px;
+  font-weight: 700;
+}
+
+.dialog-panel__progress span:first-child {
+  width: 16px;
+  height: 16px;
+  border: 2px solid color-mix(in srgb, var(--accent) 20%, var(--border-subtle));
+  border-top-color: var(--accent);
+  border-radius: 999px;
+  animation: dialog-progress-spin 0.8s linear infinite;
+}
+
+@keyframes dialog-progress-spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
 .dialog-choice-list {
   display: grid;
   gap: 8px;
   margin-top: 14px;
+  max-height: min(420px, 52vh);
+  overflow: auto;
+  padding-right: 2px;
 }
 
 .dialog-choice {
@@ -1204,6 +1459,16 @@ select {
 @media (max-width: 900px) {
   body {
     overflow-x: hidden;
+  }
+
+  .drive-hub__header {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .drive-hub__grid,
+  .drive-hub__actions {
+    grid-template-columns: 1fr;
   }
 
   .app-shell {

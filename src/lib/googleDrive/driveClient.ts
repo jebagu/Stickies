@@ -4,11 +4,14 @@ import { STICKIES_DRIVE_MIME, STICKIES_FILE_SUFFIX } from "./config";
 
 const DRIVE_API_BASE_URL = "https://www.googleapis.com/drive/v3";
 const DRIVE_UPLOAD_BASE_URL = "https://www.googleapis.com/upload/drive/v3";
+const DRIVE_FOLDER_MIME = "application/vnd.google-apps.folder";
+const STICKIES_DRIVE_FOLDER_NAME = "Stickies";
 const DRIVE_FILE_FIELDS = [
   "id",
   "name",
   "mimeType",
   "modifiedTime",
+  "trashed",
   "version",
   "webViewLink",
   "capabilities/canEdit",
@@ -21,6 +24,7 @@ export type DriveFileMetadata = {
   name: string;
   mimeType?: string;
   modifiedTime?: string;
+  trashed?: boolean;
   version?: string;
   webViewLink?: string;
   appProperties?: Record<string, string>;
@@ -41,6 +45,12 @@ export type DriveCloudFile = {
   canEdit: boolean;
   canShare: boolean;
   canDownload: boolean;
+};
+
+export type DriveFolderPick = {
+  id?: string;
+  name: string;
+  url?: string;
 };
 
 export class DriveAuthError extends Error {
@@ -99,24 +109,6 @@ async function fetchDrive(url: string, accessToken: string, options: RequestInit
   return response;
 }
 
-function createMultipartBody(metadata: Record<string, unknown>, fileText: string) {
-  const boundary = `stickies_${crypto.randomUUID().replaceAll("-", "")}`;
-  const body = [
-    `--${boundary}`,
-    "Content-Type: application/json; charset=UTF-8",
-    "",
-    JSON.stringify(metadata),
-    `--${boundary}`,
-    "Content-Type: application/json; charset=UTF-8",
-    "",
-    fileText,
-    `--${boundary}--`,
-    "",
-  ].join("\r\n");
-
-  return { boundary, body };
-}
-
 export async function getFileMetadata(fileId: string, accessToken: string) {
   const params = new URLSearchParams({
     fields: DRIVE_FILE_FIELDS,
@@ -135,36 +127,119 @@ export async function downloadFileText(fileId: string, accessToken: string) {
   return response.text();
 }
 
+async function createDriveFileMetadata(accessToken: string, metadata: Record<string, unknown>) {
+  const params = new URLSearchParams({
+    fields: DRIVE_FILE_FIELDS,
+    supportsAllDrives: "true",
+  });
+  const response = await fetchDrive(`${DRIVE_API_BASE_URL}/files?${params}`, accessToken, {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json; charset=UTF-8",
+    },
+    body: JSON.stringify(metadata),
+  });
+
+  return assertMetadata(await response.json());
+}
+
+async function patchDriveFileMetadata(accessToken: string, fileId: string, metadata: Record<string, unknown>) {
+  const params = new URLSearchParams({
+    fields: DRIVE_FILE_FIELDS,
+    supportsAllDrives: "true",
+  });
+  const response = await fetchDrive(`${DRIVE_API_BASE_URL}/files/${encodeURIComponent(fileId)}?${params}`, accessToken, {
+    method: "PATCH",
+    headers: {
+      "Content-Type": "application/json; charset=UTF-8",
+    },
+    body: JSON.stringify(metadata),
+  });
+
+  return assertMetadata(await response.json());
+}
+
+async function uploadDriveFileText(accessToken: string, fileId: string, fileText: string) {
+  const params = new URLSearchParams({
+    uploadType: "media",
+    fields: DRIVE_FILE_FIELDS,
+    supportsAllDrives: "true",
+  });
+  const response = await fetchDrive(`${DRIVE_UPLOAD_BASE_URL}/files/${encodeURIComponent(fileId)}?${params}`, accessToken, {
+    method: "PATCH",
+    headers: {
+      "Content-Type": "application/json; charset=UTF-8",
+    },
+    body: fileText,
+  });
+
+  return assertMetadata(await response.json());
+}
+
+async function uploadDriveFileContent(accessToken: string, fileId: string, project: ProjectFile) {
+  return uploadDriveFileText(accessToken, fileId, createProjectUploadBody(project));
+}
+
 export async function createStickiesDriveFile(
   accessToken: string,
-  folderId: string,
   name: string,
   project: ProjectFile,
+  folderId?: string,
 ) {
   const metadata = {
     name: ensureStickiesFileName(name),
     mimeType: STICKIES_DRIVE_MIME,
-    parents: [folderId],
+    ...(folderId ? { parents: [folderId] } : {}),
     appProperties: {
       app: "stickies",
       schemaVersion: String(project.schemaVersion),
     },
   };
-  const { boundary, body } = createMultipartBody(metadata, createProjectUploadBody(project));
-  const params = new URLSearchParams({
-    uploadType: "multipart",
-    fields: DRIVE_FILE_FIELDS,
-    supportsAllDrives: "true",
-  });
-  const response = await fetchDrive(`${DRIVE_UPLOAD_BASE_URL}/files?${params}`, accessToken, {
-    method: "POST",
-    headers: {
-      "Content-Type": `multipart/related; boundary=${boundary}`,
-    },
-    body,
-  });
+  const createdFile = await createDriveFileMetadata(accessToken, metadata);
+  return uploadDriveFileContent(accessToken, createdFile.id, project);
+}
 
-  return assertMetadata(await response.json());
+export async function createStickiesDriveFolder(accessToken: string) {
+  const metadata = {
+    name: STICKIES_DRIVE_FOLDER_NAME,
+    mimeType: DRIVE_FOLDER_MIME,
+    appProperties: {
+      app: "stickies",
+      purpose: "project-folder",
+    },
+  };
+
+  return createDriveFileMetadata(accessToken, metadata);
+}
+
+export async function validateStickiesDriveFolder(accessToken: string, folderId: string) {
+  const metadata = await getFileMetadata(folderId, accessToken);
+
+  if (metadata.mimeType !== DRIVE_FOLDER_MIME || metadata.trashed) {
+    throw new Error("The saved Stickies folder is no longer available.");
+  }
+
+  return metadata;
+}
+
+export async function createPublishedStickiesDriveFile(
+  accessToken: string,
+  name: string,
+  project: ProjectFile,
+  folderId?: string,
+) {
+  const metadata = {
+    name: ensureStickiesFileName(name),
+    mimeType: STICKIES_DRIVE_MIME,
+    ...(folderId ? { parents: [folderId] } : {}),
+    appProperties: {
+      app: "stickies",
+      purpose: "published",
+      schemaVersion: String(project.schemaVersion),
+    },
+  };
+  const createdFile = await createDriveFileMetadata(accessToken, metadata);
+  return uploadDriveFileText(accessToken, createdFile.id, createProjectJson(project));
 }
 
 export async function updateStickiesDriveFile(
@@ -176,7 +251,7 @@ export async function updateStickiesDriveFile(
   const currentMetadata = await getFileMetadata(fileId, accessToken);
 
   if (currentMetadata.capabilities?.canEdit === false) {
-    throw new Error("This Google Drive file is view-only. Use Save As to Google Drive to make an editable copy.");
+    throw new Error("This Google Drive file is view-only. Use Save to Drive to make an editable copy.");
   }
 
   if (expectedVersion && currentMetadata.version && currentMetadata.version !== expectedVersion) {
@@ -190,21 +265,8 @@ export async function updateStickiesDriveFile(
       schemaVersion: String(project.schemaVersion),
     },
   };
-  const { boundary, body } = createMultipartBody(metadata, createProjectUploadBody(project));
-  const params = new URLSearchParams({
-    uploadType: "multipart",
-    fields: DRIVE_FILE_FIELDS,
-    supportsAllDrives: "true",
-  });
-  const response = await fetchDrive(`${DRIVE_UPLOAD_BASE_URL}/files/${encodeURIComponent(fileId)}?${params}`, accessToken, {
-    method: "PATCH",
-    headers: {
-      "Content-Type": `multipart/related; boundary=${boundary}`,
-    },
-    body,
-  });
-
-  return assertMetadata(await response.json());
+  await patchDriveFileMetadata(accessToken, fileId, metadata);
+  return uploadDriveFileContent(accessToken, fileId, project);
 }
 
 export function ensureStickiesFileName(name: string) {
@@ -216,4 +278,29 @@ export function createProjectUploadBody(project: ProjectFile) {
   return createProjectJson(project);
 }
 
-export { DRIVE_API_BASE_URL, DRIVE_UPLOAD_BASE_URL, DRIVE_FILE_FIELDS, STICKIES_DRIVE_MIME };
+export async function publishDriveFileForAnyone(accessToken: string, fileId: string) {
+  const params = new URLSearchParams({
+    fields: "id,type,role",
+    supportsAllDrives: "true",
+  });
+  await fetchDrive(`${DRIVE_API_BASE_URL}/files/${encodeURIComponent(fileId)}/permissions?${params}`, accessToken, {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json; charset=UTF-8",
+    },
+    body: JSON.stringify({
+      type: "anyone",
+      role: "reader",
+      allowFileDiscovery: false,
+    }),
+  });
+}
+
+export {
+  DRIVE_API_BASE_URL,
+  DRIVE_UPLOAD_BASE_URL,
+  DRIVE_FILE_FIELDS,
+  DRIVE_FOLDER_MIME,
+  STICKIES_DRIVE_FOLDER_NAME,
+  STICKIES_DRIVE_MIME,
+};

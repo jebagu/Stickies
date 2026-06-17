@@ -4,13 +4,30 @@ import test from "node:test";
 import assert from "node:assert/strict";
 import { createProjectJson, parseProjectJsonText } from "../src/lib/exportImport.ts";
 import { isTabLayoutLocked, isTabReadOnly } from "../src/lib/generatedGraph.ts";
-import { getGoogleDriveConfig, isGoogleDriveConfigured } from "../src/lib/googleDrive/config.ts";
+import {
+  GOOGLE_DRIVE_SCOPE,
+  getGoogleDriveConfig,
+  getGoogleDriveConfigIssue,
+  isGoogleDriveConfigured,
+} from "../src/lib/googleDrive/config.ts";
 import { ensureStickiesFileName, type DriveCloudFile } from "../src/lib/googleDrive/driveClient.ts";
 import {
   DRIVE_RECENTS_STORAGE_KEY,
   loadDriveRecentFiles,
   rememberDriveRecentFile,
 } from "../src/lib/googleDrive/recents.ts";
+import {
+  DRIVE_PUBLISHED_STORAGE_KEY,
+  loadLatestPublishedDriveSnapshot,
+  rememberPublishedDriveSnapshot,
+} from "../src/lib/googleDrive/published.ts";
+import {
+  STICKIES_DRIVE_FOLDER_STORAGE_KEY,
+  clearStickiesDriveFolder,
+  loadStickiesDriveFolder,
+  saveStickiesDriveFolder,
+  toStoredStickiesDriveFolder,
+} from "../src/lib/googleDrive/stickiesFolder.ts";
 import { validateProjectFile } from "../src/lib/validation.ts";
 import type { ProjectFile } from "../src/types/planning.ts";
 
@@ -142,6 +159,57 @@ test("Drive recents cap at 10 and deduplicate by file ID", () => {
   });
 });
 
+test("Drive published snapshot helper remembers latest link for current project", () => {
+  withMockLocalStorage(() => {
+    const firstProject = expectValidProject("schema-v1-project.json");
+    const secondProject = {
+      ...firstProject,
+      createdAt: "2026-06-16T12:00:00.000Z",
+    };
+
+    rememberPublishedDriveSnapshot(firstProject, createDriveCloudFile("published-1"), "https://jebagu.github.io/Stickies/public/drive/published-1/");
+    rememberPublishedDriveSnapshot(secondProject, createDriveCloudFile("published-2"), "https://jebagu.github.io/Stickies/public/drive/published-2/");
+
+    const latestFirstProjectSnapshot = loadLatestPublishedDriveSnapshot(firstProject);
+    assert.equal(latestFirstProjectSnapshot?.fileId, "published-1");
+    assert.equal(latestFirstProjectSnapshot?.publicUrl, "https://jebagu.github.io/Stickies/public/drive/published-1/");
+    assert.ok(window.localStorage.getItem(DRIVE_PUBLISHED_STORAGE_KEY));
+  });
+});
+
+test("Stickies Drive folder helper stores only folder metadata", () => {
+  withMockLocalStorage(() => {
+    const folder = toStoredStickiesDriveFolder(
+      {
+        id: "folder-1",
+        name: "Stickies",
+        webViewLink: "https://drive.google.com/drive/folders/folder-1",
+      },
+      "2026-06-17T00:00:00.000Z",
+    );
+
+    saveStickiesDriveFolder(folder);
+
+    assert.deepEqual(loadStickiesDriveFolder(), folder);
+    assert.equal(
+      window.localStorage.getItem(STICKIES_DRIVE_FOLDER_STORAGE_KEY),
+      JSON.stringify(folder),
+    );
+
+    clearStickiesDriveFolder();
+    assert.equal(loadStickiesDriveFolder(), undefined);
+  });
+});
+
+test("Stickies Drive folder helper clears malformed storage", () => {
+  withMockLocalStorage(() => {
+    window.localStorage.setItem(STICKIES_DRIVE_FOLDER_STORAGE_KEY, JSON.stringify({ id: "folder-1" }));
+
+    assert.equal(loadStickiesDriveFolder(), undefined);
+    assert.equal(window.localStorage.getItem(STICKIES_DRIVE_FOLDER_STORAGE_KEY), null);
+  });
+});
+
 test("Google Drive config reports missing public config", () => {
   assert.deepEqual(getGoogleDriveConfig(), {
     clientId: "",
@@ -149,6 +217,50 @@ test("Google Drive config reports missing public config", () => {
     appId: "",
   });
   assert.equal(isGoogleDriveConfigured(), false);
+  assert.match(getGoogleDriveConfigIssue() ?? "", /Google Drive is not configured/);
+});
+
+test("Google Drive config accepts web OAuth, browser API key, and numeric project number", () => {
+  assert.equal(
+    getGoogleDriveConfigIssue({
+      clientId: "1234567890-abcdef.apps.googleusercontent.com",
+      apiKey: `AIza${"a".repeat(35)}`,
+      appId: "123456789012",
+    }),
+    undefined,
+  );
+});
+
+test("Google Drive scope stays limited to drive.file", () => {
+  assert.equal(GOOGLE_DRIVE_SCOPE, "https://www.googleapis.com/auth/drive.file");
+  assert.doesNotMatch(GOOGLE_DRIVE_SCOPE, /metadata\.readonly|\/auth\/drive(?:\s|$)/);
+});
+
+test("Google Drive config rejects common Picker credential mixups", () => {
+  assert.match(
+    getGoogleDriveConfigIssue({
+      clientId: "your-web-oauth-client-id",
+      apiKey: `AIza${"a".repeat(35)}`,
+      appId: "123456789012",
+    }) ?? "",
+    /looks incorrect/,
+  );
+  assert.match(
+    getGoogleDriveConfigIssue({
+      clientId: "1234567890-abcdef.apps.googleusercontent.com",
+      apiKey: "1234567890-abcdef.apps.googleusercontent.com",
+      appId: "123456789012",
+    }) ?? "",
+    /looks incorrect/,
+  );
+  assert.match(
+    getGoogleDriveConfigIssue({
+      clientId: "1234567890-abcdef.apps.googleusercontent.com",
+      apiKey: `AIza${"a".repeat(35)}`,
+      appId: "stickies-project",
+    }) ?? "",
+    /looks incorrect/,
+  );
 });
 
 test("schema v2 without stages imports with normalized empty stages", () => {
@@ -178,9 +290,9 @@ test("schema v2 generated node inspector can read provenance metadata", () => {
   assert.equal(softwareGraph?.provenance?.extractor, "sfw-graph-analyzer");
   assert.equal(softwareGraph?.provenance?.observedAt, "2026-06-15T00:00:00.000Z");
   assert.equal(isTabReadOnly(project, project.tabs[0]), true);
-  assert.equal(isTabLayoutLocked(project, project.tabs[0]), true);
+  assert.equal(isTabLayoutLocked(project, project.tabs[0]), false);
   assert.equal(
-    isTabLayoutLocked({ ...project, settings: { ...project.settings, readOnlyGeneratedTabs: false } }, project.tabs[0]),
+    isTabLayoutLocked({ ...project, settings: { ...project.settings, readOnlyGeneratedTabs: true } }, project.tabs[0]),
     false,
   );
 });

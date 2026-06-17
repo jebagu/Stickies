@@ -1,5 +1,6 @@
 import type { ReactNode } from "react";
 import { PanelRightOpen } from "lucide-react";
+import { DriveAuthRedirectHandler } from "../drive/DriveAuthRedirectHandler";
 import { DriveFileLinkPrompt } from "../drive/DriveFileLinkPrompt";
 import { isPublicViewMode } from "../../lib/appMode";
 import { useProjectStore } from "../../state/projectStore";
@@ -34,6 +35,7 @@ export function AppShell({ children }: AppShellProps) {
   return (
     <main className="app-shell" data-theme={themeId} data-view-mode={viewMode}>
       <DialogProvider>
+        <DriveAuthRedirectHandler />
         <DriveFileLinkPrompt />
         <TopBar />
         <section className={presentationMode || readOnly ? "app-shell__workspace app-shell__workspace--single-panel" : "app-shell__workspace"}>

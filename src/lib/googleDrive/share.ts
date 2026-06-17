@@ -1,5 +1,5 @@
 import { loadScript } from "../loadScript";
-import { getGoogleDriveConfig } from "./config";
+import { assertGoogleDriveConfigured } from "./config";
 
 const GOOGLE_API_SCRIPT_URL = "https://apis.google.com/js/api.js";
 
@@ -40,7 +40,7 @@ async function loadDriveShareApi() {
 }
 
 export async function openDriveSharingDialog(accessToken: string, fileId: string) {
-  const config = getGoogleDriveConfig();
+  const config = assertGoogleDriveConfigured();
   await loadDriveShareApi();
 
   const shareClientConstructor = getGapi()?.drive?.share?.ShareClient;

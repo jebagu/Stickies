@@ -1,7 +1,7 @@
 import { createSeedProject } from "../data/seedProject";
 import type { ProjectFile } from "../types/planning";
-import { getPublicProjectSlug, getPublicProjectUrl } from "./appMode";
-import { getPublishedProjectJsonUrl } from "./publish";
+import { getPublicDriveFileId, getPublicProjectSlug, getPublicProjectUrl } from "./appMode";
+import { downloadPublishedDriveProject, getPublishedProjectJsonUrl } from "./publish";
 import { validateProjectFile } from "./validation";
 
 export type LoadPublicProjectResult = {
@@ -10,10 +10,15 @@ export type LoadPublicProjectResult = {
 };
 
 export async function loadProjectFromPublicSnapshot(): Promise<LoadPublicProjectResult> {
+  const driveFileId = getPublicDriveFileId();
+  if (driveFileId) {
+    return loadParsedPublicProject(() => downloadPublishedDriveProject(driveFileId));
+  }
+
   const slug = getPublicProjectSlug();
   const projectUrl = slug ? getPublishedProjectJsonUrl(slug) : getPublicProjectUrl();
 
-  try {
+  return loadParsedPublicProject(async () => {
     const response = await fetch(projectUrl, {
       headers: {
         Accept: "application/json",
@@ -21,13 +26,16 @@ export async function loadProjectFromPublicSnapshot(): Promise<LoadPublicProject
     });
 
     if (!response.ok) {
-      return {
-        project: createSeedProject(),
-        warning: `Public project snapshot could not be loaded (${response.status}). Showing seed data instead.`,
-      };
+      throw new Error(`Public project snapshot could not be loaded (${response.status}).`);
     }
 
-    const parsed = (await response.json()) as unknown;
+    return (await response.json()) as unknown;
+  });
+}
+
+async function loadParsedPublicProject(loadProject: () => Promise<unknown>): Promise<LoadPublicProjectResult> {
+  try {
+    const parsed = await loadProject();
     const validation = validateProjectFile(parsed);
 
     if (!validation.ok) {
@@ -43,7 +51,7 @@ export async function loadProjectFromPublicSnapshot(): Promise<LoadPublicProject
   } catch (error) {
     return {
       project: createSeedProject(),
-      warning: error instanceof Error ? error.message : "Public project snapshot could not be loaded.",
+      warning: `${error instanceof Error ? error.message : "Public project snapshot could not be loaded."} Showing seed data instead.`,
     };
   }
 }

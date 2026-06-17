@@ -48,7 +48,7 @@ export async function loadDriveProject(fileId: string, sourceName?: string): Pro
   const result = parseProjectJsonText(text, sourceName ?? metadata.name);
 
   if (!result.ok) {
-    throw new Error(result.error);
+    throw new Error(`This is not a Stickies project file.\n\n${result.error}`);
   }
 
   return {

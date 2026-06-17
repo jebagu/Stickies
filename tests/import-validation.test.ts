@@ -15,7 +15,11 @@ import {
   getGoogleDriveConfigIssue,
   isGoogleDriveConfigured,
 } from "../src/lib/googleDrive/config.ts";
-import { ensureStickiesFileName, type DriveCloudFile } from "../src/lib/googleDrive/driveClient.ts";
+import {
+  ensureStickiesFileName,
+  findExistingStickiesDriveFolder,
+  type DriveCloudFile,
+} from "../src/lib/googleDrive/driveClient.ts";
 import {
   DRIVE_RECENTS_STORAGE_KEY,
   loadDriveRecentFiles,
@@ -352,6 +356,65 @@ test("Stickies Drive folder helper clears malformed storage", () => {
     assert.equal(loadStickiesDriveFolder(), undefined);
     assert.equal(window.localStorage.getItem(STICKIES_DRIVE_FOLDER_STORAGE_KEY), null);
   });
+});
+
+test("Stickies Drive folder lookup reuses an existing top-level folder", async () => {
+  const originalFetch = globalThis.fetch;
+
+  globalThis.fetch = async (input, init) => {
+    const url = new URL(String(input));
+    const query = url.searchParams.get("q") ?? "";
+
+    assert.equal(url.pathname, "/drive/v3/files");
+    assert.match(query, /appProperties has/);
+    assert.match(query, /name = 'Stickies'/);
+    assert.match(query, /name = 'stickies'/);
+    assert.match(query, /'root' in parents/);
+    assert.equal((init?.headers as Record<string, string> | undefined)?.Authorization, "Bearer test-token");
+
+    return new Response(
+      JSON.stringify({
+        files: [
+          {
+            id: "folder-lowercase",
+            name: "stickies",
+            mimeType: "application/vnd.google-apps.folder",
+            modifiedTime: "2026-06-17T10:00:00.000Z",
+            trashed: false,
+            webViewLink: "https://drive.google.com/drive/folders/folder-lowercase",
+          },
+          {
+            id: "folder-stickies",
+            name: "Stickies",
+            mimeType: "application/vnd.google-apps.folder",
+            modifiedTime: "2026-06-16T10:00:00.000Z",
+            trashed: false,
+            webViewLink: "https://drive.google.com/drive/folders/folder-stickies",
+            appProperties: {
+              app: "stickies",
+              purpose: "project-folder",
+            },
+          },
+        ],
+      }),
+      {
+        headers: {
+          "Content-Type": "application/json",
+        },
+        status: 200,
+      },
+    );
+  };
+
+  try {
+    const result = await findExistingStickiesDriveFolder("test-token");
+
+    assert.equal(result?.folder.id, "folder-stickies");
+    assert.equal(result?.folder.name, "Stickies");
+    assert.equal(result?.matchCount, 2);
+  } finally {
+    globalThis.fetch = originalFetch;
+  }
 });
 
 test("Google Drive config reports missing public config", () => {

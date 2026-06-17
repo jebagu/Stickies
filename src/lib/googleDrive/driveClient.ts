@@ -15,6 +15,7 @@ const DRIVE_FILE_FIELDS = [
   "trashed",
   "version",
   "webViewLink",
+  "appProperties",
   "capabilities/canEdit",
   "capabilities/canShare",
   "capabilities/canDownload",
@@ -53,6 +54,11 @@ export type DriveFolderPick = {
   id?: string;
   name: string;
   url?: string;
+};
+
+export type ExistingStickiesDriveFolder = {
+  folder: DriveFileMetadata;
+  matchCount: number;
 };
 
 export class DriveAuthError extends Error {
@@ -213,6 +219,54 @@ export async function createStickiesDriveFolder(accessToken: string) {
   };
 
   return createDriveFileMetadata(accessToken, metadata);
+}
+
+function choosePreferredStickiesFolder(folders: DriveFileMetadata[]) {
+  return [...folders].sort((leftFolder, rightFolder) => {
+    const leftExactName = leftFolder.name === STICKIES_DRIVE_FOLDER_NAME ? 1 : 0;
+    const rightExactName = rightFolder.name === STICKIES_DRIVE_FOLDER_NAME ? 1 : 0;
+
+    if (leftExactName !== rightExactName) {
+      return rightExactName - leftExactName;
+    }
+
+    const leftCreatedByStickies = leftFolder.appProperties?.app === "stickies" ? 1 : 0;
+    const rightCreatedByStickies = rightFolder.appProperties?.app === "stickies" ? 1 : 0;
+
+    if (leftCreatedByStickies !== rightCreatedByStickies) {
+      return rightCreatedByStickies - leftCreatedByStickies;
+    }
+
+    return (rightFolder.modifiedTime ?? "").localeCompare(leftFolder.modifiedTime ?? "");
+  })[0];
+}
+
+export async function findExistingStickiesDriveFolder(
+  accessToken: string,
+): Promise<ExistingStickiesDriveFolder | undefined> {
+  const params = new URLSearchParams({
+    fields: `files(${DRIVE_FILE_FIELDS})`,
+    pageSize: "10",
+    q: [
+      `mimeType = '${DRIVE_FOLDER_MIME}'`,
+      "trashed = false",
+      "'root' in parents",
+      `(appProperties has { key='app' and value='stickies' } or name = '${STICKIES_DRIVE_FOLDER_NAME}' or name = 'stickies')`,
+    ].join(" and "),
+    spaces: "drive",
+    supportsAllDrives: "true",
+  });
+  const response = await fetchDrive(`${DRIVE_API_BASE_URL}/files?${params}`, accessToken);
+  const data = (await response.json()) as { files?: unknown };
+  const folders = Array.isArray(data.files) ? data.files.map(assertMetadata).filter((folder) => !folder.trashed) : [];
+  const folder = choosePreferredStickiesFolder(folders);
+
+  return folder
+    ? {
+        folder,
+        matchCount: folders.length,
+      }
+    : undefined;
 }
 
 export async function validateStickiesDriveFolder(accessToken: string, folderId: string) {

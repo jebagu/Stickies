@@ -15,6 +15,7 @@ import {
   createStickiesDriveFolder,
   createStickiesDriveFile,
   ensureStickiesFileName,
+  findExistingStickiesDriveFolder,
   isDriveAuthError,
   toDriveCloudFile,
   updateStickiesDriveFile,
@@ -133,9 +134,59 @@ export function useDriveSaveActions() {
     return dialog.confirm({
       title: "Create Stickies folder?",
       message:
-        'Stickies will create a folder named "Stickies" at the top level of My Drive and save this project there. Future Stickies files will use that folder automatically.',
+        'Stickies did not find an existing top-level "Stickies" folder it can use. It can create one in My Drive and save this project there. Future Stickies files will use that folder automatically.',
       confirmLabel: "Create Folder and Save",
     });
+  }
+
+  async function findExistingStickiesFolderForSave(
+    action: PendingGoogleDriveAction,
+    accessToken: string,
+    progress?: ReturnType<typeof dialog.progress>,
+  ) {
+    const activeProgress =
+      progress ??
+      dialog.progress({
+        title: "Checking Stickies folder",
+        message: "Looking for an existing Stickies folder in My Drive.",
+      });
+    let localProgressClosed = false;
+
+    activeProgress.update({
+      title: "Checking Stickies folder",
+      message: "Looking for an existing Stickies folder in My Drive.",
+    });
+
+    try {
+      const existingFolder = await runWithDriveToken(action, findExistingStickiesDriveFolder, accessToken);
+
+      if (!existingFolder) {
+        return undefined;
+      }
+
+      const folder = toStoredStickiesDriveFolder(existingFolder.folder);
+      saveStickiesDriveFolder(folder);
+
+      if (!progress) {
+        activeProgress.close();
+        localProgressClosed = true;
+        await dialog.alert({
+          title: "Existing Stickies folder found",
+          message:
+            existingFolder.matchCount > 1
+              ? `Found ${existingFolder.matchCount} existing Stickies folders in My Drive. Stickies will use "${folder.name}" and will not create another folder.`
+              : `Found your existing "${folder.name}" folder in My Drive. Stickies will save there and will not create another folder.`,
+          openLabel: "Open Folder in Drive",
+          openUrl: getStickiesFolderUrl(folder),
+        });
+      }
+
+      return folder;
+    } finally {
+      if (!progress && !localProgressClosed) {
+        activeProgress.close();
+      }
+    }
   }
 
   async function createStickiesFolderForSave(accessToken: string, progress?: ReturnType<typeof dialog.progress>) {
@@ -185,6 +236,12 @@ export function useDriveSaveActions() {
 
     if (folder) {
       return folder;
+    }
+
+    const existingFolder = await findExistingStickiesFolderForSave(action, accessToken, progress);
+
+    if (existingFolder) {
+      return existingFolder;
     }
 
     return createStickiesFolderForSave(accessToken, progress);

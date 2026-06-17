@@ -13,6 +13,7 @@ import {
 import {
   createStickiesDriveFolder,
   ensureStickiesFileName,
+  findExistingStickiesDriveFolder,
   isDriveAuthError,
   validateStickiesDriveFolder,
 } from "../../lib/googleDrive/driveClient";
@@ -113,11 +114,40 @@ export function useDrivePublishActions() {
       return rememberedFolder;
     }
 
+    const lookupProgress = dialog.progress({
+      title: "Checking Stickies folder",
+      message: "Looking for an existing Stickies folder in My Drive.",
+    });
+    let lookupProgressClosed = false;
+
+    try {
+      const existingFolder = await runWithDriveToken(findExistingStickiesDriveFolder, accessToken);
+
+      if (existingFolder) {
+        const folder = toStoredStickiesDriveFolder(existingFolder.folder);
+        saveStickiesDriveFolder(folder);
+        lookupProgress.close();
+        lookupProgressClosed = true;
+        await dialog.alert({
+          title: "Existing Stickies folder found",
+          message:
+            existingFolder.matchCount > 1
+              ? `Found ${existingFolder.matchCount} existing Stickies folders in My Drive. Stickies will use "${folder.name}" and will not create another folder.`
+              : `Found your existing "${folder.name}" folder in My Drive. Stickies will publish there and will not create another folder.`,
+        });
+        return folder;
+      }
+    } finally {
+      if (!lookupProgressClosed) {
+        lookupProgress.close();
+      }
+    }
+
     if (
       !(await dialog.confirm({
         title: "Create Stickies folder?",
         message:
-          'Stickies will create a folder named "Stickies" at the top level of My Drive and save this published snapshot there. Future Stickies files will use that folder automatically.',
+          'Stickies did not find an existing top-level "Stickies" folder it can use. It can create one in My Drive and save this published snapshot there. Future Stickies files will use that folder automatically.',
         confirmLabel: "Create Folder and Publish",
       }))
     ) {

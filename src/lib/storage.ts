@@ -1,4 +1,4 @@
-import { createSeedProject } from "../data/seedProject";
+import { createBlankProject } from "../data/seedProject";
 import type { DriveCloudFile } from "./googleDrive/driveClient";
 import type { ProjectFile } from "../types/planning";
 import { validateProjectFile } from "./validation";
@@ -39,7 +39,7 @@ function normalizeLoadedProjectName(project: ProjectFile): ProjectFile {
 export function loadProjectFromStorage(): LoadProjectResult {
   if (!canUseLocalStorage()) {
     return {
-      project: createSeedProject(),
+      project: createBlankProject(),
       source: "seed",
       warning: "localStorage is not available in this environment.",
     };
@@ -49,7 +49,7 @@ export function loadProjectFromStorage(): LoadProjectResult {
 
   if (!savedProject) {
     return {
-      project: createSeedProject(),
+      project: createBlankProject(),
       source: "seed",
     };
   }
@@ -60,7 +60,7 @@ export function loadProjectFromStorage(): LoadProjectResult {
 
     if (!validation.ok) {
       return {
-        project: createSeedProject(),
+        project: createBlankProject(),
         source: "seed",
         warning: validation.errors.join(" "),
       };
@@ -74,7 +74,7 @@ export function loadProjectFromStorage(): LoadProjectResult {
     };
   } catch (error) {
     return {
-      project: createSeedProject(),
+      project: createBlankProject(),
       source: "seed",
       warning: error instanceof Error ? error.message : "Saved project JSON could not be parsed.",
     };

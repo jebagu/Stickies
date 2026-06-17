@@ -137,7 +137,7 @@ type ProjectState = {
   setInspectorHidden: (inspectorHidden: boolean) => void;
 };
 
-const initialProject = createSeedProject();
+const initialProject = createBlankProject();
 
 type LegacyPlanningNodeData = Partial<PlanningNodeData> & {
   kind?: string;

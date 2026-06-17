@@ -174,7 +174,7 @@ project-planner:v1:current
 project-planner:v1:last-opened
 ```
 
-On startup, the app loads saved localStorage data if it validates. If localStorage is empty or invalid, it loads the seed project from [src/data/seedProject.ts](/Users/jeremyguillory/Documents/vibecode-projects/SS%20React%20Flow%20Charts/src/data/seedProject.ts).
+On startup, the editor loads saved localStorage data if it validates. If localStorage is empty or invalid, it opens a new blank project using the `neon-dark` theme.
 
 The seed and committed public snapshot include a `Timeline + Install Process` tab derived from the SS Art Basel 2025 Delivery Plan PDF.
 

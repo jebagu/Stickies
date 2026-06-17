@@ -1141,7 +1141,7 @@ export function createBlankProject(): ProjectFile {
     ],
     snapshots: [],
     settings: {
-      themeId: "clean-light",
+      themeId: "neon-dark",
       showMiniMap: true,
       adminMode: false,
       presentationMode: false,

@@ -33,6 +33,7 @@ import {
   saveStickiesDriveFolder,
   toStoredStickiesDriveFolder,
 } from "../src/lib/googleDrive/stickiesFolder.ts";
+import { loadProjectFromStorage } from "../src/lib/storage.ts";
 import { createFunProjectName, createStickiesFileName } from "../src/lib/stickiesFiles.ts";
 import { validateProjectFile } from "../src/lib/validation.ts";
 import type { ProjectFile } from "../src/types/planning.ts";
@@ -98,6 +99,20 @@ test("schema v1 fixture still imports", () => {
 
   assert.equal(project.schemaVersion, 1);
   assert.equal(project.tabs[0]?.stages.length, 0);
+});
+
+test("empty local storage starts a blank neon dark project", () => {
+  withMockLocalStorage(() => {
+    const result = loadProjectFromStorage();
+
+    assert.equal(result.source, "seed");
+    assert.equal(result.project.people.length, 0);
+    assert.equal(result.project.workstreams.length, 0);
+    assert.equal(result.project.tags.length, 0);
+    assert.equal(result.project.tabs.length, 1);
+    assert.equal(result.project.tabs[0]?.name, "Planning");
+    assert.equal(result.project.settings.themeId, "neon-dark");
+  });
 });
 
 test("schema v2 generated fixture imports and preserves graph project fields", () => {
